@@ -1,0 +1,26 @@
+===================================================================
+ACADEMIA TENIS HITS (ATH) - COPIA DE SEGURIDAD v0.6
+Fecha: 2026-08-24
+===================================================================
+
+NOVEDADES Y MEJORAS DE LA VERSIÓN 0.6:
+1. Barra de Navegación en Escritorio (> 992px):
+   - Enlaces centrales visibles ('Inicio' y 'Sede y Reservas') con efecto hover/active.
+   - Botón del Panel de Administración con texto ('Panel Admin') en tamaño compacto y elegante.
+   - Botón 'Salir' visible junto a la foto de perfil en el navbar de escritorio.
+   - Ocultamiento de 'Cerrar Sesión' duplicado en el menú de navegación central.
+
+2. Barra de Navegación en Móviles (<= 992px):
+   - Menú hamburguesa desplegable presentado como Lista Limpia con divisores sutiles (sin apariencia de botones toscos).
+   - Botón 'Cerrar Sesión' integrado al final de la lista móvil con distinción en color rojo.
+   - Íconos y botones compactos (34x34px, reducidos un ~15%) con espaciado armónico de 12px.
+   - Ocultamiento de textos largos y logos innecesarios en la barra fija superior.
+
+3. Experiencia de Usuario e Interacción (UX):
+   - Botón 'Conocer la Sede' en la tarjeta de inicio configurado para derivar directamente a 'sede.html'.
+   - Filtro inteligente en manejador de eventos de reservas para permitir navegación nativa en enlaces externos.
+
+4. Panel de Administración Responsivo & Cloud Sync:
+   - Tablas transformadas en Tarjetas Fluidas con etiquetas 'data-label' dinámicas en pantallas < 850px.
+   - Sincronización continua en la nube con Firebase Firestore v10 en db.js.
+   - Sistema de caché optimizado con versión ?v=6.1 en todos los HTML.

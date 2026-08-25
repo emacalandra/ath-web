@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sede y Reserva de Canchas &bull; Academia Tenis Hits (ATH)</title>
+    <meta name="description" content="Conocé las instalaciones de la Academia Tenis Hits en el Club Ciudad Verde, San Francisco, Córdoba, y reservá tu turno online en nuestras 3 canchas de polvo de ladrillo.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css?v=11.0">
+</head>
+<body>
+
+    <!-- Header Fijo Superior (7 Secciones Sincronizadas) -->
+    <header class="navbar" id="header">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-img-wrapper" data-editable-img="header_logo_img">
+                    <img src="assets/logo.jpg" alt="Logo Oficial ATH - Academia Tenis Hits" class="logo-img">
+                </div>
+                <div class="logo-text-group">
+                    <span class="logo-title" data-editable="header_logo_title">Academia <span class="brand-orange">Tenis Hits</span></span>
+                    <span class="logo-subtitle" data-editable="header_logo_subtitle">Club Ciudad Verde &bull; Córdoba</span>
+                </div>
+            </a>
+
+            <nav class="nav-menu" id="nav-menu">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="index.html" class="nav-link">Inicio</a></li>
+                    <li class="nav-item"><a href="sede.html" class="nav-link active">Sede y Reservas</a></li>
+                    <li class="nav-item future-module"><a href="noticias.html" class="nav-link">Noticias</a></li>
+                    <li class="nav-item future-module"><a href="clases.html" class="nav-link">Clases</a></li>
+                    <li class="nav-item future-module"><a href="torneos.html" class="nav-link">Torneos</a></li>
+                    <li class="nav-item future-module"><a href="construccion.html" class="nav-link">Construcción</a></li>
+                    <li class="nav-item future-module"><a href="historia.html" class="nav-link">Historia</a></li>
+                </ul>
+            </nav>
+
+            <div class="nav-actions" id="navActions">
+                <button class="btn-cta" id="openModalBtn">
+                    <i class="fa-solid fa-user"></i>
+                    <span>Iniciar Sesión / Crear Cuenta</span>
+                </button>
+                <button class="mobile-toggle" id="mobileToggle" aria-label="Abrir menú de navegación">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main>
+        <!-- Banner Hero de Sede y Reservas -->
+        <section class="hero-section" style="min-height: 44vh; padding: 130px 0 50px 0;">
+            <div class="hero-bg" style="background-image: url('assets/cancha1.jpg');" data-editable-bg="hero_bg_sede"></div>
+            <div class="hero-overlay"></div>
+            <div class="hero-content" style="max-width: 900px;">
+                <div class="live-status-pill">
+                    <span class="live-dot"></span> <span data-editable="sede_live_pill">Instalaciones Oficiales & Autogestión de Turnos</span>
+                </div>
+                <br>
+                <h1 class="hero-title" data-editable="sede_hero_title">Sede & Reserva de Canchas <span class="text-highlight">ATH</span></h1>
+                <p class="hero-subtitle" data-editable="sede_hero_subtitle">Conocé nuestras instalaciones en el Club Ciudad Verde y elegí tu cancha preferida para desplegar el menú de reservas.</p>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- Módulo de Canchas en Tarjetas Limpias -->
+        <section id="sede" class="content-section bg-alt" style="padding: 60px 0 90px 0;">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-subtitle" data-editable="sede_sec_sub">Elegí tu Superficie</span>
+                    <h2 class="section-title" data-editable="sede_sec_title">Nuestras 3 Canchas de Tenis</h2>
+                    <p class="section-description" data-editable="sede_sec_desc">Hacé clic en el botón de cualquier tarjeta para desplegar el menú interactivo de reservas y elegir tu horario libre.</p>
+                    <div class="title-bar"></div>
+                </div>
+
+                <!-- GRILLA PROTAGÓNICA DE CANCHAS (ESTRUCTURA EXACTA DE INDEX.HTML) -->
+                <div class="courts-grid" style="margin-bottom: 60px;">
+                    <!-- Cancha 1 -->
+                    <article class="court-card" data-court="1">
+                        <div class="court-image-wrapper" data-editable-img="sede_cancha1_img">
+                            <img src="assets/cancha1.jpg" alt="Cancha 1 - Estadio Principal" class="court-img">
+                            <span class="court-badge-tag" data-editable="sede_cancha1_badge">🌱 Polvo de Ladrillo &bull; LED 1000W</span>
+                        </div>
+                        <div class="court-body">
+                            <h3 class="court-title" data-editable="sede_cancha1_title">Cancha 1 - Estadio Principal</h3>
+                            <p class="court-description" data-editable="sede_cancha1_desc">Cancha de polvo de ladrillo al aire libre de calidad profesional, con riego técnico programado, iluminación LED y tribuna lateral.</p>
+                            <button type="button" class="btn-court-book view-court-trigger btn-pulse-ath" data-court="1" style="margin-top: auto;">
+                                🎾 Reservar Esta Cancha
+                            </button>
+                        </div>
+                    </article>
+
+                    <!-- Cancha 2 -->
+                    <article class="court-card" data-court="2">
+                        <div class="court-image-wrapper" data-editable-img="sede_cancha2_img">
+                            <img src="assets/cancha2.jpg" alt="Cancha 2 - Central" class="court-img">
+                            <span class="court-badge-tag" data-editable="sede_cancha2_badge">🌱 Polvo de Ladrillo &bull; Luz LED</span>
+                        </div>
+                        <div class="court-body">
+                            <h3 class="court-title" data-editable="sede_cancha2_title">Cancha 2 - Central</h3>
+                            <p class="court-description" data-editable="sede_cancha2_desc">Superficie óptima para entrenamientos exigentes, partidos de dobles y acondicionamiento diario con iluminación nocturna.</p>
+                            <button type="button" class="btn-court-book view-court-trigger btn-pulse-ath" data-court="2" style="margin-top: auto;">
+                                🎾 Reservar Esta Cancha
+                            </button>
+                        </div>
+                    </article>
+
+                    <!-- Cancha 3 -->
+                    <article class="court-card" data-court="3">
+                        <div class="court-image-wrapper" data-editable-img="sede_cancha3_img">
+                            <img src="assets/cancha3.jpg" alt="Cancha 3 - Torneos" class="court-img">
+                            <span class="court-badge-tag" data-editable="sede_cancha3_badge">🌱 Polvo de Ladrillo &bull; Luz LED</span>
+                        </div>
+                        <div class="court-body">
+                            <h3 class="court-title" data-editable="sede_cancha3_title">Cancha 3 - Torneos</h3>
+                            <p class="court-description" data-editable="sede_cancha3_desc">Ubicada en el área tranquila del predio, cercana a la terraza social y cafetería. Ideal para certámenes institucionales.</p>
+                            <button type="button" class="btn-court-book view-court-trigger btn-pulse-ath" data-court="3" style="margin-top: auto;">
+                                🎾 Reservar Esta Cancha
+                            </button>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- Información de Ubicación y Horarios de Atención -->
+                <div class="location-grid">
+                    <div class="location-info-wrapper">
+                        <div class="contact-card-item">
+                            <div class="contact-icon-circle">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div class="contact-text-group">
+                                <h4>Dirección Física Exacta</h4>
+                                <p data-editable="sede_address"><strong>Club Ciudad Verde</strong><br>Belgrano 2900, San Francisco, Córdoba, Argentina</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-card-item">
+                            <div class="contact-icon-circle">
+                                <i class="fa-solid fa-clock"></i>
+                            </div>
+                            <div class="contact-text-group">
+                                <h4>Horarios de Atención</h4>
+                                <p data-editable="sede_hours">Lunes a Domingos: <strong>8:00 a 23:00 hs</strong><br>Canchas con iluminación LED continua hasta el cierre</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-card-item">
+                            <div class="contact-icon-circle">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+                            <div class="contact-text-group">
+                                <h4>Teléfono & WhatsApp Oficial</h4>
+                                <p>
+                                    Teléfono: <a href="tel:+543564432156">+54 3564 43-2156</a><br>
+                                    WhatsApp: <a href="https://wa.me/5493564987654" target="_blank" rel="noopener">+54 9 3564 98-7654</a>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="contact-card-item">
+                            <div class="contact-icon-circle">
+                                <i class="fa-solid fa-envelope"></i>
+                            </div>
+                            <div class="contact-text-group">
+                                <h4>Secretaría & Atención a Usuarios</h4>
+                                <p>
+                                    Correo: <a href="mailto:secretaria@tenishits.com.ar">secretaria@tenishits.com.ar</a><br>
+                                    Atención administrativa e informes institucionales
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="map-interactive-wrapper">
+                        <iframe 
+                            class="map-iframe"
+                            src="https://maps.google.com/maps?q=Belgrano+2900,+San+Francisco,+Cordoba,+Argentina&t=&z=16&ie=UTF8&iwloc=&output=embed" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade"
+                            title="Mapa de ubicación Club Ciudad Verde">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Pie de Página (7 Secciones Sincronizadas) -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <a href="index.html" class="footer-logo-link">
+                        <img src="assets/logo.jpg" alt="Logo Oficial ATH" class="footer-logo-img" data-editable-img="footer_logo_img">
+                        <div class="logo-title" data-editable="footer_logo_title">Academia <span class="brand-orange">Tenis Hits</span></div>
+                    </a>
+                    <p data-editable="footer_brand_desc">Institución líder en la enseñanza y práctica del tenis en las instalaciones del Club Ciudad Verde, San Francisco, Córdoba, Argentina. Formación técnica, certámenes y comunidad deportiva.</p>
+                </div>
+
+                <div class="footer-nav">
+                    <h4 class="footer-heading">Navegación</h4>
+                    <ul class="footer-nav-list">
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="sede.html">Sede y Reservas</a></li>
+                        <li class="future-module"><a href="noticias.html">Noticias</a></li>
+                        <li class="future-module"><a href="clases.html">Clases</a></li>
+                        <li class="future-module"><a href="torneos.html">Torneos</a></li>
+                        <li class="future-module"><a href="construccion.html">Construcción</a></li>
+                        <li class="future-module"><a href="historia.html">Historia</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-social-wrapper">
+                    <h4 class="footer-heading">Redes Sociales & Sede</h4>
+                    <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 12px;" data-editable="footer_address_info">
+                        <strong>Club Ciudad Verde</strong><br>
+                        Belgrano 2900, San Francisco, Córdoba
+                    </p>
+                    <div class="social-icons-group">
+                        <a href="https://instagram.com" target="_blank" rel="noopener" class="social-icon-btn instagram" aria-label="Instagram de ATH"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://wa.me/5493564987654" target="_blank" rel="noopener" class="social-icon-btn whatsapp" aria-label="WhatsApp Oficial de ATH"><i class="fa-brands fa-whatsapp"></i></a>
+                        <a href="https://facebook.com" target="_blank" rel="noopener" class="social-icon-btn facebook" aria-label="Facebook de ATH"><i class="fa-brands fa-facebook-f"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom-bar">
+                <div class="footer-legal">&copy; 2026 <strong>Academia Tenis Hits (ATH)</strong>. Todos los derechos reservados.</div>
+                <div class="footer-tagline">Academia de Tenis &bull; Club Ciudad Verde &bull; San Francisco, Córd    <!-- Modal Maestro de Reserva Interactiva ATH (#modalReservaApp) -->
+    <div class="modal-overlay" id="modalReservaApp" style="display: none; align-items: center; justify-content: center; z-index: 9999;">
+        <div class="modal-card" style="max-width: 900px; width: 95%; display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 32px; padding: 32px; background: rgba(10, 25, 47, 0.95); border: 1px solid rgba(255, 102, 0, 0.3); border-radius: 16px;">
+            <button class="modal-close" id="closeAppModalBtn" aria-label="Cerrar modal">&times;</button>
+            <!-- Columna Izquierda: Detalle de Cancha, Fechas y Timeline -->
+            <div>
+                <div style="position: relative; border-radius: 12px; overflow: hidden; margin-bottom: 16px;">
+                    <img id="appCourtImg" src="assets/cancha1.jpg" alt="Cancha ATH" style="width: 100%; height: 180px; object-fit: cover;">
+                    <span id="appCourtBadge" style="position: absolute; top: 10px; left: 10px; background: var(--color-ath-orange); color: #FFF; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 6px;">Polvo de Ladrillo &bull; Luz LED Pro</span>
+                </div>
+                <h3 id="appCourtName" style="color: #FFF; margin-bottom: 8px; font-size: 1.3rem;">Cancha 1 (Polvo de Ladrillo)</h3>
+                <p style="color: var(--color-text-muted); font-size: 0.85rem; margin-bottom: 16px;">Seleccioná el día de juego en nuestra tira interactiva o desplegá el calendario para otras fechas.</p>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <label style="color: #FFF; font-weight: 700; font-size: 0.85rem; margin: 0;"><i class="fa-solid fa-calendar-days" style="color: var(--color-ath-orange);"></i> Elegí tu Día de Juego:</label>
+                    <div style="display: inline-flex; align-items: center; gap: 6px; margin-left: 8px; position: relative;">
+                        <button type="button" id="btnOpenCalendar" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700;">
+                            📅 Más fechas...
+                        </button>
+                        <input type="date" id="appCustomDateHidden" style="position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0; top: 0; left: 0;">
+                    </div>
+                </div>
+                <div id="appDatePills" style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px;">
+                    <!-- Píldoras de 7 días generadas dinámicamente -->
+                </div>
+
+                <div style="margin-top: 14px;">
+                    <label style="color: #FFF; font-weight: 700; font-size: 0.82rem; display: block; margin-bottom: 6px;"><i class="fa-solid fa-chart-simple" style="color: var(--color-ath-orange);"></i> Ocupación Diaria en Vivo:</label>
+                    <div id="appDayTimelineGrid" style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 8px;"></div>
+                </div>
+            </div>
+
+            <!-- Columna Derecha: Selección Libre de Horarios, Cotizador y Pago con Mercado Pago -->
+            <div style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <h4 style="color: #FFF; margin: 0;"><i class="fa-solid fa-clock" style="color: var(--color-ath-orange);"></i> Horario de Juego (08:00 a 23:00 hs)</h4>
+                    </div>
+
+                    <!-- Relojes Digitales -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                        <div>
+                            <label style="color: var(--color-text-muted); font-size: 0.78rem;">Hora Inicio</label>
+                            <input type="time" id="appTimeStart" value="16:00" min="08:00" max="23:00" class="digital-time-input" style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #FFF; font-weight: 700; font-size: 1rem;">
+                        </div>
+                        <div>
+                            <label style="color: var(--color-text-muted); font-size: 0.78rem;">Hora Fin</label>
+                            <input type="time" id="appTimeEnd" value="17:30" min="08:00" max="23:00" class="digital-time-input" style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #FFF; font-weight: 700; font-size: 1rem;">
+                        </div>
+                    </div>
+
+                    <!-- Píldoras de Asistencia Rápida -->
+                    <label style="color: var(--color-text-muted); font-size: 0.75rem; display: block; margin-bottom: 6px;">Duración sugerida:</label>
+                    <div id="appQuickDurBtns" style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px;">
+                        <button type="button" class="quick-dur-btn" data-hours="1">1h</button>
+                        <button type="button" class="quick-dur-btn" data-hours="1.25">1h 15m</button>
+                        <button type="button" class="quick-dur-btn active" data-hours="1.5" style="background: var(--color-ath-orange); color: #FFF;">1h 30m</button>
+                        <button type="button" class="quick-dur-btn" data-hours="1.75">1h 45m</button>
+                        <button type="button" class="quick-dur-btn" data-hours="2">2h</button>
+                        <button type="button" class="quick-dur-btn" data-hours="2.25">2h 15m</button>
+                        <button type="button" class="quick-dur-btn" data-hours="2.5">2h 30m</button>
+                    </div>
+
+                    <!-- Semáforo Anti-Colisión y Cotizador -->
+                    <div id="appPriceSummary" class="booking-summary-card available" style="padding: 12px; border-radius: 10px; background: rgba(16, 185, 129, 0.1); border: 1px solid #10B981; margin-bottom: 14px;">
+                        <div id="appSummaryStatus" style="color: #10B981; font-weight: 800; font-size: 0.9rem; margin-bottom: 4px;">🟢 Horario 100% Disponible</div>
+                        <div id="appSummaryDetails" style="color: #FFF; font-size: 0.82rem; margin-bottom: 2px;">16:00 a 17:30 hs (1.50 hs en Cancha 1)</div>
+                        <div id="appSummaryLighting" style="color: #FFD700; font-size: 0.82rem; margin-bottom: 6px;">⚡ Turno Diurno ($8.000 ARS/h)</div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 6px;">
+                            <span style="color: #FFF; font-weight: 700;">Total a Pagar:</span>
+                            <span id="appSummaryPrice" style="color: var(--color-ath-orange); font-size: 1.3rem; font-weight: 900;">$12.000 ARS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simulación de Pago & Carga de Comprobante (Checkout ATH) -->
+                <div>
+                    <label style="color: #FFF; font-weight: 700; font-size: 0.85rem; display: block; margin-bottom: 8px;"><i class="fa-solid fa-wallet" style="color: var(--color-ath-orange);"></i> Método de Pago:</label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px;">
+                        <button type="button" id="payAppTransfer" class="pay-option active" style="padding: 10px; border-radius: 8px; border: 1px solid var(--color-ath-orange); background: rgba(255,102,0,0.15); color: #FFF; font-size: 0.8rem; font-weight: 700; cursor: pointer; text-align: left;">
+                            💳 Transferencia<br><small style="color: #FFD700; font-weight: normal;">Alias: TENIS.HITS.CBA</small>
+                        </button>
+                        <button type="button" id="payAppClub" class="pay-option" style="padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: #FFF; font-size: 0.8rem; font-weight: 700; cursor: pointer; text-align: left;">
+                            🏢 En Secretaría<br><small style="color: var(--color-text-muted); font-weight: normal;">Efectivo o Débito</small>
+                        </button>
+                    </div>
+
+                    <!-- Card Desplegable de Datos Bancarios & Subida Obligatoria -->
+                    <div id="paymentTransferCard" style="display: block; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,102,0,0.4); border-radius: 10px; padding: 12px; margin-bottom: 12px; font-size: 0.82rem; color: #FFF;">
+                        <div style="color: #FFD700; font-weight: 800; margin-bottom: 6px;"><i class="fa-solid fa-building-columns"></i> Datos para la Transferencia:</div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; background: rgba(255,255,255,0.05); padding: 6px 8px; border-radius: 6px;">
+                            <span><strong>Alias:</strong> TENIS.HITS.CBA</span>
+                            <button type="button" class="btn-copy-data" data-copy="TENIS.HITS.CBA" style="background: var(--color-ath-orange); border: none; color: #FFF; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; font-weight: 700;">📋 Copiar Alias</button>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; background: rgba(255,255,255,0.05); padding: 6px 8px; border-radius: 6px;">
+                            <span><strong>CBU/CVU:</strong> 0000003100054321098765</span>
+                            <button type="button" class="btn-copy-data" data-copy="0000003100054321098765" style="background: rgba(255,255,255,0.15); border: none; color: #FFF; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; font-weight: 700;">📋 Copiar CBU</button>
+                        </div>
+                        <div style="color: var(--color-text-muted); font-size: 0.75rem; margin-bottom: 10px;">Titular: Academia Tenis Hits &bull; Banco / Mercado Pago</div>
+
+                        <!-- Campo de Subida Obligatorio -->
+                        <label style="color: #FF8800; font-weight: 800; display: block; margin-bottom: 4px;">📎 Subir Comprobante (OBLIGATORIO):</label>
+                        <input type="file" id="appReceiptUpload" accept="image/*,.pdf" style="width: 100%; font-size: 0.8rem; background: rgba(255,255,255,0.1); padding: 6px; border-radius: 6px; color: #FFF; border: 1px dashed #FF8800;">
+                    </div>
+
+                    <button type="button" id="appConfirmBtn" class="btn-submit btn-pulse-ath" style="width: 100%; justify-content: center; font-size: 1rem; padding: 14px; background: linear-gradient(135deg, var(--color-ath-orange) 0%, #FF8800 100%); font-weight: 800;">
+                        ✅ Confirmar Reserva
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Login/Registro -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-card">
+            <button class="modal-close" id="modalCloseBtn" aria-label="Cerrar modal">&times;</button>
+            <div class="modal-header">
+                <h2>Portal ATH - Acceso Usuarios</h2>
+                <p>Ingresá a tu cuenta o registrate para continuar</p>
+            </div>
+            <div class="modal-tabs">
+                <button class="tab-btn active" data-tab="login">Iniciar Sesión</button>
+                <button class="tab-btn" data-tab="register">Crear Cuenta</button>
+            </div>
+            
+            <div class="tab-content active" id="tab-login">
+                <div class="alert-box alert-error" id="loginAlertError" style="display: none;"></div>
+                <div class="alert-box alert-success" id="loginAlertSuccess" style="display: none;"></div>
+                <form class="modal-form" id="loginForm">
+                    <div class="form-group"><label><i class="fa-solid fa-address-card"></i> Correo o DNI</label><input type="text" id="loginEmail" required></div>
+                    <div class="form-group"><label><i class="fa-solid fa-lock"></i> Contraseña</label><input type="password" id="loginPassword" required></div>
+                    <button type="submit" class="btn-submit"><i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión</button>
+                </form>
+            </div>
+
+            <div class="tab-content" id="tab-register">
+                <div class="alert-box alert-error" id="regAlertError" style="display: none;"></div>
+                <div class="alert-box alert-success" id="regAlertSuccess" style="display: none;"></div>
+                <form class="modal-form" id="registerForm">
+                    <div class="form-group"><label><i class="fa-solid fa-user"></i> Nombre</label><input type="text" id="regNombre" required></div>
+                    <div class="form-group"><label><i class="fa-solid fa-user-tag"></i> Apellido</label><input type="text" id="regApellido" required></div>
+                    <div class="form-group"><label><i class="fa-solid fa-id-card"></i> DNI</label><input type="text" id="regDni" required></div>
+                    <div class="form-group"><label><i class="fa-solid fa-envelope"></i> Correo</label><input type="email" id="regEmail" required></div>
+                    <div class="form-group"><label><i class="fa-solid fa-phone"></i> Teléfono</label><input type="tel" id="regTelefono" required></div>
+                    <div class="form-group"><label><i class="fa-solid fa-lock"></i> Contraseña</label><input type="password" id="regPassword" required></div>
+                    <div class="form-group"><label><i class="fa-solid fa-shield-halved"></i> Repetir Contraseña</label><input type="password" id="regConfirmPassword" required></div>
+                    <button type="submit" class="btn-submit btn-accent"><i class="fa-solid fa-user-plus"></i> Registrar Mi Cuenta</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="db.js?v=11.0"></script>
+    <script src="script.js?v=11.0"></script>
+</body>
+</html>

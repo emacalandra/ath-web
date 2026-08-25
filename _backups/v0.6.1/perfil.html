@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil y Autogestión | Academia Tenis Hits (ATH)</title>
+    <meta name="description" content="Perfil de usuario y credencial digital de Academia Tenis Hits en Club Ciudad Verde, San Francisco, Córdoba.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Font Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css?v=11.0">
+</head>
+<body>
+
+    <!-- Header Fijo Superior -->
+    <header class="navbar" id="header">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-img-wrapper">
+                    <img src="assets/logo.jpg" alt="Logo Oficial ATH - Academia Tenis Hits" class="logo-img">
+                </div>
+                <div class="logo-text-group">
+                    <span class="logo-title">Academia <span class="brand-orange">Tenis Hits</span></span>
+                    <span class="logo-subtitle">Club Ciudad Verde &bull; Córdoba</span>
+                </div>
+            </a>
+
+            <nav class="nav-menu" id="nav-menu">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="index.html" class="nav-link">Inicio</a></li>
+                    <li class="nav-item"><a href="sede.html" class="nav-link">Sede y Reservas</a></li>
+                    <li class="nav-item future-module"><a href="noticias.html" class="nav-link">Noticias</a></li>
+                    <li class="nav-item future-module"><a href="clases.html" class="nav-link">Clases</a></li>
+                    <li class="nav-item future-module"><a href="torneos.html" class="nav-link">Torneos</a></li>
+                    <li class="nav-item future-module"><a href="construccion.html" class="nav-link">Construcción</a></li>
+                    <li class="nav-item future-module"><a href="historia.html" class="nav-link">Historia</a></li>
+                </ul>
+            </nav>
+
+            <div class="nav-actions" id="navActions">
+                <button class="btn-cta" id="openModalBtn">
+                    <i class="fa-solid fa-user"></i>
+                    <span>Iniciar Sesión / Crear Cuenta</span>
+                </button>
+                <button class="mobile-toggle" id="mobileToggle" aria-label="Abrir menú de navegación">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenido Principal: Perfil de Usuario -->
+    <main>
+        <section class="content-section bg-dark-section" style="padding-top: 130px; min-height: 85vh;">
+            <div class="container" style="max-width: 1200px;">
+                
+                <div class="section-header" style="text-align: left; margin-bottom: 30px;">
+                    <span class="section-subtitle"><i class="fa-solid fa-id-card"></i> Portal de Jugadores ATH</span>
+                    <h1 class="section-title">Mi Perfil & <span class="brand-orange">Autogestión</span></h1>
+                    <p class="section-description" style="max-width: 650px;">
+                        Gestioná tus reservas de canchas, consultá tu credencial digital y actualizá tus datos personales en tiempo real.
+                    </p>
+                </div>
+
+                <div class="grid-2col" style="display: grid; grid-template-columns: minmax(300px, 360px) 1fr; gap: 30px; align-items: start;">
+                    
+                    <!-- SIDEBAR IZQUIERDO: CREDENCIAL DIGITAL ATH -->
+                    <div class="admin-card" style="background: linear-gradient(145deg, #071c33 0%, #051322 100%); border: 1px solid rgba(255, 102, 0, 0.3); border-radius: 16px; padding: 24px; text-align: center; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                        <!-- Chip decorativo de credencial -->
+                        <div style="position: absolute; top: 16px; right: 16px; font-size: 0.7rem; font-weight: 800; color: var(--color-ath-orange); background: rgba(255,102,0,0.15); border: 1px solid var(--color-ath-orange); padding: 4px 10px; border-radius: 20px; text-transform: uppercase;">
+                            <i class="fa-solid fa-microchip"></i> PASS ATH
+                        </div>
+
+                        <div style="margin-top: 10px; margin-bottom: 16px; position: relative; display: inline-block;">
+                            <img id="userAvatarImg" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Foto de Perfil" style="width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 3px solid var(--color-ath-orange); box-shadow: 0 0 20px rgba(255,102,0,0.4);">
+                            <button id="btnChangeAvatar" style="position: absolute; bottom: 0; right: 0; background: var(--color-ath-orange); color: #FFF; border: none; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.4);" title="Cambiar foto de perfil">
+                                <i class="fa-solid fa-camera"></i>
+                            </button>
+                            <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
+                        </div>
+
+                        <h2 id="userNameDisplay" style="font-size: 1.4rem; color: #FFF; font-weight: 800; margin-bottom: 4px;">Cargando...</h2>
+                        <div id="userRoleBadge" style="margin-bottom: 16px;">
+                            <span class="status-badge" style="background: rgba(255,255,255,0.1); color: #FFF;"><i class="fa-solid fa-spinner fa-spin"></i> Creciendo datos...</span>
+                        </div>
+
+                        <div style="text-align: left; background: rgba(0,0,0,0.25); padding: 14px; border-radius: 10px; font-size: 0.85rem; display: flex; flex-direction: column; gap: 8px; border: 1px solid rgba(255,255,255,0.06);">
+                            <div>
+                                <span style="color: var(--color-text-muted); display: block; font-size: 0.72rem; text-transform: uppercase;">DNI / Identificación</span>
+                                <strong id="userDniDisplay" style="color: #FFF;">-</strong>
+                            </div>
+                            <div>
+                                <span style="color: var(--color-text-muted); display: block; font-size: 0.72rem; text-transform: uppercase;">Correo Electrónico</span>
+                                <strong id="userEmailDisplay" style="color: #FFF; word-break: break-all;">-</strong>
+                            </div>
+                            <div>
+                                <span style="color: var(--color-text-muted); display: block; font-size: 0.72rem; text-transform: uppercase;">Teléfono de Contacto</span>
+                                <strong id="userPhoneDisplay" style="color: #FFF;">-</strong>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 16px; padding-top: 14px; border-top: 1px dashed rgba(255,255,255,0.1); text-align: center;">
+                            <p style="font-size: 0.72rem; color: #94A3B8; text-transform: uppercase; margin-bottom: 10px;"><i class="fa-solid fa-qrcode" style="color: var(--color-ath-orange);"></i> Credencial Digital QR</p>
+                            <div id="qrcode-container" style="display: inline-block; padding: 10px; background: #FFF; border-radius: 10px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- PANEL DERECHO: PESTAÑAS (MIS TURNOS, ESTADO DE CUENTA, AJUSTES) -->
+                    <div>
+                        <!-- Botonera de Sub-pestañas -->
+                        <div class="admin-tabs-nav" style="display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;">
+                            <button class="admin-tab-btn active" data-profiletab="turnos" style="flex: 1; min-width: 120px; justify-content: center;">
+                                <i class="fa-solid fa-calendar-check"></i> Mis Turnos
+                            </button>
+                            <button class="admin-tab-btn" data-profiletab="notificaciones" id="tabBtnNotificaciones" style="flex: 1; min-width: 120px; justify-content: center; position: relative;">
+                                <i class="fa-solid fa-bell"></i> Notificaciones <span id="tabNotifBadge" style="background: #EF4444; color: #FFF; font-size: 0.65rem; padding: 2px 6px; border-radius: 10px; display: none; margin-left: 4px;">0</span>
+                            </button>
+                            <button class="admin-tab-btn" data-profiletab="cuenta" style="flex: 1; min-width: 120px; justify-content: center;">
+                                <i class="fa-solid fa-receipt"></i> Estado de Cuenta
+                            </button>
+                            <button class="admin-tab-btn" data-profiletab="ajustes" style="flex: 1; min-width: 120px; justify-content: center;">
+                                <i class="fa-solid fa-gear"></i> Ajustes
+                            </button>
+                        </div>
+
+                        <!-- CONTENIDO 1: MIS TURNOS -->
+                        <div class="profile-tab-content" id="profile-tab-turnos">
+                            <div class="admin-card">
+                                <h3 class="admin-card-title" style="display: flex; align-items: center; justify-content: space-between;">
+                                    <span><i class="fa-solid fa-calendar-days" style="color: var(--color-ath-orange);"></i> Historial de Alquileres</span>
+                                    <a href="sede.html" class="btn-submit" style="font-size: 0.78rem; padding: 6px 12px; text-decoration: none;">
+                                        <i class="fa-solid fa-plus"></i> Reservar Nueva Cancha
+                                    </a>
+                                </h3>
+
+                                <div class="admin-table-container" style="margin-top: 16px;">
+                                    <table class="admin-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Cancha</th>
+                                                <th>Fecha & Horario</th>
+                                                <th>Monto Total</th>
+                                                <th>Estado de Pago</th>
+                                                <th>Acción</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="userBookingsTableBody">
+                                            <tr>
+                                                <td colspan="5" style="text-align: center; padding: 24px; color: var(--color-text-muted);">
+                                                    <i class="fa-solid fa-spinner fa-spin"></i> Cargando tus reservas...
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CONTENIDO 2: BANDEJA DE NOTIFICACIONES -->
+                        <div class="profile-tab-content" id="profile-tab-notificaciones" style="display: none;">
+                            <div class="admin-card">
+                                <h3 class="admin-card-title">
+                                    <i class="fa-solid fa-bell" style="color: var(--color-ath-orange);"></i> 
+                                    Bandeja de Notificaciones
+                                </h3>
+                                <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 16px;">
+                                    Alertas automáticas de confirmación de pago, avisos meteorológicos y cambios de estado.
+                                </p>
+                                <div id="notificationsInboxList">
+                                    <div style="text-align: center; padding: 24px; color: var(--color-text-muted);">
+                                        <i class="fa-solid fa-spinner fa-spin"></i> Cargando notificaciones...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CONTENIDO 2: ESTADO DE CUENTA -->
+                        <div class="profile-tab-content" id="profile-tab-cuenta" style="display: none;">
+                            <div class="admin-card">
+                                <h3 class="admin-card-title">
+                                    <i class="fa-solid fa-clock-rotate-left" style="color: #FFD700;"></i> 
+                                    Reservas Pendientes de Confirmación
+                                </h3>
+                                <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 16px;">
+                                    A continuación ves las solicitudes enviadas que están aguardando la verificación de comprobante por Secretaría.
+                                </p>
+                                <div id="unpaidBookingsList">
+                                    <div style="text-align: center; padding: 24px; color: var(--color-text-muted);">
+                                        <i class="fa-solid fa-spinner fa-spin"></i> Consultando registros...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CONTENIDO 3: AJUSTES DE PERFIL -->
+                        <div class="profile-tab-content" id="profile-tab-ajustes" style="display: none;">
+                            <div class="admin-card">
+                                <h3 class="admin-card-title">
+                                    <i class="fa-solid fa-user-pen" style="color: var(--color-ath-orange);"></i> 
+                                    Editar Información Personal
+                                </h3>
+
+                                <form id="profileUpdateForm" class="modal-form" style="max-width: 100%;">
+                                    <div class="grid-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                        <div class="form-group">
+                                            <label><i class="fa-solid fa-user"></i> Nombre</label>
+                                            <input type="text" id="editNombre" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label><i class="fa-solid fa-user"></i> Apellido</label>
+                                            <input type="text" id="editApellido" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="grid-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                        <div class="form-group">
+                                            <label><i class="fa-solid fa-address-card"></i> DNI</label>
+                                            <input type="text" id="editDni" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label><i class="fa-solid fa-phone"></i> Teléfono</label>
+                                            <input type="text" id="editTelefono" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label><i class="fa-solid fa-envelope"></i> Correo Electrónico</label>
+                                        <input type="email" id="editEmail" required>
+                                    </div>
+
+                                    <button type="submit" class="btn-submit" style="margin-top: 10px;">
+                                        <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios de Perfil
+                                    </button>
+                                </form>
+
+                                <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 30px 0;">
+
+                                <h3 class="admin-card-title">
+                                    <i class="fa-solid fa-lock" style="color: #FF8800;"></i> 
+                                    Cambiar Contraseña
+                                </h3>
+                                <form id="passwordChangeForm" class="modal-form" style="max-width: 100%;">
+                                    <div class="form-group">
+                                        <label><i class="fa-solid fa-key"></i> Nueva Contraseña</label>
+                                        <input type="password" id="newPassword" placeholder="Mínimo 6 caracteres" required>
+                                    </div>
+                                    <button type="submit" class="btn-submit btn-accent">
+                                        <i class="fa-solid fa-shield-halved"></i> Actualizar Contraseña
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom" style="text-align: center; padding: 20px 0; border-top: 1px solid rgba(255,255,255,0.1);">
+                <p>&copy; 2026 Academia Tenis Hits. Todos los derechos reservados. San Francisco, Córdoba.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts de la Aplicación -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <script src="db.js?v=11.0"></script>
+    <script src="script.js?v=11.0"></script>
+    <script src="perfil.js"></script>
+</body>
+</html>

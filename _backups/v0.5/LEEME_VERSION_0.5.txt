@@ -1,0 +1,23 @@
+===================================================================
+ACADEMIA TENIS HITS (ATH) - COPIA DE SEGURIDAD v0.5
+Fecha: 2026-08-24
+===================================================================
+
+ESTADO Y CARACTERÍSTICAS DE LA VERSIÓN 0.5:
+1. Base de Datos & Backend:
+   - Sincronización en la nube con Firebase Firestore v10 (db.js).
+   - Gestión reactiva de reservas, usuarios y bloqueos administrativos.
+
+2. Barra de Navegación (Mobile-First):
+   - Diseño compacto en móviles (< 992px) con botones de 34x34px.
+   - Ocultamiento de textos largos y logos innecesarios en móviles.
+   - Menú de secciones y botón 'Cerrar Sesión' dentro del menú hamburguesa.
+
+3. Panel de Administración Responsivo:
+   - Tablas transformadas en Tarjetas Fluidas en pantallas < 850px.
+   - Etiquetas data-label dinámicas con estilos naranja ATH.
+   - Botones de acción adaptables al 100% de ancho.
+
+4. Módulos & CMS:
+   - Ocultamiento estratégico global de módulos futuros (.future-module).
+   - Servidor local Python (dev_server.py) para persistencia visual.

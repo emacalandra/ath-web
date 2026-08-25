@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración | Academia Tenis Hits (ATH)</title>
+    <meta name="description" content="Panel exclusivo de administración y gerencia de Academia Tenis Hits en Club Ciudad Verde, San Francisco, Córdoba.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Font Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Header Fijo Superior -->
+    <header class="navbar" id="header">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-img-wrapper">
+                    <img src="assets/logo.jpg" alt="Logo Oficial ATH - Academia Tenis Hits" class="logo-img">
+                </div>
+                <div class="logo-text-group">
+                    <span class="logo-title">Academia <span class="brand-orange">Tenis Hits</span></span>
+                    <span class="logo-subtitle">Club Ciudad Verde &bull; Córdoba</span>
+                </div>
+            </a>
+
+            <nav class="nav-menu" id="nav-menu">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="index.html" class="nav-link">Inicio</a></li>
+                    <li class="nav-item"><a href="sede.html" class="nav-link">Sede y Reservas</a></li>
+                    <li class="nav-item future-module"><a href="noticias.html" class="nav-link">Noticias</a></li>
+                    <li class="nav-item future-module"><a href="clases.html" class="nav-link">Clases</a></li>
+                    <li class="nav-item future-module"><a href="torneos.html" class="nav-link">Torneos</a></li>
+                    <li class="nav-item future-module"><a href="construccion.html" class="nav-link">Construcción</a></li>
+                    <li class="nav-item future-module"><a href="historia.html" class="nav-link">Historia</a></li>
+                </ul>
+            </nav>
+
+            <div class="nav-actions" id="navActions">
+                <button class="btn-cta" id="openModalBtn">
+                    <i class="fa-solid fa-user"></i>
+                    <span>Iniciar Sesión / Crear Cuenta</span>
+                </button>
+                <button class="mobile-toggle" id="mobileToggle" aria-label="Abrir menú de navegación">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenido Principal: Panel de Administración -->
+    <main>
+        <section class="content-section bg-dark-section" style="padding-top: 140px;">
+            <div class="admin-container-wide">
+                <div class="section-header">
+                    <span class="section-subtitle"><i class="fa-solid fa-shield-halved"></i> Panel Restringido de Gerencia</span>
+                    <h2 class="section-title">⚡ Panel de Administración ATH</h2>
+                    <p class="section-description">Gestión de usuarios, control de roles (RBAC), aprobación de pagos de reservas, publicación de eventos y edición de tarifas oficiales de la institución.</p>
+                    <div class="title-bar"></div>
+                </div>
+
+                <div class="admin-tabs-nav">
+                    <button class="admin-tab-btn active" data-admintab="usuarios">
+                        <i class="fa-solid fa-users-gear"></i> 1. Usuarios & Roles
+                    </button>
+                    <button class="admin-tab-btn" data-admintab="reservas">
+                        <i class="fa-solid fa-file-invoice-dollar"></i> 2. Pagos & Reservas
+                    </button>
+                    <button class="admin-tab-btn future-module" data-admintab="contenido">
+                        <i class="fa-solid fa-newspaper"></i> 3. Publicar Contenido
+                    </button>
+                    <button class="admin-tab-btn" data-admintab="tarifas">
+                        <i class="fa-solid fa-tags"></i> 4. Tarifas & Textos
+                    </button>
+                    <button class="admin-tab-btn future-module" data-admintab="escuela">
+                        <i class="fa-solid fa-graduation-cap"></i> 5. Escuela y Alumnos
+                    </button>
+                    <button class="admin-tab-btn" data-admintab="canchas">
+                        <i class="fa-solid fa-lock"></i> 6. Gestión y Bloqueo de Canchas
+                    </button>
+                </div>
+
+                <!-- MÓDULO 1: GESTIÓN DE USUARIOS Y ROLES -->
+                <div class="admin-tab-content active" id="admin-tab-usuarios">
+                    <div class="admin-card">
+                        <h3 class="admin-card-title">
+                            <i class="fa-solid fa-user-shield" style="color: var(--color-ath-orange);"></i> 
+                            Directorio de Usuarios Registrados (<span id="totalUsersCount">0</span>)
+                        </h3>
+                        <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 20px;">
+                            Buscá usuarios por Nombre, Apellido, DNI o Email. Seleccioná y guardá el nuevo rol ('usuario', 'alumno' o 'admin') para modificar sus privilegios en tiempo real.
+                        </p>
+
+                        <input type="text" class="admin-search-bar" id="userSearchInput" placeholder="🔍 Buscar por Nombre, Apellido, DNI o Email...">
+
+                        <div class="admin-table-container">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Usuario</th>
+                                        <th>DNI</th>
+                                        <th>Correo Electrónico</th>
+                                        <th>Teléfono</th>
+                                        <th>Rol Asignado (RBAC)</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersTableBody">
+                                    <tr>
+                                        <td colspan="6" style="text-align: center; padding: 20px;">Cargando directorio de usuarios...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MÓDULO 2: CONTROL DE PAGOS Y RESERVAS -->
+                <div class="admin-tab-content" id="admin-tab-reservas">
+                    <div class="admin-card">
+                        <h3 class="admin-card-title">
+                            <i class="fa-solid fa-calendar-check" style="color: var(--color-ath-orange);"></i> 
+                            Gestión de Reservas y Estado de Pagos (<span id="totalBookingsCount">0</span>)
+                        </h3>
+                        <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 20px;">
+                            Revisá los turnos reservados por los usuarios. Aprobá los pagos o cancelá las reservas que no registren pago válido.
+                        </p>
+
+                        <!-- SUB-NAVEGACIÓN DE PESTAÑAS (TURNOS ACTIVOS VS HISTORIAL ARCHIVADO) -->
+                        <div class="subtabs-container" style="display: flex; gap: 10px; margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px;">
+                            <button id="btn-subtab-activas" class="btn-subtab active" onclick="window.cambiarSubtabReservas('activas')" style="background: linear-gradient(135deg, #FF6600 0%, #FF8800 100%); border: 1px solid #FFD700; color: #FFF; padding: 10px 18px; border-radius: 8px; font-weight: 800; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 0 10px rgba(255,102,0,0.4);">
+                                🟢 Turnos Activos & Pendientes <span id="badge-count-activas" style="background: #FFF; color: #FF6600; padding: 2px 6px; border-radius: 12px; font-size: 0.75rem;">0</span>
+                            </button>
+                            <button id="btn-subtab-historial" class="btn-subtab" onclick="window.cambiarSubtabReservas('historial')" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: #CBD5E1; padding: 10px 18px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
+                                🗄️ Historial de Pagos & Reservas <span id="badge-count-historial" style="background: rgba(255,255,255,0.2); color: #FFF; padding: 2px 6px; border-radius: 12px; font-size: 0.75rem;">0</span>
+                            </button>
+                        </div>
+
+                        <!-- PANEL DE REPORTES FINANCIEROS Y CIERRE CONTABLE SEMANAL -->
+                        <div id="panel-reportes-financieros" style="display: none; background: rgba(16, 185, 129, 0.1); border: 1px solid #10B981; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+                            <h4 style="color: #10B981; margin-top: 0; margin-bottom: 12px;"><i class="fa-solid fa-chart-line"></i> Cierre Contable Semanal</h4>
+                            <div style="display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; margin-bottom: 10px;">
+                                <div class="form-group" style="margin: 0; min-width: 320px;">
+                                    <label style="font-size: 0.8rem; margin-bottom: 4px;">Rango a consultar (Desde - Hasta):</label>
+                                    <div style="display: flex; gap: 8px; align-items: center;">
+                                        <input type="date" id="reportStartDate" style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff; width: 100%;">
+                                        <span style="color: #94A3B8; font-weight: bold;">-</span>
+                                        <input type="date" id="reportEndDate" style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff; width: 100%;">
+                                    </div>
+                                    <div style="display: flex; gap: 8px; margin-top: 8px;">
+                                        <button id="btnQuickThisWeek" type="button" style="background: rgba(59, 130, 246, 0.15); border: 1px solid #3B82F6; color: #60A5FA; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; font-weight: 700; transition: all 0.2s;">📅 Esta Semana</button>
+                                        <button id="btnQuickLastWeek" type="button" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #CBD5E1; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; transition: all 0.2s;">📅 Semana Pasada</button>
+                                    </div>
+                                </div>
+                                <button id="btnGenerateReport" class="btn-submit" style="background: #10B981; border: none; padding: 10px 16px; flex-shrink: 0;">
+                                    <i class="fa-solid fa-calculator"></i> Calcular Ingresos
+                                </button>
+                                <button id="btnDownloadCSV" class="btn-submit" style="background: #3B82F6; border: none; padding: 10px 16px; display: none; flex-shrink: 0;">
+                                    <i class="fa-solid fa-file-csv"></i> Descargar Excel (CSV)
+                                </button>
+                            </div>
+                            <div id="reportResultsBox" style="margin-top: 16px; display: none;">
+                                <!-- Resultados inyectados por JS -->
+                            </div>
+                        </div>
+
+                        <div class="admin-table-container">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Usuario / Solicitante</th>
+                                        <th>Cancha</th>
+                                        <th>Fecha & Turno</th>
+                                        <th>Monto</th>
+                                        <th>Método de Pago</th>
+                                        <th>Estado de Pago</th>
+                                        <th>Asistencia</th>
+                                        <th>Acciones de Control</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bookingsTableBody">
+                                    <tr>
+                                        <td colspan="8" style="text-align: center; padding: 20px;">Cargando reservas de canchas...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MÓDULO 3: EDICIÓN DE CONTENIDO (NOTICIAS Y TORNEOS) -->
+                <div class="admin-tab-content" id="admin-tab-contenido">
+                    <div class="grid-2col">
+                        <div class="admin-card">
+                            <h3 class="admin-card-title">
+                                <i class="fa-solid fa-bullhorn" style="color: var(--color-ath-orange);"></i> 
+                                Publicar Nueva Noticia
+                            </h3>
+                            <form id="newsPublishForm" class="modal-form">
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-heading"></i> Título de la Noticia</label>
+                                    <input type="text" id="newsTitle" placeholder="Ej: Abierta la inscripción al Torneo de Primavera" required>
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-tag"></i> Etiqueta / Categoría</label>
+                                    <input type="text" id="newsTag" placeholder="Ej: Torneos / Mantenimiento / Novedades" required>
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-calendar"></i> Fecha de Publicación</label>
+                                    <input type="text" id="newsDate" placeholder="Ej: 28 de Octubre, 2026" required>
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-align-left"></i> Contenido / Resumen</label>
+                                    <textarea id="newsContent" rows="4" style="background: rgba(5, 19, 34, 0.8); border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 10px; border-radius: 8px; font-family: inherit;" placeholder="Escribí el texto oficial del comunicado..." required></textarea>
+                                </div>
+                                <button type="submit" class="btn-submit">
+                                    <i class="fa-solid fa-paper-plane"></i> Publicar en noticias.html
+                                </button>
+                            </form>
+                        </div>
+
+                        <div class="admin-card">
+                            <h3 class="admin-card-title">
+                                <i class="fa-solid fa-trophy" style="color: var(--color-ath-orange);"></i> 
+                                Publicar Nuevo Torneo
+                            </h3>
+                            <form id="tournamentPublishForm" class="modal-form">
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-award"></i> Nombre del Certamen</label>
+                                    <input type="text" id="tournTitle" placeholder="Ej: Torneo Abierto de Fin de Semana" required>
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-layer-group"></i> Modalidad y Categorías</label>
+                                    <input type="text" id="tournCategory" placeholder="Ej: 1ª a 4ª Categoría y Dobles" required>
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-calendar-days"></i> Fecha de Disputa</label>
+                                    <input type="text" id="tournDate" placeholder="Ej: Sábado 15 y Domingo 16 de Noviembre" required>
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-circle-info"></i> Descripción & Premiación</label>
+                                    <textarea id="tournDesc" rows="4" style="background: rgba(5, 19, 34, 0.8); border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 10px; border-radius: 8px; font-family: inherit;" placeholder="Detalles de premios, ronda de consolación e hidratación..." required></textarea>
+                                </div>
+                                <button type="submit" class="btn-submit btn-accent">
+                                    <i class="fa-solid fa-circle-plus"></i> Publicar en torneos.html
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MÓDULO 4: EDICIÓN DE PRECIOS Y TARIFAS -->
+                <div class="admin-tab-content" id="admin-tab-tarifas">
+                    <div class="admin-card">
+                        <h3 class="admin-card-title">
+                            <i class="fa-solid fa-sack-dollar" style="color: var(--color-ath-orange);"></i> 
+                            Edición de Tarifas Oficiales y Cuotas ATH
+                        </h3>
+                        <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 24px;">
+                            Actualizá los precios vigentes para alquiler de canchas y programas de entrenamiento de la academia.
+                        </p>
+
+                        <form id="pricingForm" class="modal-form" style="max-width: 100%;">
+                            <!-- SECCIÓN A: ALQUILER DE CANCHAS (MATRIZ POR ROLES) -->
+                            <h4 style="color: var(--color-ath-orange); margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 6px;"><i class="fa-solid fa-layer-group"></i> Matriz de Alquiler de Canchas (ARS/Hora)</h4>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                                <!-- Estándar -->
+                                <div style="background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                                    <label style="color: #94A3B8; font-size: 0.8rem; text-transform: uppercase;">Invitado / Usuario Estándar</label>
+                                    <div class="form-group" style="margin-top: 8px;">
+                                        <label><i class="fa-solid fa-sun" style="color: #FFD700;"></i> Día</label>
+                                        <input type="number" id="priceCourtDay" value="8000" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label><i class="fa-solid fa-bolt" style="color: #FFD700;"></i> Noche (LED)</label>
+                                        <input type="number" id="priceCourtNight" value="12000" required>
+                                    </div>
+                                </div>
+                                <!-- Socios -->
+                                <div style="background: rgba(59, 130, 246, 0.05); padding: 12px; border-radius: 8px; border: 1px solid rgba(59, 130, 246, 0.3);">
+                                    <label style="color: #60A5FA; font-size: 0.8rem; text-transform: uppercase;">Socios ATH</label>
+                                    <div class="form-group" style="margin-top: 8px;">
+                                        <label><i class="fa-solid fa-sun" style="color: #FFD700;"></i> Día (Socio)</label>
+                                        <input type="number" id="priceCourtDaySocio" value="6000" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label><i class="fa-solid fa-bolt" style="color: #FFD700;"></i> Noche (Socio)</label>
+                                        <input type="number" id="priceCourtNightSocio" value="9000" required>
+                                    </div>
+                                </div>
+                                <!-- Alumnos -->
+                                <div style="background: rgba(16, 185, 129, 0.05); padding: 12px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.3);">
+                                    <label style="color: #34D399; font-size: 0.8rem; text-transform: uppercase;">Alumnos Escuela</label>
+                                    <div class="form-group" style="margin-top: 8px;">
+                                        <label><i class="fa-solid fa-sun" style="color: #FFD700;"></i> Día (Alumno)</label>
+                                        <input type="number" id="priceCourtDayAlumno" value="5000" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label><i class="fa-solid fa-bolt" style="color: #FFD700;"></i> Noche (Alumno)</label>
+                                        <input type="number" id="priceCourtNightAlumno" value="8000" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- SECCIÓN B: CUOTAS Y CLASES -->
+                            <h4 style="color: var(--color-ath-orange); margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 6px;"><i class="fa-solid fa-graduation-cap"></i> Escuela, Entrenamiento y Particulares</h4>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+                                <div class="form-group">
+                                    <label>Cuota Mensual Formativa (ARS)</label>
+                                    <input type="number" id="priceEscuela" value="25000" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Cuota Alto Rendimiento (ARS)</label>
+                                    <input type="number" id="priceAltoRend" value="45000" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Clase Particular Individual (ARS)</label>
+                                    <input type="number" id="priceClaseParticular" value="15000" required>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-submit" style="margin-top: 24px; max-width: 300px;">
+                                <i class="fa-solid fa-floppy-disk"></i> Guardar Tarifas Generales
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- MÓDULO 5: GESTIÓN Y BLOQUEO DE CANCHAS -->
+                <div class="admin-tab-content" id="admin-tab-canchas">
+                    <div class="grid-2col">
+                        
+                        <!-- Formulario de Bloqueo Administrativo Rápido -->
+                        <div class="admin-card">
+                            <h3 class="admin-card-title">
+                                <i class="fa-solid fa-ban" style="color: #EF4444;"></i> 
+                                Bloqueo Administrativo Rápido
+                            </h3>
+                            <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 20px;">
+                                Inhabilitá una o todas las canchas para clases de la escuela, torneos oficiales o mantenimientos.
+                            </p>
+
+                            <form id="adminCourtLockForm" style="display: flex; flex-direction: column; gap: 16px;">
+                                <div class="form-group">
+                                    <label style="font-weight: 700; color: #FFF;"><i class="fa-solid fa-layer-group" style="color: var(--color-ath-orange);"></i> Cancha a Bloquear</label>
+                                    <select id="lockCourtSelect" required style="padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; font-weight: 700;">
+                                        <option value="1">Cancha 1 - Polvo de Ladrillo</option>
+                                        <option value="2">Cancha 2 - Polvo de Ladrillo</option>
+                                        <option value="3">Cancha 3 - Polvo de Ladrillo</option>
+                                        <option value="TODAS">🚫 TODAS LAS CANCHAS (1, 2 y 3)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label style="font-weight: 700; color: #FFF;"><i class="fa-solid fa-calendar" style="color: var(--color-ath-orange);"></i> Fecha del Bloqueo</label>
+                                    <input type="date" id="lockDate" required style="padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; font-weight: 700;">
+                                </div>
+
+                                <div class="time-input-group">
+                                    <div class="form-group">
+                                        <label style="font-weight: 700; color: #FFF;"><i class="fa-solid fa-clock"></i> Hora Inicio</label>
+                                        <input type="time" id="lockStartTime" required value="08:00" style="padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; font-weight: 700;">
+                                    </div>
+                                    <div class="form-group">
+                                        <label style="font-weight: 700; color: #FFF;"><i class="fa-solid fa-clock"></i> Hora Fin</label>
+                                        <input type="time" id="lockEndTime" required value="12:00" style="padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; font-weight: 700;">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label style="font-weight: 700; color: #FFF;"><i class="fa-solid fa-tag" style="color: var(--color-ath-orange);"></i> Motivo Institucional</label>
+                                    <select id="lockReasonSelect" required style="padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; font-weight: 700;">
+                                        <option value="Clases Escuela Formativa">Clases Escuela Formativa</option>
+                                        <option value="Entrenamiento Alto Rendimiento">Entrenamiento Alto Rendimiento</option>
+                                        <option value="Torneo ATH Oficial">Torneo ATH Oficial</option>
+                                        <option value="Mantenimiento Técnico / Riego">Mantenimiento Técnico / Riego</option>
+                                        <option value="Bloqueo Especial Institucional">Bloqueo Especial Institucional</option>
+                                    </select>
+                                </div>
+
+                                <button type="submit" class="btn-submit" style="background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%); justify-content: center;">
+                                    <i class="fa-solid fa-lock"></i> Registrar Bloqueo Administrativo
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Tarjeta de Alerta Climática (Suspensión Masiva) -->
+                        <div class="admin-card" style="border: 1px solid #EF4444; background: rgba(239, 68, 68, 0.05);">
+                            <h3 class="admin-card-title"><i class="fa-solid fa-cloud-showers-heavy" style="color: #EF4444;"></i> Alerta Climática (Suspensión Masiva)</h3>
+                            <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 16px;">Cancela todos los turnos activos de un día y envía una notificación push de "Cancha Suspendida" a todos los afectados.</p>
+                            <input type="date" id="weatherDate" style="padding: 10px; width: 100%; margin-bottom: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF;">
+                            <input type="text" id="weatherReason" placeholder="Ej: Lluvia intensa y canchas inundadas" style="padding: 10px; width: 100%; margin-bottom: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF;">
+                            <button id="btnSuspenderClima" class="btn-submit" style="background: #EF4444; justify-content: center; width: 100%;"><i class="fa-solid fa-triangle-exclamation"></i> Suspender y Notificar</button>
+                        </div>
+
+                        <!-- Grilla Maestra de Bloqueos y Reservas -->
+                        <div class="admin-card">
+                            <h3 class="admin-card-title">
+                                <i class="fa-solid fa-list-check" style="color: var(--color-ath-orange);"></i> 
+                                Bloqueos & Reservas Activas
+                            </h3>
+                            <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 16px;">
+                                Administrá la disponibilidad en vivo. Podés liberar un horario cancelando o eliminando un bloqueo.
+                            </p>
+
+                            <div class="admin-table-container">
+                                <table class="admin-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Cancha</th>
+                                            <th>Fecha & Horario</th>
+                                            <th>Detalle / Usuario</th>
+                                            <th>Tipo / Motivo</th>
+                                            <th>Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="adminLocksTableBody">
+                                        <tr>
+                                            <td colspan="5" style="text-align: center; padding: 20px;">Cargando bloqueos y reservas...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                <!-- MÓDULO 5: GESTIÓN DE ESCUELA DE TENIS -->
+                <div class="admin-tab-content" id="admin-tab-escuela">
+                    <div class="admin-card">
+                        <h3 class="admin-card-title"><i class="fa-solid fa-users-viewfinder" style="color: var(--color-ath-orange);"></i> Gestión de Escuela de Tenis</h3>
+                        <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 20px;">Control de matrículas, asistencia a clases regulares y estado de cuotas mensuales de alumnos (Formativa y Alto Rendimiento).</p>
+                        <div style="display: flex; gap: 10px; margin-bottom: 16px;">
+                            <button class="btn-submit btn-accent"><i class="fa-solid fa-user-plus"></i> Inscribir Nuevo Alumno</button>
+                            <button class="btn-submit" style="background: rgba(255,255,255,0.1);"><i class="fa-solid fa-file-invoice-dollar"></i> Control de Cuotas Mensuales</button>
+                        </div>
+                        <div class="admin-table-container">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr><th>Alumno</th><th>DNI</th><th>Programa</th><th>Días de Entrenamiento</th><th>Estado Cuota Mes Actual</th><th>Acción</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td colspan="6" style="text-align: center; padding: 20px;">Módulo en construcción. Próximamente integración con DB.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Pie de Página -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <a href="index.html" class="footer-logo-link">
+                        <img src="assets/logo.jpg" alt="Logo Oficial ATH" class="footer-logo-img">
+                        <div class="logo-title">Academia <span class="brand-orange">Tenis Hits</span></div>
+                    </a>
+                    <p>Institución líder en la enseñanza y práctica del tenis en las instalaciones del Club Ciudad Verde, San Francisco, Córdoba, Argentina. Formación técnica, certámenes y comunidad deportiva.</p>
+                </div>
+
+                <div class="footer-nav">
+                    <h4 class="footer-heading">Navegación</h4>
+                    <ul class="footer-nav-list">
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="sede.html">Sede y Reservas</a></li>
+                        <li><a href="noticias.html">Noticias</a></li>
+                        <li><a href="clases.html">Clases</a></li>
+                        <li><a href="torneos.html">Torneos</a></li>
+                        <li><a href="construccion.html">Construcción</a></li>
+                        <li><a href="historia.html">Historia</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-social-wrapper">
+                    <h4 class="footer-heading">Redes Sociales & Sede</h4>
+                    <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 12px;">
+                        <strong>Club Ciudad Verde</strong><br>
+                        Belgrano 2900, San Francisco, Córdoba
+                    </p>
+                    <div class="social-icons-group">
+                        <a href="https://instagram.com" target="_blank" rel="noopener" class="social-icon-btn instagram" aria-label="Instagram de ATH">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="https://wa.me/5493564987654" target="_blank" rel="noopener" class="social-icon-btn whatsapp" aria-label="WhatsApp Oficial de ATH">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </a>
+                        <a href="https://facebook.com" target="_blank" rel="noopener" class="social-icon-btn facebook" aria-label="Facebook de ATH">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom-bar">
+                <div class="footer-legal">
+                    &copy; 2026 <strong>Academia Tenis Hits (ATH)</strong>. Todos los derechos reservados.
+                </div>
+                <div class="footer-tagline">
+                    Academia de Tenis &bull; Club Ciudad Verde &bull; San Francisco, Córdoba, Argentina
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal / Portal ATH - Acceso Usuarios -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-card">
+            <button class="modal-close" id="modalCloseBtn" aria-label="Cerrar modal">&times;</button>
+            <div class="modal-header">
+                <h2>Portal ATH - Acceso Usuarios</h2>
+                <p>Ingresá a tu cuenta o registrate para continuar</p>
+            </div>
+            <div class="modal-tabs">
+                <button class="tab-btn active" data-tab="login">Iniciar Sesión</button>
+                <button class="tab-btn" data-tab="register">Crear Cuenta</button>
+            </div>
+            
+            <div class="tab-content active" id="tab-login">
+                <div class="alert-box alert-error" id="loginAlertError" style="display: none;"></div>
+                <div class="alert-box alert-success" id="loginAlertSuccess" style="display: none;"></div>
+
+                <form class="modal-form" id="loginForm">
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-address-card"></i> Correo Electrónico o DNI</label>
+                        <input type="text" id="loginEmail" placeholder="Correo o DNI (sin puntos)" required>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 4px;">
+                        <label><i class="fa-solid fa-lock"></i> Contraseña</label>
+                        <input type="password" id="loginPassword" placeholder="••••••••" required>
+                        <div style="text-align: right; margin-top: 6px;">
+                            <a href="#" id="forgotPasswordBtn" class="terms-link" style="font-size: 0.85rem;">¿Olvidaste tu contraseña? Recuperala acá</a>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit">
+                        <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión
+                    </button>
+                </form>
+            </div>
+
+            <div class="tab-content" id="tab-register">
+                <div class="alert-box alert-error" id="regAlertError" style="display: none;"></div>
+                <div class="alert-box alert-success" id="regAlertSuccess" style="display: none;"></div>
+
+                <form class="modal-form" id="registerForm">
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-user"></i> Nombre</label>
+                        <input type="text" id="regNombre" placeholder="Ej: Lucas" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-user-tag"></i> Apellido</label>
+                        <input type="text" id="regApellido" placeholder="Ej: González" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-id-card"></i> DNI (Documento de Identidad)</label>
+                        <input type="text" id="regDni" placeholder="Ej: 38123456 (sin puntos)" required pattern="\d{7,8}" title="Ingresá entre 7 y 8 dígitos sin puntos">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-envelope"></i> Correo Electrónico</label>
+                        <input type="email" id="regEmail" placeholder="tu-email@ejemplo.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-phone"></i> Teléfono / WhatsApp</label>
+                        <input type="tel" id="regTelefono" placeholder="+54 9 3564 123456" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-lock"></i> Contraseña</label>
+                        <input type="password" id="regPassword" placeholder="••••••••" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-shield-halved"></i> Repetir Contraseña</label>
+                        <input type="password" id="regConfirmPassword" placeholder="••••••••" required>
+                    </div>
+
+                    <div class="form-group form-checkbox-group" style="margin-top: 6px;">
+                        <label class="checkbox-label" style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.85rem; cursor: pointer; color: var(--color-text-muted);">
+                            <input type="checkbox" id="regTerms" required style="width: 18px; height: 18px; accent-color: var(--color-ath-orange); margin-top: 2px;">
+                            <span>He leído y acepto los <a href="#" class="terms-link">Términos y Condiciones de Uso y Política de Privacidad</a> de la Academia Tenis Hits.</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn-submit btn-accent" id="regSubmitBtn">
+                        <i class="fa-solid fa-user-plus"></i> Crear mi cuenta
+                    </button>
+                </form>
+            </div>
+
+
+
+            <div class="tab-content" id="tab-recovery">
+                <div class="alert-box alert-error" id="recAlertError" style="display: none;"></div>
+                <div class="alert-box alert-success" id="recAlertSuccess" style="display: none;"></div>
+
+                <form class="modal-form" id="recoveryStep1Form">
+                    <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 6px;">
+                        Ingresá tu correo electrónico registrado. Te enviaremos un código de seguridad de 6 dígitos para restablecer tu clave.
+                    </p>
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-envelope"></i> Correo Electrónico Registrado</label>
+                        <input type="email" id="recEmail" placeholder="tu-email@ejemplo.com" required>
+                    </div>
+                    <button type="submit" class="btn-submit" id="sendCodeBtn">
+                        <i class="fa-solid fa-paper-plane"></i> Enviar Código de Seguridad
+                    </button>
+                </form>
+
+                <form class="modal-form" id="recoveryStep2Form" style="display: none;">
+                    <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 6px;">
+                        Ingresá el código de 6 dígitos enviado desde <strong>no-reply@tenishits.com.ar</strong> y definí tu nueva clave.
+                    </p>
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-key"></i> Código de Seguridad (6 dígitos)</label>
+                        <input type="text" id="recCode" placeholder="Ej: 482910" required maxlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-lock"></i> Nueva Contraseña</label>
+                        <input type="password" id="recNewPassword" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn-submit btn-accent" id="resetPasswordBtn">
+                        <i class="fa-solid fa-check-double"></i> Restablecer Contraseña
+                    </button>
+                </form>
+
+                <div style="text-align: center; margin-top: 14px;">
+                    <a href="#" id="backToLoginBtn" class="terms-link" style="font-size: 0.85rem;">
+                        <i class="fa-solid fa-arrow-left"></i> Volver a Iniciar Sesión
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Secundario Legal -->
+    <div class="legal-modal-overlay" id="legalModalOverlay">
+        <div class="legal-modal-card">
+            <button class="modal-close" id="legalModalCloseBtn" aria-label="Cerrar modal legal">&times;</button>
+            <div class="legal-modal-header">
+                <i class="fa-solid fa-scale-balanced" style="font-size: 2rem; color: var(--color-ath-orange); margin-bottom: 10px;"></i>
+                <h2>Términos, Condiciones & Política de Privacidad</h2>
+                <p>Academia Tenis Hits (ATH) &bull; Club Ciudad Verde &bull; San Francisco, Córdoba</p>
+            </div>
+            <div class="legal-modal-body">
+                <h3>1. Instalaciones y Uso de Canchas</h3>
+                <p>La práctica de tenis en nuestras 3 canchas de polvo de ladrillo ubicadas en el Club Ciudad Verde (Belgrano 2900, San Francisco, Córdoba) requiere el uso obligatorio de calzado deportivo adecuado sin tapones agresivos que puedan dañar la superficie. Los usuarios y alumnos deben respetar la puntualidad de inicio y finalización del turno reservado.</p>
+
+                <h3>2. Política de Cancelación y Reprogramación</h3>
+                <p>Las reservas de turnos pueden cancelarse o reprogramarse sin penalización acreditando el saldo con una anticipación mínima de <strong>24 horas</strong> respecto al horario fijado. Cancelaciones realizadas con un plazo menor no darán derecho a reembolso salvo inclemencias climáticas severas evaluadas por la secretaría del club.</p>
+
+                <h3>3. Protección de Datos Personales (Ley N° 25.326)</h3>
+                <p>En cumplimiento de la <strong>Ley Nacional de Protección de Datos Personales N° 25.326 de la República Argentina</strong>, la Academia Tenis Hits (ATH) garantiza que los datos brindados (Nombre, Apellido, DNI, Correo Electrónico y Teléfono) son almacenados de forma confidencial e inalterable en nuestros sistemas. Dichos datos serán empleados de manera estricta y exclusiva para la identificación de usuarios, reserva de turnos, registro de alumnos y comunicación institucional del club.</p>
+
+                <h3>4. Aceptación Expresa</h3>
+                <p>Al marcar la casilla correspondiente durante el registro de cuenta, el titular declara haber leído, comprendido y aceptado en su totalidad los presentes Términos y Condiciones de Uso.</p>
+            </div>
+            <div class="legal-modal-footer">
+                <button class="btn-submit" id="legalAcceptBtn">
+                    <i class="fa-solid fa-check"></i> Entendido y Acepto
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Módulo de Base de Datos, Script Principal y Controlador Admin -->
+    <script src="db.js"></script>
+    <script src="script.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

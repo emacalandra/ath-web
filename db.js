@@ -617,7 +617,14 @@ class ATHDatabaseEngine {
         return afectadas;
     }
 
-        getWeeklyRules() {
+            getExceptions() {
+        try { return JSON.parse(localStorage.getItem('ath_exceptions_rules')) || []; } catch { return []; }
+    }
+    saveExceptions(exc) {
+        localStorage.setItem('ath_exceptions_rules', JSON.stringify(exc));
+    }
+
+    getWeeklyRules() {
         try { return JSON.parse(localStorage.getItem('ath_weekly_rules')) || []; } catch { return []; }
     }
     saveWeeklyRules(rules) {
@@ -737,16 +744,31 @@ class ATHDatabaseEngine {
             if (rules.length > 0) {
                 const dateObj = new Date(`${fecha}T12:00:00`);
                 const dayOfWeek = dateObj.getDay(); // 0 a 6
+                const exceptions = this.getExceptions();
                 
                 for (let rule of rules) {
                     if (String(rule.day) === String(dayOfWeek) && (rule.court === 'TODAS' || String(rule.court) === String(canchaId))) {
                         const startRule = timeStringToMinutes(rule.start);
                         const endRule = timeStringToMinutes(rule.end);
-                        if (startNuevo < endRule && endNuevo > startRule) {
+                        
+                        // Verificar si existe una excepción que anule esta regla en este día
+                        let isExcepted = false;
+                        for(let ex of exceptions) {
+                            if(ex.fecha === fecha && (ex.cancha === 'TODAS' || String(ex.cancha) === String(canchaId))) {
+                                const exStart = timeStringToMinutes(ex.inicio);
+                                const exEnd = timeStringToMinutes(ex.fin);
+                                if(startRule < exEnd && endRule > exStart) {
+                                    isExcepted = true;
+                                    break; // La clase está suspendida, se ignora la regla
+                                }
+                            }
+                        }
+
+                        if (!isExcepted && startNuevo < endRule && endNuevo > startRule) {
                             return {
                                 disponible: false,
                                 conflicto: { horaInicio: rule.start, horaFin: rule.end },
-                                mensaje: `⛔ Horario bloqueado por Clase/Plantilla Fija: ${rule.label} (${rule.start} a ${rule.end} hs).`
+                                mensaje: `⛔ Horario bloqueado por Clase Fija: ${rule.label} (${rule.start} a ${rule.end} hs).`
                             };
                         }
                     }

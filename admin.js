@@ -1022,3 +1022,75 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     }
+
+
+    // Controladores de Excepciones (Liberar Cancha por Día)
+    const formExcepcion = document.getElementById('formExcepcionClase');
+    const listaExcepciones = document.getElementById('listaExcepciones');
+
+    function renderizarExcepciones() {
+        if (!listaExcepciones) return;
+        let excepciones = [];
+        if (window.DBHits.getExceptions) excepciones = window.DBHits.getExceptions();
+        
+        // Limpiar excepciones viejas automáticamente
+        const hoyISO = new Date().toISOString().split('T')[0];
+        const activas = excepciones.filter(ex => ex.fecha >= hoyISO);
+        if (activas.length !== excepciones.length) window.DBHits.saveExceptions(activas);
+
+        if (activas.length === 0) {
+            listaExcepciones.innerHTML = '';
+            return;
+        }
+
+        listaExcepciones.innerHTML = activas.map(ex => `
+            <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 8px 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-size: 0.8rem; color: #FFF;">
+                    <strong style="color: #6EE7B7;">${ex.fecha}</strong> &bull; ${ex.inicio} a ${ex.fin} hs<br>
+                    <span style="color: #A7F3D0;"><i class="fa-solid fa-unlock"></i> Cancha Liberada (${ex.cancha === 'TODAS' ? 'Todas' : 'Cancha ' + ex.cancha})</span>
+                </div>
+                <button class="btn-borrar-exc" data-id="${ex.id}" style="background: none; border: none; color: #EF4444; font-size: 1.1rem; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+        `).join('');
+
+        document.querySelectorAll('.btn-borrar-exc').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const id = btn.dataset.id;
+                let excs = window.DBHits.getExceptions();
+                excs = excs.filter(x => String(x.id) !== String(id));
+                window.DBHits.saveExceptions(excs);
+                renderizarExcepciones();
+            });
+        });
+    }
+
+    if (formExcepcion) {
+        renderizarExcepciones();
+        // Asignar hoy por defecto
+        const hoy = new Date();
+        const offset = hoy.getTimezoneOffset() * 60000;
+        const inputExcFecha = document.getElementById('excFecha');
+        if (inputExcFecha) inputExcFecha.value = (new Date(hoy - offset)).toISOString().split('T')[0];
+
+        formExcepcion.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const inicio = document.getElementById('excInicio').value;
+            const fin = document.getElementById('excFin').value;
+            if(inicio >= fin) return alert("La hora de inicio debe ser anterior a la de fin.");
+
+            const excs = window.DBHits.getExceptions();
+            excs.push({
+                id: Date.now(),
+                fecha: document.getElementById('excFecha').value,
+                cancha: document.getElementById('excCancha').value,
+                inicio: inicio,
+                fin: fin
+            });
+            window.DBHits.saveExceptions(excs);
+            alert("✅ ¡Cancha liberada con éxito! El sistema ignorará la clase en esta fecha y permitirá reservas.");
+            formExcepcion.reset();
+            if (inputExcFecha) inputExcFecha.value = (new Date(hoy - offset)).toISOString().split('T')[0];
+            renderizarExcepciones();
+        });
+    }

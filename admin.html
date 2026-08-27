@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome Font Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css?v=37.0">
+    <link rel="stylesheet" href="styles.css?v=38.0">
 </head>
 <body>
 
@@ -464,6 +464,35 @@
     </div>
                         </div>
 
+                        
+                        <!-- Excepciones: Liberar Clase Suspendida -->
+                        <div class="admin-card" style="border: 1px solid #10B981; background: rgba(16, 185, 129, 0.05); grid-column: 1 / -1; margin-bottom: 24px;">
+                            <h3 class="admin-card-title"><i class="fa-solid fa-lock-open" style="color: #10B981;"></i> Liberar Turno Fijo (Excepción por Día)</h3>
+                            <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 16px;">¿Se suspendió una clase de la escuela hoy? Ingresa la fecha y horario para anular la plantilla fija <strong>solo por ese día</strong> y permitir que el público reserve.</p>
+                            <form id="formExcepcionClase" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end;">
+                                <div style="flex: 1; min-width: 130px;">
+                                    <label style="font-size: 0.8rem; color: #6EE7B7; font-weight: 700;">Fecha a liberar:</label>
+                                    <input type="date" id="excFecha" required style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.3); color: #FFF; border: 1px solid #10B981;">
+                                </div>
+                                <div style="flex: 1; min-width: 120px;">
+                                    <label style="font-size: 0.8rem; color: #6EE7B7; font-weight: 700;">Cancha:</label>
+                                    <select id="excCancha" required style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.3); color: #FFF; border: 1px solid #10B981;">
+                                        <option value="TODAS">Todas</option><option value="1">Cancha 1</option><option value="2">Cancha 2</option><option value="3">Cancha 3</option>
+                                    </select>
+                                </div>
+                                <div style="flex: 1; min-width: 100px;">
+                                    <label style="font-size: 0.8rem; color: #6EE7B7; font-weight: 700;">De (hs):</label>
+                                    <input type="time" id="excInicio" required style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.3); color: #FFF; border: 1px solid #10B981;">
+                                </div>
+                                <div style="flex: 1; min-width: 100px;">
+                                    <label style="font-size: 0.8rem; color: #6EE7B7; font-weight: 700;">Hasta (hs):</label>
+                                    <input type="time" id="excFin" required style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.3); color: #FFF; border: 1px solid #10B981;">
+                                </div>
+                                <button type="submit" class="btn-submit" style="background: #10B981; border: none; padding: 11px 16px;"><i class="fa-solid fa-unlock"></i> Liberar Cancha</button>
+                            </form>
+                            <div id="listaExcepciones" style="margin-top: 16px; display: flex; flex-direction: column; gap: 8px;"></div>
+                        </div>
+
                         <!-- Tarjeta de Alerta Climática (Suspensión Masiva) -->
                         <div class="admin-card" style="border: 1px solid #EF4444; background: rgba(239, 68, 68, 0.05);">
                             <h3 class="admin-card-title"><i class="fa-solid fa-cloud-showers-heavy" style="color: #EF4444;"></i> Alerta Climática (Suspensión Masiva)</h3>
@@ -745,8 +774,8 @@
     </div>
 
     <!-- Módulo de Base de Datos, Script Principal y Controlador Admin -->
-    <script src="db.js?v=37.0"></script>
-    <script src="script.js?v=37.0"></script>
-    <script src="admin.js?v=37.0"></script>
+    <script src="db.js?v=38.0"></script>
+    <script src="script.js?v=38.0"></script>
+    <script src="admin.js?v=38.0"></script>
 </body>
 </html>

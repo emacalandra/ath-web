@@ -1507,12 +1507,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 if (!enVacaciones) {
                     const rules = window.DBHits.getWeeklyRules();
+                    const exceptions = window.DBHits.getExceptions ? window.DBHits.getExceptions() : [];
                     const dayOfWeek = new Date(`${currentWidgetDate}T12:00:00`).getDay();
+                    
                     rules.forEach(rule => {
                         if (String(rule.day) === String(dayOfWeek) && (rule.court === 'TODAS' || String(rule.court) === String(currentWidgetCourt))) {
-                            reservasCancha.push({
-                                tipo: 'bloqueo_admin', motivo: rule.label, horaInicio: rule.start, horaFin: rule.end
-                            });
+                            let isExcepted = false;
+                            const startRuleMin = parseInt(rule.start.split(':')[0])*60 + parseInt(rule.start.split(':')[1]);
+                            const endRuleMin = parseInt(rule.end.split(':')[0])*60 + parseInt(rule.end.split(':')[1]);
+
+                            for(let ex of exceptions) {
+                                if(ex.fecha === currentWidgetDate && (ex.cancha === 'TODAS' || String(ex.cancha) === String(currentWidgetCourt))) {
+                                    const exStartMin = parseInt(ex.inicio.split(':')[0])*60 + parseInt(ex.inicio.split(':')[1]);
+                                    const exEndMin = parseInt(ex.fin.split(':')[0])*60 + parseInt(ex.fin.split(':')[1]);
+                                    if(startRuleMin < exEndMin && endRuleMin > exStartMin) {
+                                        isExcepted = true; break;
+                                    }
+                                }
+                            }
+
+                            if(!isExcepted) {
+                                reservasCancha.push({
+                                    tipo: 'bloqueo_admin', motivo: rule.label, horaInicio: rule.start, horaFin: rule.end
+                                });
+                            }
                         }
                     });
                 }

@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome Font Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css?v=34.0">
+    <link rel="stylesheet" href="styles.css?v=35.0">
 </head>
 <body>
 
@@ -380,56 +380,50 @@
                 <div class="admin-tab-content" id="admin-tab-canchas">
                     <div class="grid-2col">
                         
-                        <!-- Formulario de Bloqueo Administrativo Rápido -->
-                        <div class="admin-card">
+                        <div class="admin-card" style="margin-bottom: 24px;">
                             <h3 class="admin-card-title">
                                 <i class="fa-solid fa-ban" style="color: #EF4444;"></i> 
-                                Bloqueo Administrativo Rápido
+                                Bloqueo Rápido / Excepcional
                             </h3>
                             <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 20px;">
-                                Inhabilitá una o todas las canchas para clases de la escuela, torneos oficiales o mantenimientos.
+                                Bloqueá una o todas las canchas para un día y horario específico de forma inmediata (ej: alquiler externo, clase particular suelta, etc.).
                             </p>
 
                             <form id="adminCourtLockForm" style="display: flex; flex-direction: column; gap: 16px;">
-                                <div class="form-group">
-                                    <label style="font-weight: 700; color: #FFF;"><i class="fa-solid fa-layer-group" style="color: var(--color-ath-orange);"></i> Cancha a Bloquear</label>
-                                    <select id="lockCourtSelect" required style="padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; font-weight: 700;">
-                                        <option value="1">Cancha 1 - Polvo de Ladrillo</option>
-                                        <option value="2">Cancha 2 - Polvo de Ladrillo</option>
-                                        <option value="3">Cancha 3 - Polvo de Ladrillo</option>
-                                        <option value="TODAS">🚫 TODAS LAS CANCHAS (1, 2 y 3)</option>
-                                    </select>
+                                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                    <div class="form-group" style="flex: 1; min-width: 200px;">
+                                        <label style="font-weight: 700; color: #FFF;"><i class="fa-solid fa-layer-group" style="color: var(--color-ath-orange);"></i> Cancha a Bloquear</label>
+                                        <select id="lockCourtSelect" required style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; font-weight: 700;">
+                                            <option value="1">Cancha 1</option>
+                                            <option value="2">Cancha 2</option>
+                                            <option value="3">Cancha 3</option>
+                                            <option value="TODAS">🚫 TODAS LAS CANCHAS</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                                        <label style="font-weight: 700; color: #FFF;"><i class="fa-solid fa-calendar" style="color: var(--color-ath-orange);"></i> Fecha</label>
+                                        <input type="date" id="lockDate" required style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; font-weight: 700;">
+                                    </div>
                                 </div>
 
-                                <div class="form-group">
-                                    <label style="font-weight: 700; color: #FFF;"><i class="fa-solid fa-calendar" style="color: var(--color-ath-orange);"></i> Fecha del Bloqueo</label>
-                                    <input type="date" id="lockDate" required style="padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; font-weight: 700;">
-                                </div>
-
-                                <div class="time-input-group">
-                                    <div class="form-group">
+                                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                    <div class="form-group" style="flex: 1; min-width: 120px;">
                                         <label style="font-weight: 700; color: #FFF;"><i class="fa-solid fa-clock"></i> Hora Inicio</label>
-                                        <input type="time" id="lockStartTime" required value="08:00" style="padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; font-weight: 700;">
+                                        <input type="time" id="lockStartTime" required value="08:00" style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; font-weight: 700;">
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group" style="flex: 1; min-width: 120px;">
                                         <label style="font-weight: 700; color: #FFF;"><i class="fa-solid fa-clock"></i> Hora Fin</label>
-                                        <input type="time" id="lockEndTime" required value="12:00" style="padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; font-weight: 700;">
+                                        <input type="time" id="lockEndTime" required value="10:00" style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; font-weight: 700;">
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label style="font-weight: 700; color: #FFF;"><i class="fa-solid fa-tag" style="color: var(--color-ath-orange);"></i> Motivo Institucional</label>
-                                    <select id="lockReasonSelect" required style="padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; font-weight: 700;">
-                                        <option value="Clases Escuela Formativa">Clases Escuela Formativa</option>
-                                        <option value="Entrenamiento Alto Rendimiento">Entrenamiento Alto Rendimiento</option>
-                                        <option value="Torneo ATH Oficial">Torneo ATH Oficial</option>
-                                        <option value="Mantenimiento Técnico / Riego">Mantenimiento Técnico / Riego</option>
-                                        <option value="Bloqueo Especial Institucional">Bloqueo Especial Institucional</option>
-                                    </select>
+                                    <label style="font-weight: 700; color: #FFF;"><i class="fa-solid fa-tag" style="color: var(--color-ath-orange);"></i> Motivo (Opcional)</label>
+                                    <input type="text" id="lockReasonInput" placeholder="Ej: Clase profe Juan, Torneo externo, etc. (Dejar en blanco si no hay motivo)" style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; font-weight: 700;">
                                 </div>
 
                                 <button type="submit" class="btn-submit" style="background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%); justify-content: center;">
-                                    <i class="fa-solid fa-lock"></i> Registrar Bloqueo Administrativo
+                                    <i class="fa-solid fa-lock"></i> Bloquear Cancha Ahora
                                 </button>
                             </form>
                         </div>
@@ -782,8 +776,8 @@
     </div>
 
     <!-- Módulo de Base de Datos, Script Principal y Controlador Admin -->
-    <script src="db.js?v=34.0"></script>
-    <script src="script.js?v=34.0"></script>
-    <script src="admin.js?v=34.0"></script>
+    <script src="db.js?v=35.0"></script>
+    <script src="script.js?v=35.0"></script>
+    <script src="admin.js?v=35.0"></script>
 </body>
 </html>

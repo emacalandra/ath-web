@@ -603,7 +603,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             const fecha = document.getElementById('lockDate').value;
             const horaInicio = document.getElementById('lockStartTime').value;
             const horaFin = document.getElementById('lockEndTime').value;
-            const motivo = document.getElementById('lockReasonSelect').value;
+            const motivoInput = document.getElementById('lockReasonInput') ? document.getElementById('lockReasonInput').value.trim() : '';
+            const motivo = motivoInput !== '' ? motivoInput : 'Bloqueo Excepcional';
 
             if (!fecha || !horaInicio || !horaFin) {
                 alert('Por favor, completa la fecha y las horas de inicio y fin del bloqueo.');

@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome Font Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css?v=31.0">
+    <link rel="stylesheet" href="styles.css?v=32.0">
 </head>
 <body>
 
@@ -235,10 +235,10 @@
                         <h4 class="step-title"><span class="step-badge">2</span> <span data-editable="modal_step2_label">¿Cuándo querés jugar?</span></h4>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
                             <label style="color: var(--color-text-muted); font-size: 0.8rem;" data-editable="modal_day_label">Día de la semana:</label>
-                            <div style="position: relative;">
-                                <button type="button" id="btnOpenCalendar" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.22); color: #FFF; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 0.78rem; font-weight: 700;">📅 Calendario</button>
-                                <input type="date" id="appCustomDateHidden" style="position: absolute; opacity: 0; pointer-events: none; width:0; height:0;">
-                            </div>
+                            <div style="position: relative; display: inline-block;">
+    <button type="button" id="btnOpenCalendar" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.22); color: #FFF; padding: 5px 10px; border-radius: 6px; font-size: 0.78rem; font-weight: 700;">📅 Calendario</button>
+    <input type="date" id="appCustomDateHidden" style="position: absolute; top: 0; left: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; z-index: 10;">
+</div>
                         </div>
                         <div id="appDatePills" style="display: flex; gap: 6px; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 6px; width: 100%; box-sizing: border-box;"></div>
                     </div>
@@ -512,7 +512,7 @@
         </div>
     </div>
 
-    <script src="db.js?v=31.0"></script>
-    <script src="script.js?v=31.0"></script>
+    <script src="db.js?v=32.0"></script>
+    <script src="script.js?v=32.0"></script>
 </body>
 </html>

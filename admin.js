@@ -295,8 +295,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             // 2. Estructura modular de la botonera de control
             let accionesHtml = '';
             const usrAdmin = window.DBHits ? window.DBHits.getActiveUser() : null;
-            if (usrAdmin && usrAdmin.role === 'secretaria') {
-                accionesHtml = '<div style="text-align:center; color:#94A3B8; font-size:0.75rem; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);"><i class="fa-solid fa-eye"></i> Visualización</div>';
+            
+            // Evaluamos si el método de pago corresponde al mostrador
+            const mPagoParaAccion = String(r.metodoPago || '').toLowerCase();
+            const esPagoFisico = mPagoParaAccion.includes('secretaría') || mPagoParaAccion.includes('físico');
+
+            // Si es secretaría y el pago es Online/Transferencia, se bloquea. Si es físico, pasa de largo para mostrar los botones de Aprobar/Rechazar.
+            if (usrAdmin && usrAdmin.role === 'secretaria' && !esPagoFisico) {
+                accionesHtml = '<div style="text-align:center; color:#94A3B8; font-size:0.75rem; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);"><i class="fa-solid fa-eye"></i> Solo Lectura (Transferencia)</div>';
             } else if (subtabActualReservas === 'historial') {
                 accionesHtml = `
                     <div style="padding: 8px 10px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; text-align: center; min-width: 190px;">

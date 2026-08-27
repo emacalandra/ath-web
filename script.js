@@ -1953,7 +1953,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert(`🎾 ¡Reserva completada con éxito tras iniciar sesión! Cancha ${r.canchaId} el ${r.fecha} (${r.horaInicio} a ${r.horaFin} hs).`);
                 localStorage.removeItem('pending_ath_booking');
                 if (typeof renderWidgetDayTimelineGrid === 'function') renderWidgetDayTimelineGrid();
-    initFloatingWhatsApp();
             }).catch(e => {
                 console.error("Error al completar reserva pendiente:", e);
                 localStorage.removeItem('pending_ath_booking');
@@ -2041,9 +2040,9 @@ async function renderizarMisTurnos() {
 
             let mensajeConfirmacion = "⚠️ ¿Estás seguro de que deseas cancelar este turno? La cancha quedará liberada.";
             if (estabaPagado) {
-                mensajeConfirmacion = "⚠️ ATENCIÓN: Este turno ya figura como PAGADO.
+                mensajeConfirmacion = `⚠️ ATENCIÓN: Este turno ya figura como PAGADO.
 
-Al cancelar, el sistema liberará la cancha y te abrirá un chat de WhatsApp con la administración para coordinar la devolución de tu dinero. ¿Deseas continuar?";
+Al cancelar, el sistema liberará la cancha y te abrirá un chat de WhatsApp con la administración para coordinar la devolución de tu dinero. ¿Deseas continuar?`;
             }
 
             if (confirm(mensajeConfirmacion)) {
@@ -2172,3 +2171,12 @@ function initFloatingWhatsApp() {
 }
 
 
+
+// Ejecuci�n global incondicional de WhatsApp
+if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => { initFloatingWhatsApp(); });
+    } else {
+        initFloatingWhatsApp();
+    }
+}

@@ -2223,3 +2223,17 @@ select option {
     background-color: #051322 !important; 
     color: #FFFFFF !important;
 }
+
+
+/* Responsive Notifications Fix */
+@media (max-width: 768px) {
+    #notificationDropdownMenu {
+        position: fixed !important;
+        top: 75px !important;
+        right: 5vw !important;
+        left: 5vw !important;
+        width: 90vw !important;
+        max-width: none !important;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.8) !important;
+    }
+}

@@ -1,7 +1,7 @@
 /* ==========================================================================
    ACADEMIA TENIS HITS (ATH) - INTERACTIVE JAVASCRIPT (ARGENTINA)
-   Navegación Multi-Página, Autenticación, Control RBAC, Recuperación de Contraseña
-   y Motor de CMS Visual Multi-Página con Escáner Dinámico de Atributos
+   NavegaciÃ³n Multi-PÃ¡gina, AutenticaciÃ³n, Control RBAC, RecuperaciÃ³n de ContraseÃ±a
+   y Motor de CMS Visual Multi-PÃ¡gina con EscÃ¡ner DinÃ¡mico de Atributos
    ========================================================================== */
 
 
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const legalModalCloseBtn = document.getElementById('legalModalCloseBtn');
     const legalAcceptBtn = document.getElementById('legalAcceptBtn');
 
-    // Elementos de Recuperación de Contraseña (#tab-recovery)
+    // Elementos de RecuperaciÃ³n de ContraseÃ±a (#tab-recovery)
     const forgotPasswordBtn = document.getElementById('forgotPasswordBtn');
     const backToLoginBtn = document.getElementById('backToLoginBtn');
     const recoveryStep1Form = document.getElementById('recoveryStep1Form');
@@ -67,12 +67,12 @@ document.addEventListener('DOMContentLoaded', () => {
         code: null
     };
 
-    // 1. EJECUCIÓN UNIVERSAL DE SESIÓN Y CMS (SIEMPRE AL INICIO ABSOLUTO PARA EVITAR BLOQUEOS)
+    // 1. EJECUCIÃN UNIVERSAL DE SESIÃN Y CMS (SIEMPRE AL INICIO ABSOLUTO PARA EVITAR BLOQUEOS)
     const activeUser = getActiveUser();
     renderUserNavbarState(activeUser);
     initCmsVisualEditor(activeUser);
 
-    // Helper global para identificar la clave y nombre de la página actual
+    // Helper global para identificar la clave y nombre de la pÃ¡gina actual
     function getPageInfo() {
         let path = window.location.pathname.toLowerCase();
         let filename = path.substring(path.lastIndexOf('/') + 1);
@@ -86,12 +86,12 @@ document.addEventListener('DOMContentLoaded', () => {
             'noticias': 'Noticias',
             'clases': 'Clases',
             'torneos': 'Torneos',
-            'construccion': 'Construcción',
+            'construccion': 'ConstrucciÃ³n',
             'historia': 'Historia'
         };
         return {
             key: key,
-            name: mapNames[key] || 'Página Actual'
+            name: mapNames[key] || 'PÃ¡gina Actual'
         };
     }
 
@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('scroll', handleHeaderScroll);
     handleHeaderScroll();
 
-    // 3. Menú Hamburguesa Móvil Universal (Delegación de eventos para máxima robustez)
+    // 3. MenÃº Hamburguesa MÃ³vil Universal (DelegaciÃ³n de eventos para mÃ¡xima robustez)
     document.addEventListener('click', (e) => {
         const toggleBtn = e.target.closest('#mobileToggle, .mobile-toggle');
         const navMenu = document.getElementById('nav-menu');
@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // 4. FUNCIONES DE MODAL & CONTROL DE PESTAÑAS
+    // 4. FUNCIONES DE MODAL & CONTROL DE PESTAÃAS
     function openModal(tab = 'login', showBookingTab = false) {
         if (modalOverlay) {
             const bookingTabBtn = document.querySelector('.tab-btn[data-tab="booking"]');
@@ -288,7 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Flujo de Recuperación de Contraseña (#tab-recovery)
+    // Flujo de RecuperaciÃ³n de ContraseÃ±a (#tab-recovery)
     if (forgotPasswordBtn) {
         forgotPasswordBtn.addEventListener('click', (e) => {
             e.preventDefault();
@@ -317,7 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const emailInput = document.getElementById('recEmail').value.trim();
 
             if (!emailInput) {
-                showErrorAlert(recAlertError, 'Por favor, ingresá tu correo electrónico.');
+                showErrorAlert(recAlertError, 'Por favor, ingresÃ¡ tu correo electrÃ³nico.');
                 return;
             }
 
@@ -335,13 +335,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     code: generatedCode
                 };
 
-                console.log(`✉️ [SIMULACIÓN EMAIL ATH] Código para ${emailInput}: ${generatedCode}`);
+                console.log(`âï¸ [SIMULACIÃN EMAIL ATH] CÃ³digo para ${emailInput}: ${generatedCode}`);
 
                 if (recAlertSuccess) {
                     recAlertSuccess.innerHTML = `
                         <div style="display: flex; flex-direction: column; gap: 4px;">
-                            <span><i class="fa-solid fa-envelope-circle-check"></i> Simulación de Email enviado desde <strong>no-reply@tenishits.com.ar</strong></span>
-                            <span style="font-size: 1rem; font-weight: 800; color: #FFF;">Tu código de verificación es: <span style="color: var(--color-ath-orange); font-size: 1.2rem; letter-spacing: 2px;">${generatedCode}</span></span>
+                            <span><i class="fa-solid fa-envelope-circle-check"></i> SimulaciÃ³n de Email enviado desde <strong>no-reply@tenishits.com.ar</strong></span>
+                            <span style="font-size: 1rem; font-weight: 800; color: #FFF;">Tu cÃ³digo de verificaciÃ³n es: <span style="color: var(--color-ath-orange); font-size: 1.2rem; letter-spacing: 2px;">${generatedCode}</span></span>
                         </div>
                     `;
                     recAlertSuccess.style.display = 'flex';
@@ -365,12 +365,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const newPassword = document.getElementById('recNewPassword').value;
 
             if (!inputCode || !newPassword) {
-                showErrorAlert(recAlertError, 'Por favor, completá el código de 6 dígitos y la nueva contraseña.');
+                showErrorAlert(recAlertError, 'Por favor, completÃ¡ el cÃ³digo de 6 dÃ­gitos y la nueva contraseÃ±a.');
                 return;
             }
 
             if (inputCode !== recoveryState.code) {
-                showErrorAlert(recAlertError, 'El código ingresado es incorrecto o ha vencido.');
+                showErrorAlert(recAlertError, 'El cÃ³digo ingresado es incorrecto o ha vencido.');
                 return;
             }
 
@@ -378,7 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 await window.DBHits.actualizarPasswordUsuario(recoveryState.userId, newPassword);
 
                 if (recAlertSuccess) {
-                    recAlertSuccess.innerHTML = '<i class="fa-solid fa-circle-check"></i> ¡Contraseña actualizada con éxito! Ya podés iniciar sesión.';
+                    recAlertSuccess.innerHTML = '<i class="fa-solid fa-circle-check"></i> Â¡ContraseÃ±a actualizada con Ã©xito! Ya podÃ©s iniciar sesiÃ³n.';
                     recAlertSuccess.style.display = 'flex';
                 }
 
@@ -396,7 +396,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 5. GESTIÓN DE SESIÓN DE USUARIO & AUTENTICACIÓN RBAC (Usuario, Alumno, Admin)
+    // 5. GESTIÃN DE SESIÃN DE USUARIO & AUTENTICACIÃN RBAC (Usuario, Alumno, Admin)
     function getActiveUser() {
         if (window.DBHits && typeof window.DBHits.getActiveUser === 'function') {
             return window.DBHits.getActiveUser();
@@ -412,7 +412,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const navActionsContainer = document.getElementById('navActions');
 
         if (usuario) {
-            // 1. Ocultar todos los botones de creación de cuenta en el sitio (Hero y Banner)
+            // 1. Ocultar todos los botones de creaciÃ³n de cuenta en el sitio (Hero y Banner)
             document.querySelectorAll('.open-register-trigger').forEach(btn => {
                 btn.style.display = 'none';
             });
@@ -422,10 +422,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const ctaDesc = document.getElementById('ctaBannerDesc');
 
             if (ctaTitle) {
-                ctaTitle.innerHTML = `<i class="fa-solid fa-trophy" style="color: var(--color-ath-orange);"></i> ¿Listo para tu próximo partido, <span class="text-highlight">${usuario.nombre}</span>?`;
+                ctaTitle.innerHTML = `<i class="fa-solid fa-trophy" style="color: var(--color-ath-orange);"></i> Â¿Listo para tu prÃ³ximo partido, <span class="text-highlight">${usuario.nombre}</span>?`;
             }
             if (ctaDesc) {
-                ctaDesc.innerHTML = `Tenés acceso directo a la disponibilidad en vivo del Club Ciudad Verde. Elegí tu cancha, programá tu turno minuto a minuto y prepará tus raquetas.`;
+                ctaDesc.innerHTML = `TenÃ©s acceso directo a la disponibilidad en vivo del Club Ciudad Verde. ElegÃ­ tu cancha, programÃ¡ tu turno minuto a minuto y preparÃ¡ tus raquetas.`;
             }
 
             if (!navActionsContainer) return;
@@ -437,10 +437,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const isAdmin = usuario.role === 'admin';
                 roleBadgeHtml = isAdmin 
                     ? `<span class="user-role-tag tag-admin"><i class="fa-solid fa-shield-halved"></i> Admin</span>`
-                    : `<span class="user-role-tag tag-admin" style="background: rgba(16, 185, 129, 0.2); color: #34D399; border: 1px solid #10B981;"><i class="fa-solid fa-address-book"></i> Secretaría</span>`;
+                    : `<span class="user-role-tag tag-admin" style="background: rgba(16, 185, 129, 0.2); color: #34D399; border: 1px solid #10B981;"><i class="fa-solid fa-address-book"></i> SecretarÃ­a</span>`;
                 
                 adminBtnHtml = `
-                    <button class="btn-admin-panel" id="adminPanelBtn" title="${isAdmin ? 'Acceder al Panel de Administración' : 'Acceder a la Agenda de Secretaría'}" style="position: relative; ${!isAdmin ? 'background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: #FFF;' : ''}">
+                    <button class="btn-admin-panel" id="adminPanelBtn" title="${isAdmin ? 'Acceder al Panel de AdministraciÃ³n' : 'Acceder a la Agenda de SecretarÃ­a'}" style="position: relative; ${!isAdmin ? 'background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: #FFF;' : ''}">
                         <i class="fa-solid ${isAdmin ? 'fa-bolt' : 'fa-calendar-check'}"></i><span class="hide-mobile"> ${isAdmin ? 'Panel Admin' : 'Agenda'}</span>
                         ${isAdmin ? '<span id="navAdminPendingBadge" style="display: none; align-items: center; justify-content: center; position: absolute; top: -6px; right: -6px; background: #EF4444; color: #FFF; font-size: 0.65rem; font-weight: 800; min-width: 18px; height: 18px; border-radius: 50%; box-shadow: 0 0 8px rgba(239, 68, 68, 0.8);">0</span>' : ''}
                     </button>
@@ -484,11 +484,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
 
-                    <button class="btn-logout" id="logoutBtn" title="Cerrar Sesión">
+                    <button class="btn-logout" id="logoutBtn" title="Cerrar SesiÃ³n">
                         <i class="fa-solid fa-right-from-bracket"></i><span class="hide-mobile"> Salir</span>
                     </button>
                 </div>
-                <button class="mobile-toggle" id="mobileToggle" aria-label="Abrir menú">
+                <button class="mobile-toggle" id="mobileToggle" aria-label="Abrir menÃº">
                     <i class="fa-solid fa-bars"></i>
                 </button>
             `;
@@ -519,12 +519,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
 
-            // INYECTAR LOGOUT EN MENÚ HAMBURGUESA PARA MÓVILES
+            // INYECTAR LOGOUT EN MENÃ HAMBURGUESA PARA MÃVILES
             const navList = document.querySelector('.nav-list');
             if (navList && !document.getElementById('mobileLogoutBtn')) {
                 const logoutLi = document.createElement('li');
                 logoutLi.className = 'nav-item mobile-logout-item';
-                logoutLi.innerHTML = `<a href="#" class="nav-link" id="mobileLogoutBtn" style="color: #EF4444 !important; font-weight: bold;"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</a>`;
+                logoutLi.innerHTML = `<a href="#" class="nav-link" id="mobileLogoutBtn" style="color: #EF4444 !important; font-weight: bold;"><i class="fa-solid fa-right-from-bracket"></i> Cerrar SesiÃ³n</a>`;
                 navList.appendChild(logoutLi);
                 
                 document.getElementById('mobileLogoutBtn').addEventListener('click', (e) => {
@@ -533,11 +533,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
         } else {
-            // Eliminar botón de logout móvil si existe
+            // Eliminar botÃ³n de logout mÃ³vil si existe
             const mobileLogoutItem = document.querySelector('.mobile-logout-item');
             if (mobileLogoutItem) mobileLogoutItem.remove();
 
-            // Restaurar visibilidad por defecto si no hay sesión
+            // Restaurar visibilidad por defecto si no hay sesiÃ³n
             document.querySelectorAll('.open-register-trigger').forEach(btn => {
                 btn.style.display = '';
             });
@@ -546,9 +546,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 navActionsContainer.innerHTML = `
                     <button class="btn-cta" id="openModalBtn">
                         <i class="fa-solid fa-user"></i>
-                        <span>Iniciar Sesión / Crear Cuenta</span>
+                        <span>Iniciar SesiÃ³n / Crear Cuenta</span>
                     </button>
-                    <button class="mobile-toggle" id="mobileToggle" aria-label="Abrir menú">
+                    <button class="mobile-toggle" id="mobileToggle" aria-label="Abrir menÃº">
                         <i class="fa-solid fa-bars"></i>
                     </button>
                 `;
@@ -568,7 +568,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const usuario = usuarioActual || getActiveUser();
 
         if (!usuario || (usuario.role !== 'admin' && usuario.role !== 'secretaria')) {
-            alert('⛔ ACCESO DENEGADO: Se requieren privilegios de Administrador para acceder al Panel de Gestión de la Academia.');
+            alert('â ACCESO DENEGADO: Se requieren privilegios de Administrador para acceder al Panel de GestiÃ³n de la Academia.');
             window.location.href = 'index.html';
             return;
         }
@@ -581,7 +581,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentPath.includes('admin.html')) {
             const activeUser = getActiveUser();
             if (!activeUser || (activeUser.role !== 'admin' && activeUser.role !== 'secretaria')) {
-                alert('⛔ ACCESO DENEGADO: Se requieren privilegios de Administrador.');
+                alert('â ACCESO DENEGADO: Se requieren privilegios de Administrador.');
                 window.location.href = 'index.html';
             }
         }
@@ -594,7 +594,7 @@ document.addEventListener('DOMContentLoaded', () => {
             containerElement.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${message}`;
             containerElement.style.display = 'flex';
         } else {
-            alert(`⚠️ ATH Atención: ${message}`);
+            alert(`â ï¸ ATH AtenciÃ³n: ${message}`);
         }
     }
 
@@ -628,27 +628,27 @@ document.addEventListener('DOMContentLoaded', () => {
             const confirmPassword = regConfirmPasswordEl ? regConfirmPasswordEl.value : '';
 
             if (!nombre || !apellido || !dni || !email || !telefono || !password || !confirmPassword) {
-                showErrorAlert(regAlertError, 'Por favor, completá todos los campos obligatorios del formulario.');
+                showErrorAlert(regAlertError, 'Por favor, completÃ¡ todos los campos obligatorios del formulario.');
                 return;
             }
 
             if (!/^\d{7,8}$/.test(dni)) {
-                showErrorAlert(regAlertError, 'El DNI debe ser numérico y contener entre 7 y 8 dígitos sin puntos ni espacios.');
+                showErrorAlert(regAlertError, 'El DNI debe ser numÃ©rico y contener entre 7 y 8 dÃ­gitos sin puntos ni espacios.');
                 return;
             }
 
             if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                showErrorAlert(regAlertError, 'Por favor, ingresá una dirección de correo electrónico válida.');
+                showErrorAlert(regAlertError, 'Por favor, ingresÃ¡ una direcciÃ³n de correo electrÃ³nico vÃ¡lida.');
                 return;
             }
 
             if (password !== confirmPassword) {
-                showErrorAlert(regAlertError, 'Las contraseñas no coinciden. Por favor, verifícalas.');
+                showErrorAlert(regAlertError, 'Las contraseÃ±as no coinciden. Por favor, verifÃ­calas.');
                 return;
             }
 
             if (!regTermsEl || !regTermsEl.checked) {
-                showErrorAlert(regAlertError, 'Debés marcar la casilla de aceptación de los Términos y Condiciones y la Política de Privacidad para registrarte.');
+                showErrorAlert(regAlertError, 'DebÃ©s marcar la casilla de aceptaciÃ³n de los TÃ©rminos y Condiciones y la PolÃ­tica de Privacidad para registrarte.');
                 return;
             }
 
@@ -664,10 +664,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 if (regAlertSuccess) {
-                    regAlertSuccess.innerHTML = '<i class="fa-solid fa-circle-check"></i> ¡Cuenta creada con éxito! Ya podés iniciar sesión con tu Correo o DNI.';
+                    regAlertSuccess.innerHTML = '<i class="fa-solid fa-circle-check"></i> Â¡Cuenta creada con Ã©xito! Ya podÃ©s iniciar sesiÃ³n con tu Correo o DNI.';
                     regAlertSuccess.style.display = 'flex';
                 } else {
-                    alert(`🎾 ¡Bienvenido/a ${nuevoUsuario.nombre}! Tu cuenta ha sido registrada con éxito.`);
+                    alert(`ð¾ Â¡Bienvenido/a ${nuevoUsuario.nombre}! Tu cuenta ha sido registrada con Ã©xito.`);
                 }
 
                 registerForm.reset();
@@ -685,7 +685,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 7. FORMULARIO DE INICIO DE SESIÓN
+    // 7. FORMULARIO DE INICIO DE SESIÃN
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
@@ -699,7 +699,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const password = passwordInput ? passwordInput.value : '';
 
             if (!identificador || !password) {
-                showErrorAlert(loginAlertError, 'Por favor, ingresá tu Correo o DNI y tu contraseña.');
+                showErrorAlert(loginAlertError, 'Por favor, ingresÃ¡ tu Correo o DNI y tu contraseÃ±a.');
                 return;
             }
 
@@ -714,14 +714,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 renderUserNavbarState(usuario);
                 initCmsVisualEditor(usuario);
                 closeModal();
-                window.location.reload(); // Recargar para sincronizar estados de sesión y perfil
+                window.location.reload(); // Recargar para sincronizar estados de sesiÃ³n y perfil
             } catch (error) {
                 showErrorAlert(loginAlertError, error.message || "Error al autenticar usuario.");
             }
         });
     }
 
-    // 8. APARICIÓN SUAVE DE SECCIONES (FADE-IN REVEAL)
+    // 8. APARICIÃN SUAVE DE SECCIONES (FADE-IN REVEAL)
     function initScrollReveal() {
         const revealTargets = document.querySelectorAll('.section-header, .court-card, .news-card, .class-card, .tournament-block-card, .history-card, .feature-box, .contact-card-item, .construction-banner-box');
 
@@ -748,11 +748,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initScrollReveal();
 
-    // 9. ESCÁNER DINÁMICO DE ATRIBUTOS EDITABLES PARA CUALQUIER PÁGINA HTML (CMS TOTAL 2.0)
+    // 9. ESCÃNER DINÃMICO DE ATRIBUTOS EDITABLES PARA CUALQUIER PÃGINA HTML (CMS TOTAL 2.0)
     function runDynamicCmsDomScanner(pageKey) {
         const rootEl = document.body;
 
-        // Escanear elementos textuales principales (incluyendo títulos, descripciones, badges y botones de tarjetas)
+        // Escanear elementos textuales principales (incluyendo tÃ­tulos, descripciones, badges y botones de tarjetas)
         const textElements = rootEl.querySelectorAll('h1, h2, h3, h4, h5, h6, p, .hero-title, .hero-subtitle, .section-title, .section-subtitle, .section-description, .court-title, .court-description, .court-badge-tag, .btn-court-book, .live-status-pill span');
 
         let textIdx = 0;
@@ -768,7 +768,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // 2. Escanear el fondo general de la página (Hero Background)
+        // 2. Escanear el fondo general de la pÃ¡gina (Hero Background)
         const heroBgElements = rootEl.querySelectorAll('.hero-bg');
         heroBgElements.forEach((el) => {
             if (el.closest('.modal-overlay') || el.closest('.legal-modal-overlay') || el.closest('#adminCmsFabWrapper')) return;
@@ -778,7 +778,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // 3. Escanear todas las imágenes <img> reales de la página (fotos de canchas, tarjetas, logo)
+        // 3. Escanear todas las imÃ¡genes <img> reales de la pÃ¡gina (fotos de canchas, tarjetas, logo)
         const imgElements = rootEl.querySelectorAll('img');
         let imgIdx = 0;
         imgElements.forEach(el => {
@@ -792,7 +792,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 10. CONTROLADOR UNIVERSAL DE CMS MULTI-PÁGINA (EXCLUSIVO ROLE: 'ADMIN' CON CONTROL TOTAL DE IMÁGENES Y TEXTOS)
+    // 10. CONTROLADOR UNIVERSAL DE CMS MULTI-PÃGINA (EXCLUSIVO ROLE: 'ADMIN' CON CONTROL TOTAL DE IMÃGENES Y TEXTOS)
     function initCmsVisualEditor(usuario) {
         if (!usuario || (usuario.role !== 'admin' && usuario.role !== 'secretaria')) {
             const existingFab = document.getElementById('adminCmsFabWrapper');
@@ -805,12 +805,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const pageKey = pageInfo.key;
         const pageName = pageInfo.name;
 
-        // Ejecutar escáner dinámico en la página HTML actual
+        // Ejecutar escÃ¡ner dinÃ¡mico en la pÃ¡gina HTML actual
         runDynamicCmsDomScanner(pageKey);
 
         if (document.getElementById('adminCmsFabWrapper')) return;
 
-        // Inyectar Botón Flotante Discreto (FAB) y Panel Popover Compacto
+        // Inyectar BotÃ³n Flotante Discreto (FAB) y Panel Popover Compacto
         const fabHtml = `
             <div class="cms-fab-wrapper" id="adminCmsFabWrapper">
                 <div class="cms-popover-panel" id="cmsPopoverPanel">
@@ -823,37 +823,37 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
 
                     <div style="font-size: 0.72rem; color: #94A3B8; line-height: 1.4;">
-                        <i class="fa-solid fa-cloud" style="color: #10B981;"></i> Sincronización en la nube activa. Todos los usuarios verán los cambios en tiempo real.
+                        <i class="fa-solid fa-cloud" style="color: #10B981;"></i> SincronizaciÃ³n en la nube activa. Todos los usuarios verÃ¡n los cambios en tiempo real.
                     </div>
                     
                     <div id="cmsInactiveControls" style="display: flex; flex-direction: column; gap: 8px;">
                         <button class="btn-submit" id="cmsEnableEditBtn" style="padding: 11px; font-size: 0.88rem; border-radius: 8px; margin-top: 2px; background: linear-gradient(135deg, var(--color-ath-orange) 0%, #FF8C00 100%); font-weight: 800;">
-                            <i class="fa-solid fa-wand-magic-sparkles"></i> 🛠️ Activar Modo Edición
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> ð ï¸ Activar Modo EdiciÃ³n
                         </button>
                     </div>
 
                     <div id="cmsActiveControls" style="display: none; flex-direction: column; gap: 8px;">
                         <button class="cms-save-btn" id="cmsSaveBtn" style="width: 100%; justify-content: center; padding: 11px; font-size: 0.88rem; border-radius: 8px;">
-                            <i class="fa-solid fa-floppy-disk"></i> 💾 Guardar y Publicar para Todos
+                            <i class="fa-solid fa-floppy-disk"></i> ð¾ Guardar y Publicar para Todos
                         </button>
                         <button class="btn-submit" id="cmsChangeHeroBgBtn" style="background: rgba(255, 215, 0, 0.12); border: 1px solid #FFD700; color: #FFD700; padding: 10px; font-size: 0.84rem; border-radius: 8px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: none; margin-top: 0;">
-                            <i class="fa-solid fa-image"></i> 🖼️ Cambiar Fondo de la Página
+                            <i class="fa-solid fa-image"></i> ð¼ï¸ Cambiar Fondo de la PÃ¡gina
                         </button>
                         <button class="btn-submit" id="cmsEditModalBtn" style="background: rgba(16, 185, 129, 0.15); border: 1px solid #10B981; color: #6EE7B7; padding: 10px; font-size: 0.84rem; border-radius: 8px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: none; margin-top: 0;">
-                            <i class="fa-solid fa-pen-to-square"></i> 🎾 Abrir y Editar Menú de Reservas
+                            <i class="fa-solid fa-pen-to-square"></i> ð¾ Abrir y Editar MenÃº de Reservas
                         </button>
                         <button class="btn-submit" id="cmsExitEditBtn" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #EF4444; color: #FCA5A5; padding: 9px; font-size: 0.82rem; border-radius: 8px; box-shadow: none; margin-top: 0;">
-                            <i class="fa-solid fa-xmark"></i> ❌ Salir del Modo Edición
+                            <i class="fa-solid fa-xmark"></i> â Salir del Modo EdiciÃ³n
                         </button>
                         <button class="cms-reset-btn" id="cmsResetBtn" style="justify-content: center; width: 100%; padding: 6px; font-size: 0.75rem; border-radius: 6px;">
-                            <i class="fa-solid fa-rotate-left"></i> Restablecer de Fábrica
+                            <i class="fa-solid fa-rotate-left"></i> Restablecer de FÃ¡brica
                         </button>
                     </div>
                 </div>
 
-                <button class="cms-fab-btn" id="cmsFabMainBtn" aria-label="Modo Edición ATH">
+                <button class="cms-fab-btn" id="cmsFabMainBtn" aria-label="Modo EdiciÃ³n ATH">
                     <i class="fa-solid fa-wand-magic-sparkles"></i>
-                    <span class="cms-fab-tooltip">Modo Edición &bull; ${pageName}</span>
+                    <span class="cms-fab-tooltip">Modo EdiciÃ³n &bull; ${pageName}</span>
                 </button>
             </div>
         `;
@@ -896,7 +896,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Alternar Estado de Edición Visual
+        // Alternar Estado de EdiciÃ³n Visual
         function setVisualEditingState(active) {
             if (active) {
                 document.body.classList.add('cms-editing-active');
@@ -910,7 +910,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (cmsActiveControls) cmsActiveControls.style.display = 'none';
             }
 
-            // 1. Alternar contenteditable en textos con desbloqueo de selección total
+            // 1. Alternar contenteditable en textos con desbloqueo de selecciÃ³n total
             runDynamicCmsDomScanner(pageKey);
             document.querySelectorAll('[data-editable]').forEach(el => {
                 if (active) {
@@ -933,7 +933,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // 2. Alternar botones de cámara sobre las fotos e imágenes reales (<img>)
+            // 2. Alternar botones de cÃ¡mara sobre las fotos e imÃ¡genes reales (<img>)
             document.querySelectorAll('[data-editable-img]').forEach(el => {
                 if (el.classList.contains('hero-bg')) return; // Blindaje: Ignorar hero-bg
 
@@ -966,7 +966,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 const file = event.target.files[0];
                                 if (file) {
                                     try {
-                                        showCmsToast('⏳ Optimizando imagen...');
+                                        showCmsToast('â³ Optimizando imagen...');
                                         const base64Data = await window.DBHits.convertFileToBase64(file, 1600, 1600, 0.85);
                                         
                                         if (el.tagName === 'IMG') {
@@ -981,10 +981,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                         tempImagesMap[imgKey] = base64Data;
                                         window.DBHits.guardarImagenCMS(imgKey, base64Data, pageKey);
-                                        showCmsToast('📷 ¡Foto actualizada y guardada!');
+                                        showCmsToast('ð· Â¡Foto actualizada y guardada!');
                                     } catch (err) {
                                         console.error("Error al procesar imagen:", err);
-                                        alert("⚠️ No se pudo procesar la imagen seleccionada.");
+                                        alert("â ï¸ No se pudo procesar la imagen seleccionada.");
                                     }
                                 }
                                 fileInput.remove();
@@ -1003,7 +1003,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Handler para el botón "🖼️ Cambiar Fondo de la Página" del panel Admin CMS
+        // Handler para el botÃ³n "ð¼ï¸ Cambiar Fondo de la PÃ¡gina" del panel Admin CMS
         const cmsChangeHeroBgBtn = document.getElementById('cmsChangeHeroBgBtn');
         if (cmsChangeHeroBgBtn) {
             cmsChangeHeroBgBtn.addEventListener('click', () => {
@@ -1020,7 +1020,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const file = event.target.files[0];
                     if (file) {
                         try {
-                            showCmsToast('⏳ Optimizando fondo de pantalla...');
+                            showCmsToast('â³ Optimizando fondo de pantalla...');
                             const base64Data = await window.DBHits.convertFileToBase64(file, 1920, 1080, 0.85);
                             
                             if (bgEl) {
@@ -1031,10 +1031,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                             tempImagesMap[bgKey] = base64Data;
                             window.DBHits.guardarImagenCMS(bgKey, base64Data, pageKey);
-                            showCmsToast('🖼️ ¡Fondo de página actualizado y sincronizado!');
+                            showCmsToast('ð¼ï¸ Â¡Fondo de pÃ¡gina actualizado y sincronizado!');
                         } catch (err) {
                             console.error("Error al cambiar fondo:", err);
-                            alert("⚠️ No se pudo cargar la imagen de fondo.");
+                            alert("â ï¸ No se pudo cargar la imagen de fondo.");
                         }
                     }
                     fileInput.remove();
@@ -1044,7 +1044,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Interceptar clicks en modo edicion para permitir edición de textos sin navegar
+        // Interceptar clicks en modo edicion para permitir ediciÃ³n de textos sin navegar
         if (!window._cmsClickInterceptorAdded) {
             document.addEventListener('click', (e) => {
                 if (document.body.classList.contains('cms-editing-active')) {
@@ -1063,7 +1063,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (cmsEnableEditBtn) {
             cmsEnableEditBtn.addEventListener('click', () => {
                 setVisualEditingState(true);
-                showCmsToast(`🛠️ Modo Edición Activado en ${pageName}. Podés hacer clic en cualquier texto para editarlo o en "Cambiar Imagen" en cualquier foto o fondo.`);
+                showCmsToast(`ð ï¸ Modo EdiciÃ³n Activado en ${pageName}. PodÃ©s hacer clic en cualquier texto para editarlo o en "Cambiar Imagen" en cualquier foto o fondo.`);
             });
         }
 
@@ -1071,13 +1071,13 @@ document.addEventListener('DOMContentLoaded', () => {
             cmsExitEditBtn.addEventListener('click', () => {
                 setVisualEditingState(false);
                 if (cmsPopoverPanel) cmsPopoverPanel.classList.remove('active');
-                showCmsToast('Has salido del modo edición. La web ahora se visualiza como usuario estándar.');
+                showCmsToast('Has salido del modo ediciÃ³n. La web ahora se visualiza como usuario estÃ¡ndar.');
             });
         }
 
         if (cmsSaveBtn) {
             cmsSaveBtn.addEventListener('click', async () => {
-                showCmsToast('⏳ Publicando y sincronizando cambios en la nube...');
+                showCmsToast('â³ Publicando y sincronizando cambios en la nube...');
 
                 // 1. Guardar en localStorage y Firebase Firestore
                 const textsMap = {};
@@ -1088,7 +1088,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 window.DBHits.guardarLoteCMS(textsMap, tempImagesMap, {}, pageKey);
                 
-                // 2. Guardar en código fuente físico si el Servidor Python local está en ejecución
+                // 2. Guardar en cÃ³digo fuente fÃ­sico si el Servidor Python local estÃ¡ en ejecuciÃ³n
                 let extraMsg = '';
                 try {
                     const clonedHtml = document.documentElement.cloneNode(true);
@@ -1112,26 +1112,26 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                     
                     if (res.ok) {
-                        extraMsg = '<br><span style="color:#10B981;font-size:0.8rem;">✓ Código fuente (.html) actualizado en disco</span>';
+                        extraMsg = '<br><span style="color:#10B981;font-size:0.8rem;">â CÃ³digo fuente (.html) actualizado en disco</span>';
                     }
                 } catch (e) {
-                    // Servidor Python no activo, continúa con Firebase y LocalStorage
+                    // Servidor Python no activo, continÃºa con Firebase y LocalStorage
                 }
 
-                showCmsToast(`💾 ¡Cambios guardados y publicados para todos los usuarios en ${pageName}!${extraMsg}`);
+                showCmsToast(`ð¾ Â¡Cambios guardados y publicados para todos los usuarios en ${pageName}!${extraMsg}`);
             });
         }
 
         if (cmsResetBtn) {
             cmsResetBtn.addEventListener('click', () => {
-                if (confirm('🔄 ¿Estás seguro de que querés restablecer esta página al diseño original de fábrica?')) {
+                if (confirm('ð Â¿EstÃ¡s seguro de que querÃ©s restablecer esta pÃ¡gina al diseÃ±o original de fÃ¡brica?')) {
                     window.DBHits.resetToDefaults();
                 }
             });
         }
     }
 
-    // Helper de Notificación Toast Flotante
+    // Helper de NotificaciÃ³n Toast Flotante
     function showCmsToast(message) {
         const existingToast = document.querySelector('.cms-toast-notification');
         if (existingToast) existingToast.remove();
@@ -1178,8 +1178,8 @@ document.addEventListener('DOMContentLoaded', () => {
             nombre: 'Cancha 1 (Estadio Principal)',
             img: 'assets/cancha1.jpg',
             specs: [
-                'Superficie reglamentaria de polvo de ladrillo con drenaje rápido.',
-                'Iluminación LED Pro de 1000W para partidos nocturnos televisados.',
+                'Superficie reglamentaria de polvo de ladrillo con drenaje rÃ¡pido.',
+                'IluminaciÃ³n LED Pro de 1000W para partidos nocturnos televisados.',
                 'Tribuna lateral exclusiva y sector de sombra para jugadores.',
                 'Mantenimiento continuo y rastreado automatizado post-partido.'
             ]
@@ -1188,9 +1188,9 @@ document.addEventListener('DOMContentLoaded', () => {
             nombre: 'Cancha 2 - Central',
             img: 'assets/cancha2.jpg',
             specs: [
-                'Polvo de ladrillo con grado de compactación ideal para entrenamiento.',
+                'Polvo de ladrillo con grado de compactaciÃ³n ideal para entrenamiento.',
                 'Medidas oficiales ITF con espaciado amplio para dobles.',
-                'Iluminación nocturna LED de alta uniformidad.',
+                'IluminaciÃ³n nocturna LED de alta uniformidad.',
                 'Mantenimiento diario de riego y cepillado.'
             ]
         },
@@ -1199,9 +1199,9 @@ document.addEventListener('DOMContentLoaded', () => {
             img: 'assets/cancha3.jpg',
             specs: [
                 'Ubicada en el sector tranquilo cercano a la terraza del club.',
-                'Superficie óptima con excelente respuesta al pique de bola.',
-                'Iluminación LED ambiental continua.',
-                'Sector cercano a vestuarios e hidratación.'
+                'Superficie Ã³ptima con excelente respuesta al pique de bola.',
+                'IluminaciÃ³n LED ambiental continua.',
+                'Sector cercano a vestuarios e hidrataciÃ³n.'
             ]
         }
     };
@@ -1225,9 +1225,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = courtDataMap[currentWidgetCourt] || courtDataMap['1'];
         if (imgEl) imgEl.src = data.img;
         if (nameEl) nameEl.textContent = data.nombre;
-        if (badgeEl) badgeEl.textContent = `Polvo de Ladrillo • Cancha ${currentWidgetCourt}`;
+        if (badgeEl) badgeEl.textContent = `Polvo de Ladrillo â¢ Cancha ${currentWidgetCourt}`;
 
-        // Sincronizar botones de selección de cancha en el modal
+        // Sincronizar botones de selecciÃ³n de cancha en el modal
         const courtPillsContainer = document.getElementById('appCourtSelectBtns');
         if (courtPillsContainer) {
             const pills = courtPillsContainer.querySelectorAll('.court-select-pill');
@@ -1249,7 +1249,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Garantizar presencia del aviso climático institucional en el modal
+        // Garantizar presencia del aviso climÃ¡tico institucional en el modal
         const confirmBtn = document.getElementById('appConfirmBtn') || document.getElementById('widgetConfirmBtn');
         const paymentCard = document.getElementById('paymentTransferCard');
         const targetAnchor = paymentCard || confirmBtn;
@@ -1261,8 +1261,8 @@ document.addEventListener('DOMContentLoaded', () => {
             weatherNotice.innerHTML = `
                 <i class="fa-solid fa-cloud-sun-rain" style="color: #60A5FA; font-size: 1.2rem; margin-top: 2px;"></i>
                 <div style="font-size: 0.76rem; color: #E2E8F0; line-height: 1.3;">
-                    <strong style="color: #93C5FD; display: block; margin-bottom: 2px;">🌦️ Reservas sujetas a condiciones climáticas</strong>
-                    Al tratarse de canchas descubiertas de polvo de ladrillo, la jugabilidad depende del buen tiempo. En caso de lluvia o fuerza mayor, comunicate con la administración para reprogramar tu turno sin perder tu dinero.
+                    <strong style="color: #93C5FD; display: block; margin-bottom: 2px;">ð¦ï¸ Reservas sujetas a condiciones climÃ¡ticas</strong>
+                    Al tratarse de canchas descubiertas de polvo de ladrillo, la jugabilidad depende del buen tiempo. En caso de lluvia o fuerza mayor, comunicate con la administraciÃ³n para reprogramar tu turno sin perder tu dinero.
                 </div>
             `;
             targetAnchor.parentNode.insertBefore(weatherNotice, targetAnchor);
@@ -1284,13 +1284,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 secFields.id = 'secretariaBookingFields';
                 secFields.style.cssText = "background: rgba(16, 185, 129, 0.1); border: 1px solid #10B981; border-radius: 8px; padding: 12px; margin-bottom: 14px;";
                 secFields.innerHTML = `
-                    <div style="font-size: 0.85rem; color: #10B981; font-weight: bold; margin-bottom: 8px;"><i class="fa-solid fa-user-shield"></i> Modo Secretaría: Cargar turno a cliente</div>
+                    <div style="font-size: 0.85rem; color: #10B981; font-weight: bold; margin-bottom: 8px;"><i class="fa-solid fa-user-shield"></i> Modo SecretarÃ­a: Cargar turno a cliente</div>
                     <div style="display: flex; gap: 8px; margin-bottom: 8px;">
                         <input type="text" id="secInputNombre" placeholder="Nombre" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
                         <input type="text" id="secInputApellido" placeholder="Apellido" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
                     </div>
-                    <input type="tel" id="secInputTelefono" placeholder="Teléfono" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
-                    <div style="margin-top: 8px; font-size: 0.75rem; color: #FCA5A5;"><i class="fa-solid fa-clock"></i> El turno se agendará y el pago quedará <strong>Pendiente</strong> hasta que el cliente abone en el club.</div>
+                    <input type="tel" id="secInputTelefono" placeholder="TelÃ©fono" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
+                    <div style="margin-top: 8px; font-size: 0.75rem; color: #FCA5A5;"><i class="fa-solid fa-clock"></i> El turno se agendarÃ¡ y el pago quedarÃ¡ <strong>Pendiente</strong> hasta que el cliente abone en el club.</div>
                 `;
                 confirmBtnEl.parentNode.insertBefore(secFields, confirmBtnEl);
             }
@@ -1331,9 +1331,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const imgEl = document.getElementById('appCourtImg') || document.getElementById('unifiedCourtImg');
 
             const courtDataMap = {
-                '1': { nombre: 'Cancha 1 (Polvo de Ladrillo)', img: 'assets/cancha1.jpg', badge: 'Polvo de Ladrillo • LED Pro' },
-                '2': { nombre: 'Cancha 2 (Polvo de Ladrillo)', img: 'assets/cancha2.jpg', badge: 'Polvo de Ladrillo • Central' },
-                '3': { nombre: 'Cancha 3 (Polvo de Ladrillo)', img: 'assets/cancha3.jpg', badge: 'Polvo de Ladrillo • Torneos' }
+                '1': { nombre: 'Cancha 1 (Polvo de Ladrillo)', img: 'assets/cancha1.jpg', badge: 'Polvo de Ladrillo â¢ LED Pro' },
+                '2': { nombre: 'Cancha 2 (Polvo de Ladrillo)', img: 'assets/cancha2.jpg', badge: 'Polvo de Ladrillo â¢ Central' },
+                '3': { nombre: 'Cancha 3 (Polvo de Ladrillo)', img: 'assets/cancha3.jpg', badge: 'Polvo de Ladrillo â¢ Torneos' }
             };
 
             const data = courtDataMap[currentWidgetCourt] || courtDataMap['1'];
@@ -1368,17 +1368,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Amarrar con Delegación de Eventos Resiliente a todos los botones de reserva del sitio
+    // Amarrar con DelegaciÃ³n de Eventos Resiliente a todos los botones de reserva del sitio
     document.addEventListener('click', (e) => {
         const trigger = e.target.closest('.open-booking-trigger, .btn-court-book, .view-court-trigger');
         if (trigger) {
-            // SI EL MODO EDICIÓN ESTÁ ACTIVO, NO ABRIR EL MODAL (Permitir editar el texto del botón o tarjeta)
+            // SI EL MODO EDICIÃN ESTÃ ACTIVO, NO ABRIR EL MODAL (Permitir editar el texto del botÃ³n o tarjeta)
             if (document.body.classList.contains('cms-editing-active')) {
                 e.preventDefault();
                 trigger.focus();
                 return;
             }
-            // Si el botón es un enlace <a> que apunta a otra página (ej: sede.html, clases.html) y NO tiene la clase open-booking-trigger, permitir la navegación natural
+            // Si el botÃ³n es un enlace <a> que apunta a otra pÃ¡gina (ej: sede.html, clases.html) y NO tiene la clase open-booking-trigger, permitir la navegaciÃ³n natural
             const href = trigger.getAttribute('href');
             if (href && (href.endsWith('.html') || href.includes('.html')) && !trigger.classList.contains('open-booking-trigger')) {
                 return; // Permitir que el navegador redirija a sede.html
@@ -1436,7 +1436,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const days = [];
         const today = new Date();
-        const diasSemana = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+        const diasSemana = ['Dom', 'Lun', 'Mar', 'MiÃ©', 'Jue', 'Vie', 'SÃ¡b'];
 
         for (let i = 0; i < 7; i++) {
             const d = new Date();
@@ -1477,17 +1477,17 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const reservasDia = await window.DBHits.listarReservas();
             
-            // CORRECCIÓN: Filtrar también los turnos que fueron rechazados o cancelados
+            // CORRECCIÃN: Filtrar tambiÃ©n los turnos que fueron rechazados o cancelados
             const reservasCancha = reservasDia.filter(r => {
                 const estado = String(r.estadoPago || '');
                 return String(r.canchaId) === String(currentWidgetCourt) && 
                        r.fecha === currentWidgetDate &&
                        !estado.includes('Rechazado') && 
                        !estado.includes('Cancelado') && 
-                       !estado.includes('❌');
+                       !estado.includes('â');
             });
 
-            // Inyección virtual de la plantilla en la grilla visual
+            // InyecciÃ³n virtual de la plantilla en la grilla visual
             if (window.DBHits && window.DBHits.getWeeklyRules) {
                 const vacDates = window.DBHits.getVacationsDates ? window.DBHits.getVacationsDates() : null;
                 let enVacaciones = false;
@@ -1541,7 +1541,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (reservasCancha.length === 0) {
                 gridContainer.innerHTML = `
                     <div style="color: #10B981; font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; gap: 6px;">
-                        <i class="fa-solid fa-circle-check"></i> Cancha 100% despejada en todo el día.
+                        <i class="fa-solid fa-circle-check"></i> Cancha 100% despejada en todo el dÃ­a.
                     </div>
                 `;
                 return;
@@ -1550,7 +1550,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let html = '<div style="display: flex; gap: 8px; flex-wrap: wrap;">';
             reservasCancha.forEach(r => {
                 const isLock = r.tipo === 'bloqueo_admin';
-                const label = isLock ? `🚫 Bloqueo: ${r.motivo || 'Uso Interno'}` : `🎾 Reservado`;
+                const label = isLock ? `ð« Bloqueo: ${r.motivo || 'Uso Interno'}` : `ð¾ Reservado`;
                 html += `
                     <span class="occupancy-slot-pill busy">
                         ${label} (${r.horaInicio} a ${r.horaFin} hs)
@@ -1562,7 +1562,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gridContainer.innerHTML = html;
 
         } catch (err) {
-            console.error("Error al renderizar línea de tiempo del widget:", err);
+            console.error("Error al renderizar lÃ­nea de tiempo del widget:", err);
             gridContainer.innerHTML = '<span style="color:var(--color-text-muted); font-size:0.85rem;">Sin reservas registradas para hoy.</span>';
         }
     }
@@ -1575,7 +1575,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const month = parseInt(parts[1], 10) - 1;
         const day = parseInt(parts[2], 10);
         const d = new Date(year, month, day);
-        const dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+        const dias = ['Domingo', 'Lunes', 'Martes', 'MiÃ©rcoles', 'Jueves', 'Viernes', 'SÃ¡bado'];
         const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
         const diaNombre = dias[d.getDay()];
         const mesNombre = meses[d.getMonth()];
@@ -1603,7 +1603,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const endMin = timeStringToMinutes(horaFin);
         const duracionHoras = (endMin - startMin) / 60;
 
-        // Sincronizar resaltado activo de los botones de duración rápida por Fuerza Bruta
+        // Sincronizar resaltado activo de los botones de duraciÃ³n rÃ¡pida por Fuerza Bruta
         const quickDurContainer = document.getElementById('appQuickDurBtns') || document.getElementById('widgetQuickDurBtns');
         if (quickDurContainer) {
             const quickBtns = quickDurContainer.querySelectorAll('.quick-dur-btn');
@@ -1615,11 +1615,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (endMin <= startMin) {
             priceSummary.className = 'booking-summary-card occupied status-busy';
-            if (summaryStatus) summaryStatus.innerHTML = '❌ La hora de finalización debe ser posterior a la de inicio';
-            if (summaryDetails) summaryDetails.innerHTML = 'Horario inválido';
+            if (summaryStatus) summaryStatus.innerHTML = 'â La hora de finalizaciÃ³n debe ser posterior a la de inicio';
+            if (summaryDetails) summaryDetails.innerHTML = 'Horario invÃ¡lido';
             if (summaryLighting) summaryLighting.innerHTML = '-';
             if (summaryPrice) summaryPrice.innerHTML = '$0 ARS';
-            if (courtBadge) courtBadge.innerHTML = '🔴 Horario Inválido';
+            if (courtBadge) courtBadge.innerHTML = 'ð´ Horario InvÃ¡lido';
             confirmBtn.disabled = true;
             confirmBtn.style.opacity = '0.5';
             return;
@@ -1631,11 +1631,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (startMin < openMin || endMin > closeMin) {
             priceSummary.className = 'booking-summary-card occupied status-busy';
-            if (summaryStatus) summaryStatus.innerHTML = `❌ El club opera entre las ${pricingConfig.timeOpen || '08:00'} y ${pricingConfig.timeClose || '23:00'} hs`;
+            if (summaryStatus) summaryStatus.innerHTML = `â El club opera entre las ${pricingConfig.timeOpen || '08:00'} y ${pricingConfig.timeClose || '23:00'} hs`;
             if (summaryDetails) summaryDetails.innerHTML = 'Fuera de rango operativo';
             if (summaryLighting) summaryLighting.innerHTML = '-';
             if (summaryPrice) summaryPrice.innerHTML = '$0 ARS';
-            if (courtBadge) courtBadge.innerHTML = '🔴 Fuera de Horario';
+            if (courtBadge) courtBadge.innerHTML = 'ð´ Fuera de Horario';
             confirmBtn.disabled = true;
             confirmBtn.style.opacity = '0.5';
             return;
@@ -1645,11 +1645,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!chequeo.disponible) {
             priceSummary.className = 'booking-summary-card occupied status-busy';
-            if (courtBadge) courtBadge.innerHTML = '🔴 Turno Solapado';
+            if (courtBadge) courtBadge.innerHTML = 'ð´ Turno Solapado';
             confirmBtn.disabled = true;
             confirmBtn.style.opacity = '0.5';
 
-            let statusHTML = `<div>❌ ${chequeo.mensaje}</div>`;
+            let statusHTML = `<div>â ${chequeo.mensaje}</div>`;
 
             // Buscar recomendaciones inteligentes libres ante conflicto
             if (window.DBHits && typeof window.DBHits.obtenerSugerenciasLibres === 'function') {
@@ -1657,7 +1657,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (sugerencias && sugerencias.length > 0) {
                     statusHTML += `
                         <div id="appSuggestionsBox" style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed rgba(239, 68, 68, 0.4);">
-                            <span style="color: #FCA5A5; font-size: 0.78rem; font-weight: 800; display: block; margin-bottom: 6px;">🔥 Opciones libres recomendadas para vos:</span>
+                            <span style="color: #FCA5A5; font-size: 0.78rem; font-weight: 800; display: block; margin-bottom: 6px;">ð¥ Opciones libres recomendadas para vos:</span>
                             <div style="display: flex; flex-direction: column; gap: 6px;">
                                 ${sugerencias.map(s => `
                                     <button type="button" class="btn-suggestion-item" data-cancha="${s.canchaId}" data-inicio="${s.horaInicio}" data-fin="${s.horaFin}" style="background: rgba(255, 102, 0, 0.18); border: 1px solid var(--color-ath-orange); color: #FFF; padding: 6px 10px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; text-align: left; cursor: pointer; transition: all 0.2s ease;">
@@ -1673,8 +1673,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (summaryStatus) summaryStatus.innerHTML = statusHTML;
         } else {
             priceSummary.className = 'booking-summary-card available status-available';
-            if (summaryStatus) summaryStatus.innerHTML = `🟢 Horario 100% Libre y Disponible`;
-            if (courtBadge) courtBadge.innerHTML = '🟢 Cancha Disponible';
+            if (summaryStatus) summaryStatus.innerHTML = `ð¢ Horario 100% Libre y Disponible`;
+            if (courtBadge) courtBadge.innerHTML = 'ð¢ Cancha Disponible';
             confirmBtn.disabled = false;
             confirmBtn.style.opacity = '1';
         }
@@ -1686,7 +1686,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let detalleIluminacion = 'Turno Diurno';
             if (calculo.horasDia > 0 && calculo.horasNoche > 0) {
-                detalleIluminacion = `Turno Mixto (${calculo.horasDia.toFixed(1)}h Día + ${calculo.horasNoche.toFixed(1)}h Noche LED)`;
+                detalleIluminacion = `Turno Mixto (${calculo.horasDia.toFixed(1)}h DÃ­a + ${calculo.horasNoche.toFixed(1)}h Noche LED)`;
             } else if (calculo.horasNoche > 0) {
                 detalleIluminacion = `Turno Nocturno (Incluye Luz LED)`;
             }
@@ -1694,9 +1694,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (summaryDetails) {
                 summaryDetails.innerHTML = `
                     <div style="background: rgba(0,0,0,0.3); padding: 8px 10px; border-radius: 6px; margin: 6px 0; border-left: 3px solid var(--color-ath-orange);">
-                        <div style="color: #FFF; font-weight: 700; font-size: 0.88rem;">🎾 Cancha: <span style="color: #FFD700;">Cancha ${currentWidgetCourt}</span></div>
-                        <div style="color: #FFF; font-weight: 700; font-size: 0.88rem;">📅 Día: <span style="color: #FFD700;">${fechaFormateada}</span></div>
-                        <div style="color: #FFF; font-weight: 700; font-size: 0.88rem;">⏰ Horario: <span style="color: #FFD700;">${horaInicio} a ${horaFin} hs</span> (${duracionHoras.toFixed(2)} hs)</div>
+                        <div style="color: #FFF; font-weight: 700; font-size: 0.88rem;">ð¾ Cancha: <span style="color: #FFD700;">Cancha ${currentWidgetCourt}</span></div>
+                        <div style="color: #FFF; font-weight: 700; font-size: 0.88rem;">ð DÃ­a: <span style="color: #FFD700;">${fechaFormateada}</span></div>
+                        <div style="color: #FFF; font-weight: 700; font-size: 0.88rem;">â° Horario: <span style="color: #FFD700;">${horaInicio} a ${horaFin} hs</span> (${duracionHoras.toFixed(2)} hs)</div>
                     </div>
                 `;
             }
@@ -1704,7 +1704,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (summaryPrice) summaryPrice.innerHTML = `$${calculo.precioTotal.toLocaleString('es-AR')} ARS`;
 
         } catch (err) {
-            console.error("Error al calcular cotización libre:", err);
+            console.error("Error al calcular cotizaciÃ³n libre:", err);
         }
     }
 
@@ -1746,7 +1746,7 @@ document.addEventListener('DOMContentLoaded', () => {
         timeEndInput.addEventListener('change', calculateAndVerifyMinuteByMinute);
     }
 
-    // Sugerencias rápidas de duración que asisten pero no bloquean la escritura libre
+    // Sugerencias rÃ¡pidas de duraciÃ³n que asisten pero no bloquean la escritura libre
     const quickDurBtnsContainer = document.getElementById('appQuickDurBtns') || document.getElementById('widgetQuickDurBtns');
     if (quickDurBtnsContainer) {
         const quickBtns = quickDurBtnsContainer.querySelectorAll('.quick-dur-btn');
@@ -1772,7 +1772,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let selectedPaymentMethod = 'transferencia';
 
-    // 1. Evento para abrir el calendario nativo del navegador vía showPicker()
+    // 1. Evento para abrir el calendario nativo del navegador vÃ­a showPicker()
     const btnOpenCalendar = document.getElementById('btnOpenCalendar');
     const appCustomDateHidden = document.getElementById('appCustomDateHidden');
     if (btnOpenCalendar && appCustomDateHidden) {
@@ -1795,14 +1795,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 2. Copiado Rápido de Alias y CBU al Portapapeles con Feedback Visual
+    // 2. Copiado RÃ¡pido de Alias y CBU al Portapapeles con Feedback Visual
     document.addEventListener('click', (e) => {
         const btnCopy = e.target.closest('.btn-copy-data');
         if (btnCopy && btnCopy.dataset.copy) {
             const textToCopy = btnCopy.dataset.copy;
             navigator.clipboard.writeText(textToCopy).then(() => {
                 const originalText = btnCopy.innerHTML;
-                btnCopy.innerHTML = '✅ ¡Copiado!';
+                btnCopy.innerHTML = 'â Â¡Copiado!';
                 btnCopy.style.background = '#10B981';
                 setTimeout(() => {
                     btnCopy.innerHTML = originalText;
@@ -1816,7 +1816,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     
 
-    // 3. Candado de Seguridad Estricto en Confirmación de Reserva & Doble Confirmación
+    // 3. Candado de Seguridad Estricto en ConfirmaciÃ³n de Reserva & Doble ConfirmaciÃ³n
     const confirmAppBtn = document.getElementById('appConfirmBtn') || document.getElementById('widgetConfirmBtn');
     if (confirmAppBtn) {
         confirmAppBtn.addEventListener('click', async () => {
@@ -1836,11 +1836,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const isSecretaria = activeUser && (activeUser.role === 'admin' || activeUser.role === 'secretaria');
             
-            // VALIDACIÓN BLOQUEANTE ESTRICTA PARA TRANSFERENCIA ÚNICA (Solo si NO es secretaria)
+            // VALIDACIÃN BLOQUEANTE ESTRICTA PARA TRANSFERENCIA ÃNICA (Solo si NO es secretaria)
             const file = (fileInput && fileInput.files && fileInput.files.length > 0) ? fileInput.files[0] : null;
             if (!isSecretaria && !file) {
                 if (fileInput) { fileInput.style.border = '2px solid #EF4444'; fileInput.focus(); }
-                alert("⛔ ATENCIÓN: Solo aceptamos pagos por transferencia. Es obligatorio adjuntar la captura del comprobante de pago para reservar la cancha.");
+                alert("â ATENCIÃN: Solo aceptamos pagos por transferencia. Es obligatorio adjuntar la captura del comprobante de pago para reservar la cancha.");
                 return;
             }
 
@@ -1854,25 +1854,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // Capturar datos de secretaría si existen
+            // Capturar datos de secretarÃ­a si existen
             const secNombre = document.getElementById('secInputNombre')?.value.trim();
             const secApellido = document.getElementById('secInputApellido')?.value.trim();
             const secTelefono = document.getElementById('secInputTelefono')?.value.trim();
 
             const finalNombre = isSecretaria && secNombre ? `${secNombre} ${secApellido || ''}`.trim() : (activeUser ? `${activeUser.nombre} ${activeUser.apellido || ''}` : 'Usuario');
             const finalTelefono = isSecretaria && secTelefono ? secTelefono : (activeUser ? activeUser.telefono : '');
-            const finalEstadoPago = isSecretaria ? '⏳ Pago pendiente en Club' : '⏳ Pago esperando aprobación';
-            const finalMetodoPago = isSecretaria ? 'En Secretaría (Efectivo/Físico)' : selectedPaymentMethod;
+            const finalEstadoPago = isSecretaria ? 'â³ Pago pendiente en Club' : 'â³ Pago esperando aprobaciÃ³n';
+            const finalMetodoPago = isSecretaria ? 'En SecretarÃ­a (Efectivo/FÃ­sico)' : selectedPaymentMethod;
 
-            // DOBLE CONFIRMACIÓN ANTI-ERROR
+            // DOBLE CONFIRMACIÃN ANTI-ERROR
             const fechaFormateada = formatFriendlyDate(currentWidgetDate);
             const userRole = activeUser ? activeUser.role : 'usuario';
             const calculo = window.DBHits.calcularPrecioReserva(horaInicio, duracionHoras, userRole);
-            const mensajeConfirmacion = `❓ CONFIRMACIÓN DE RESERVA ATH\n\n¿Estás seguro que deseas confirmar la reserva con los siguientes datos?\n\n🎾 Cancha: Cancha ${currentWidgetCourt}\n📅 Día: ${fechaFormateada}\n⏰ Horario: ${horaInicio} a ${horaFin} hs\n💰 Total a abonar: $${calculo.precioTotal.toLocaleString('es-AR')} ARS\n\nPresiona ACEPTAR para enviar tu reserva o CANCELAR para modificar los horarios.`;
+            const mensajeConfirmacion = `â CONFIRMACIÃN DE RESERVA ATH\n\nÂ¿EstÃ¡s seguro que deseas confirmar la reserva con los siguientes datos?\n\nð¾ Cancha: Cancha ${currentWidgetCourt}\nð DÃ­a: ${fechaFormateada}\nâ° Horario: ${horaInicio} a ${horaFin} hs\nð° Total a abonar: $${calculo.precioTotal.toLocaleString('es-AR')} ARS\n\nPresiona ACEPTAR para enviar tu reserva o CANCELAR para modificar los horarios.`;
 
             if (!confirm(mensajeConfirmacion)) {
-                console.log("🚫 Reserva cancelada por el usuario en el paso de doble confirmación.");
-                return; // Detiene la ejecución sin guardar nada
+                console.log("ð« Reserva cancelada por el usuario en el paso de doble confirmaciÃ³n.");
+                return; // Detiene la ejecuciÃ³n sin guardar nada
             }
 
             const pendingData = {
@@ -1894,7 +1894,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 closeAppBookingModal();
 
                 if (loginAlertError) {
-                    loginAlertError.innerHTML = `<i class="fa-solid fa-lock"></i> ¡Ya casi! Iniciá sesión o creá tu cuenta en segundos para asegurar tu turno en la Cancha ${currentWidgetCourt} (${currentWidgetDate} de ${horaInicio} a ${horaFin} hs).`;
+                    loginAlertError.innerHTML = `<i class="fa-solid fa-lock"></i> Â¡Ya casi! IniciÃ¡ sesiÃ³n o creÃ¡ tu cuenta en segundos para asegurar tu turno en la Cancha ${currentWidgetCourt} (${currentWidgetDate} de ${horaInicio} a ${horaFin} hs).`;
                     loginAlertError.style.display = 'flex';
                 }
                 openModal('login', false);
@@ -1915,13 +1915,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     metodoPago: finalMetodoPago,
                     comprobanteBase64: comprobanteBase64,
                     rolUsuario: isSecretaria ? 'usuario' : userRole,
-                    overrideEstadoPago: finalEstadoPago // Parámetro nuevo
+                    overrideEstadoPago: finalEstadoPago // ParÃ¡metro nuevo
                 });
 
                 if (isSecretaria) {
-                    alert("✅ ¡TURNO AGENDADO EN MOSTRADOR!\n\nEl turno de " + finalNombre + " ha sido registrado exitosamente.\n\n⚠️ RECORDATORIO: El pago ha quedado PENDIENTE. Cuando el cliente abone en el club, recuerda presionar 'Aprobar' en el Panel de Administración para que impacte en el reporte financiero.");
+                    alert("â Â¡TURNO AGENDADO EN MOSTRADOR!\n\nEl turno de " + finalNombre + " ha sido registrado exitosamente.\n\nâ ï¸ RECORDATORIO: El pago ha quedado PENDIENTE. Cuando el cliente abone en el club, recuerda presionar 'Aprobar' en el Panel de AdministraciÃ³n para que impacte en el reporte financiero.");
                 } else {
-                    alert("✅ ¡RESERVA REGISTRADA CON ÉXITO!\n\nEstado actual: ⏳ PAGO ESPERANDO APROBACIÓN.");
+                    alert("â Â¡RESERVA REGISTRADA CON ÃXITO!\n\nEstado actual: â³ PAGO ESPERANDO APROBACIÃN.");
                 }
 
                 closeAppBookingModal();
@@ -1935,7 +1935,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Auto-procesar reserva pendiente tras iniciar sesión
+    // Auto-procesar reserva pendiente tras iniciar sesiÃ³n
     const pendingBooking = localStorage.getItem('pending_ath_booking');
     if (activeUser && pendingBooking) {
         try {
@@ -1950,7 +1950,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 horaInicio: data.horaInicio,
                 duracionHoras: data.duracionHoras
             }).then(r => {
-                alert(`🎾 ¡Reserva completada con éxito tras iniciar sesión! Cancha ${r.canchaId} el ${r.fecha} (${r.horaInicio} a ${r.horaFin} hs).`);
+                alert(`ð¾ Â¡Reserva completada con Ã©xito tras iniciar sesiÃ³n! Cancha ${r.canchaId} el ${r.fecha} (${r.horaInicio} a ${r.horaFin} hs).`);
                 localStorage.removeItem('pending_ath_booking');
                 if (typeof renderWidgetDayTimelineGrid === 'function') renderWidgetDayTimelineGrid();
             }).catch(e => {
@@ -1963,6 +1963,59 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+
+
+    // ==========================================
+    // RENDERIZADO DE CONTACTO Y STAFF
+    // ==========================================
+    const publicStaffGrid = document.getElementById('publicStaffGrid');
+    if (publicStaffGrid && window.DBHits) {
+        const staff = window.DBHits.getStaffRaw ? window.DBHits.getStaffRaw() : [];
+        publicStaffGrid.innerHTML = '';
+        if (staff.length === 0) {
+            publicStaffGrid.innerHTML = '<div style="grid-column: 1/-1; text-align:center; color:#94A3B8;">Próximamente...</div>';
+        } else {
+            staff.forEach(s => {
+                const avatar = s.foto ? s.foto : 'assets/avatar.png';
+                publicStaffGrid.innerHTML += `
+                    <div class="class-card reveal-element" style="text-align: center; padding: 30px 20px;">
+                        <img src="${avatar}" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid var(--color-ath-orange); margin-bottom: 16px; box-shadow: 0 4px 15px rgba(255, 102, 0, 0.3);" onerror="this.src='assets/avatar.png'">
+                        <h3 style="color: #FFF; font-size: 1.25rem; margin-bottom: 4px;">${s.nombre}</h3>
+                        <div style="color: var(--color-ath-orange); font-size: 0.9rem; font-weight: 700; margin-bottom: 16px;">${s.rol}</div>
+                        <p style="color: var(--color-text-muted); font-size: 0.88rem; line-height: 1.5;">${s.desc}</p>
+                    </div>
+                `;
+            });
+        }
+    }
+
+    const publicContactData = document.getElementById('publicContactData');
+    if (publicContactData && window.DBHits) {
+        const clubInfo = window.DBHits.getClubConfig ? window.DBHits.getClubConfig() : {
+            email: 'contacto@academiatenishits.com',
+            direccion: 'San Francisco, Córdoba, Argentina',
+            whatsapp: '5493564000000'
+        };
+        
+        publicContactData.innerHTML = `
+            <div class="contact-card-item" style="background: rgba(255,255,255,0.03); padding: 24px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); text-align: center; min-width: 250px;">
+                <i class="fa-solid fa-envelope" style="font-size: 2rem; color: var(--color-ath-orange); margin-bottom: 16px;"></i>
+                <h4 style="color: #FFF; margin-bottom: 8px;">Correo Electrónico</h4>
+                <p style="color: #94A3B8; font-size: 0.9rem;">${clubInfo.email}</p>
+            </div>
+            <div class="contact-card-item" style="background: rgba(255,255,255,0.03); padding: 24px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); text-align: center; min-width: 250px;">
+                <i class="fa-solid fa-location-dot" style="font-size: 2rem; color: var(--color-ath-orange); margin-bottom: 16px;"></i>
+                <h4 style="color: #FFF; margin-bottom: 8px;">Ubicación</h4>
+                <p style="color: #94A3B8; font-size: 0.9rem;">${clubInfo.direccion}</p>
+            </div>
+            <div class="contact-card-item" style="background: rgba(255,255,255,0.03); padding: 24px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); text-align: center; min-width: 250px;">
+                <i class="fa-brands fa-whatsapp" style="font-size: 2rem; color: #10B981; margin-bottom: 16px;"></i>
+                <h4 style="color: #FFF; margin-bottom: 8px;">WhatsApp Oficial</h4>
+                <p style="color: #94A3B8; font-size: 0.9rem;">+${clubInfo.whatsapp}</p>
+                <a href="https://wa.me/${clubInfo.whatsapp}" target="_blank" class="btn-submit" style="background: #10B981; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; margin-top: 12px; display: inline-flex; width: auto;"><i class="fa-solid fa-comment-dots"></i> Enviar Mensaje</a>
+            </div>
+        `;
+    }
 
 // Helper de fecha para Mis Turnos
 function formatFechaLocal(isoDate) {
@@ -1994,13 +2047,13 @@ async function renderizarMisTurnos() {
         
         let colorEstado = '#94A3B8'; // default
         let estadoStr = turno.estadoPago || 'Pendiente';
-        const estaPagado = estadoStr.includes('✅') || estadoStr.toLowerCase().includes('confirmado') || estadoStr.toLowerCase().includes('aprobado');
+        const estaPagado = estadoStr.includes('â') || estadoStr.toLowerCase().includes('confirmado') || estadoStr.toLowerCase().includes('aprobado');
         
         if(estaPagado) colorEstado = '#10B981';
-        else if(estadoStr.includes('⏳') || estadoStr.includes('pendiente') || estadoStr.includes('esperando')) colorEstado = '#F59E0B';
-        else if(estadoStr.includes('❌') || estadoStr.includes('Rechazado') || estadoStr.includes('Cancelado')) colorEstado = '#EF4444';
+        else if(estadoStr.includes('â³') || estadoStr.includes('pendiente') || estadoStr.includes('esperando')) colorEstado = '#F59E0B';
+        else if(estadoStr.includes('â') || estadoStr.includes('Rechazado') || estadoStr.includes('Cancelado')) colorEstado = '#EF4444';
 
-        // Botón de cancelar: Permitir si faltan >= 30 minutos
+        // BotÃ³n de cancelar: Permitir si faltan >= 30 minutos
         let btnCancelar = '';
         if (!esPasado && minutosFaltantes >= 30) {
             const textoBtn = estaPagado ? '<i class="fa-solid fa-triangle-exclamation"></i> Cancelar y Pedir Reembolso' : '<i class="fa-solid fa-xmark"></i> Cancelar Turno';
@@ -2028,7 +2081,7 @@ async function renderizarMisTurnos() {
         `;
     }).join('') + `</div>`;
 
-    // Asignar eventos de cancelación
+    // Asignar eventos de cancelaciÃ³n
     document.querySelectorAll('.btn-cancelar-turno').forEach(btn => {
         btn.addEventListener('click', async (e) => {
             const buttonEl = e.target.closest('.btn-cancelar-turno');
@@ -2038,11 +2091,11 @@ async function renderizarMisTurnos() {
             const horaTurno = buttonEl.dataset.hora || '';
             const canchaTurno = buttonEl.dataset.cancha || '';
 
-            let mensajeConfirmacion = "⚠️ ¿Estás seguro de que deseas cancelar este turno? La cancha quedará liberada.";
+            let mensajeConfirmacion = "â ï¸ Â¿EstÃ¡s seguro de que deseas cancelar este turno? La cancha quedarÃ¡ liberada.";
             if (estabaPagado) {
-                mensajeConfirmacion = `⚠️ ATENCIÓN: Este turno ya figura como PAGADO.
+                mensajeConfirmacion = `â ï¸ ATENCIÃN: Este turno ya figura como PAGADO.
 
-Al cancelar, el sistema liberará la cancha y te abrirá un chat de WhatsApp con la administración para coordinar la devolución de tu dinero. ¿Deseas continuar?`;
+Al cancelar, el sistema liberarÃ¡ la cancha y te abrirÃ¡ un chat de WhatsApp con la administraciÃ³n para coordinar la devoluciÃ³n de tu dinero. Â¿Deseas continuar?`;
             }
 
             if (confirm(mensajeConfirmacion)) {
@@ -2054,7 +2107,7 @@ Al cancelar, el sistema liberará la cancha y te abrirá un chat de WhatsApp con
                     if (estabaPagado) {
                         const wppNum = window.DBHits.getWhatsAppConfig ? window.DBHits.getWhatsAppConfig() : '5493564000000';
                         const fechaFormat = typeof formatFechaLocal === 'function' ? formatFechaLocal(fechaTurno) : fechaTurno;
-                        const textoWpp = encodeURIComponent(`Hola! Acabo de cancelar mi turno pagado para el día ${fechaFormat} (${horaTurno} hs - Cancha ${canchaTurno}) en Academia Tenis Hits y necesito coordinar la devolución del dinero.`);
+                        const textoWpp = encodeURIComponent(`Hola! Acabo de cancelar mi turno pagado para el dÃ­a ${fechaFormat} (${horaTurno} hs - Cancha ${canchaTurno}) en Academia Tenis Hits y necesito coordinar la devoluciÃ³n del dinero.`);
                         window.open(`https://wa.me/${wppNum}?text=${textoWpp}`, '_blank');
                     }
                 } catch(err) {
@@ -2067,7 +2120,7 @@ Al cancelar, el sistema liberará la cancha y te abrirá un chat de WhatsApp con
 window.renderizarMisTurnos = renderizarMisTurnos;
 
 
-// Controlador del menú flotante de notificaciones en la barra de navegación
+// Controlador del menÃº flotante de notificaciones en la barra de navegaciÃ³n
 function setupNotificationDropdown() {
     const notifBell = document.getElementById('notificationBell') || document.querySelector('.nav-bell-icon');
     const notifDropdown = document.getElementById('notificationDropdownMenu');
@@ -2090,7 +2143,7 @@ function setupNotificationDropdown() {
                     if (notifs.length === 0) {
                         listContainer.innerHTML = `
                             <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 6px; font-size: 0.8rem; color: #E2E8F0;">
-                                <i class="fa-solid fa-circle-info" style="color: var(--color-ath-orange);"></i> ¡Hola ${user.nombre || 'Usuario'}! Tus turnos y avisos se actualizarán aquí.
+                                <i class="fa-solid fa-circle-info" style="color: var(--color-ath-orange);"></i> Â¡Hola ${user.nombre || 'Usuario'}! Tus turnos y avisos se actualizarÃ¡n aquÃ­.
                             </div>
                         `;
                     } else {
@@ -2127,7 +2180,7 @@ function setupNotificationDropdown() {
 }
 
 
-// Inyector automático de Botón Flotante de WhatsApp Responsivo (Esquina Inferior Izquierda)
+// Inyector automÃ¡tico de BotÃ³n Flotante de WhatsApp Responsivo (Esquina Inferior Izquierda)
 function initFloatingWhatsApp() {
     if (document.getElementById('athFloatingWpp')) return; // Evitar duplicados
 
@@ -2159,11 +2212,11 @@ function initFloatingWhatsApp() {
     wppFloat.addEventListener('mouseenter', () => { wppFloat.style.transform = 'scale(1.12)'; });
     wppFloat.addEventListener('mouseleave', () => { wppFloat.style.transform = 'scale(1.0)'; });
 
-    // Acción de clic vinculada al número oficial guardado en la BD
+    // AcciÃ³n de clic vinculada al nÃºmero oficial guardado en la BD
     wppFloat.addEventListener('click', (e) => {
         e.preventDefault();
         const wppNum = window.DBHits && window.DBHits.getWhatsAppConfig ? window.DBHits.getWhatsAppConfig() : '5493564000000';
-        const mensaje = encodeURIComponent("¡Hola! Me comunico desde la web de Academia Tenis Hits para realizar una consulta.");
+        const mensaje = encodeURIComponent("Â¡Hola! Me comunico desde la web de Academia Tenis Hits para realizar una consulta.");
         window.open(`https://wa.me/${wppNum}?text=${mensaje}`, '_blank');
     });
 
@@ -2172,7 +2225,7 @@ function initFloatingWhatsApp() {
 
 
 
-// Ejecuci�n global incondicional de WhatsApp
+// Ejecución global incondicional de WhatsApp
 if (typeof document !== 'undefined') {
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => { initFloatingWhatsApp(); });

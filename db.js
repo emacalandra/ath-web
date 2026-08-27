@@ -7,6 +7,7 @@
 const SALT_ATH = '_ATH_SALT_2026';
 const USERS_STORAGE_KEY = 'ath_users_db';
 const BOOKINGS_STORAGE_KEY = 'ath_bookings_db';
+const STAFF_STORAGE_KEY = 'ath_staff_db';
 const NEWS_STORAGE_KEY = 'ath_news_db';
 const TOURNAMENTS_STORAGE_KEY = 'ath_tournaments_db';
 const PRICING_STORAGE_KEY = 'ath_pricing_db';

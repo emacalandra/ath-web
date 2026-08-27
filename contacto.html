@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Construcción y Mantenimiento de Canchas | Academia Tenis Hits (ATH)</title>
-    <meta name="description" content="Ingeniería y arquitectura deportiva especializada en construcción, drenajes y mantenimiento de canchas de tenis en Córdoba y Argentina.">
+    <title>Nuestra Historia | Academia Tenis Hits (ATH)</title>
+    <meta name="description" content="Historia, valores y trayectoria de Academia Tenis Hits en el Club Ciudad Verde de San Francisco, Córdoba, Argentina.">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,9 +35,9 @@
                     <li class="nav-item"><a href="noticias.html" class="nav-link">Noticias</a></li>
                     <li class="nav-item"><a href="clases.html" class="nav-link">Clases</a></li>
                     <li class="nav-item"><a href="torneos.html" class="nav-link">Torneos</a></li>
-                    <li class="nav-item"><a href="construccion.html" class="nav-link active">Construcción</a></li>
+                    <li class="nav-item"><a href="construccion.html" class="nav-link">Construcción</a></li>
                     <li class="nav-item"><a href="historia.html" class="nav-link">Historia</a></li>
-                    <li class="nav-item"><a href="contacto.html" class="nav-link">Contacto y Staff</a></li>
+                    <li class="nav-item"><a href="contacto.html" class="nav-link active">Contacto y Staff</a></li>
                 </ul>
             </nav>
 
@@ -55,47 +55,44 @@
 
     <!-- Contenido Principal -->
     <main>
-        <section id="construccion" class="content-section bg-dark-section" style="padding-top: 140px;">
+        <!-- Hero Section -->
+        <section class="hero-section" style="min-height: 40vh; display: flex; align-items: center; justify-content: center; position: relative;">
+            <div class="hero-bg" style="background-image: url('assets/hero-bg.jpg'); filter: brightness(0.4);"></div>
+            <div class="hero-content" style="text-align: center; position: relative; z-index: 2;">
+                <span class="badge" style="margin-bottom: 16px;"><i class="fa-solid fa-address-book"></i> Nuestro Equipo</span>
+                <h1 class="hero-title">Contacto y Staff ATH</h1>
+                <p class="hero-subtitle" style="font-size: 1.1rem; max-width: 600px; margin: 0 auto;">Conocé a los profesionales que día a día hacen de la Academia Tenis Hits tu mejor lugar para aprender y disfrutar del tenis.</p>
+            </div>
+        </section>
+
+        <!-- Datos de Contacto Dinámicos -->
+        <section class="section" style="background-color: var(--color-bg-light); padding: 60px 20px;">
             <div class="container">
-                <div class="section-header">
-                    <span class="section-subtitle">Servicios Especializados</span>
-                    <h2 class="section-title">Construcción y Mantenimiento de Canchas</h2>
-                    <p class="section-description">Ingeniería y arquitectura deportiva especializada en la ejecución, nivelación y acondicionamiento integral de superficies deportivas en Córdoba y todo el país.</p>
-                    <div class="title-bar"></div>
+                <div class="section-header reveal-element">
+                    <h2 class="section-title">Datos del Club</h2>
+                    <p class="section-subtitle">Vías de comunicación oficiales de ATH.</p>
                 </div>
-
-                <div class="construction-banner-box">
-                    <h3>Proyectos e Ingeniería de Canchas de Tenis</h3>
-                    <p>En <strong>Academia Tenis Hits</strong> brindamos asesoramiento técnico completo para la construcción desde cero de canchas de tenis de polvo de ladrillo, instalación de drenajes sub-superficiales optimizados, nivelación láser y provisión de insumos seleccionados de nivel internacional.</p>
-                    
-                    <div class="construction-grid-features">
-                        <div class="construction-item">
-                            <i class="fa-solid fa-trowel-bricks"></i>
-                            <h4>Construcción desde Cero</h4>
-                            <p>Diseño estructural y ejecución de obras completas con sistemas de drenaje técnico.</p>
-                        </div>
-                        <div class="construction-item">
-                            <i class="fa-solid fa-fill-drip"></i>
-                            <h4>Insumos de Calidad Internacional</h4>
-                            <p>Distribución de materiales e insumos deportivos seleccionados de máxima durabilidad.</p>
-                        </div>
-                        <div class="construction-item">
-                            <i class="fa-solid fa-screwdriver-wrench"></i>
-                            <h4>Reacondicionamiento Técnico</h4>
-                            <p>Recarga de superficie, colocación de flejes de PVC y nivelación con rodillo pesado.</p>
-                        </div>
-                    </div>
-
-                    <div class="construction-action-wrapper">
-                        <span class="construction-action-text">¿Deseás construir o recuperar tu cancha con estándares profesionales?</span>
-                        <a href="https://wa.me/5493564987654" target="_blank" rel="noopener" class="btn-hero-primary" style="box-shadow: 0 4px 20px rgba(255, 102, 0, 0.6);">
-                            <i class="fa-brands fa-whatsapp"></i> Consultar por Asesoría Técnica
-                        </a>
-                    </div>
+                
+                <div id="publicContactData" style="display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; margin-top: 40px;" class="reveal-element">
+                    <!-- Dinámico desde script.js -->
                 </div>
             </div>
         </section>
-    </main>
+
+        <!-- Staff Grid -->
+        <section class="section" style="padding: 80px 20px;">
+            <div class="container">
+                <div class="section-header reveal-element">
+                    <h2 class="section-title">El Equipo ATH</h2>
+                    <p class="section-subtitle">Profesionales capacitados para llevar tu nivel al máximo.</p>
+                </div>
+                
+                <div class="grid-3col" id="publicStaffGrid" style="margin-top: 40px;">
+                    <!-- Cargado dinámicamente desde db.js -->
+                </div>
+            </div>
+        </section>
+</main>
 
     <!-- Pie de Página -->
     <footer class="footer">

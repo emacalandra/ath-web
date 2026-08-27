@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test</title>
+    <script>
+        window.onerror = function(message, source, lineno, colno, error) {
+            var msg = "ERROR: " + message + " at " + source + ":" + lineno + ":" + colno;
+            console.log(msg);
+            fetch('http://localhost:8081/log', { method: 'POST', body: msg });
+        };
+    </script>
+</head>
+<body>
+    <div id="loginForm"></div>
+    <div id="loginEmail"></div>
+    <div id="loginPassword"></div>
+    <script src="db.js"></script>
+    <script src="script.js"></script>
+    <script>
+        setTimeout(() => {
+            fetch('http://localhost:8081/log', { method: 'POST', body: 'DONE' });
+        }, 1000);
+    </script>
+</body>
+</html>

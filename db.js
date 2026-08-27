@@ -745,31 +745,42 @@ class ATHDatabaseEngine {
                 const dateObj = new Date(`${fecha}T12:00:00`);
                 const dayOfWeek = dateObj.getDay(); // 0 a 6
                 const exceptions = this.getExceptions();
-                
                 for (let rule of rules) {
                     if (String(rule.day) === String(dayOfWeek) && (rule.court === 'TODAS' || String(rule.court) === String(canchaId))) {
                         const startRule = timeStringToMinutes(rule.start);
                         const endRule = timeStringToMinutes(rule.end);
                         
-                        // Verificar si existe una excepción que anule esta regla en este día
-                        let isExcepted = false;
-                        for(let ex of exceptions) {
+                        // Recortar la regla según las excepciones existentes
+                        let ruleBlocks = [{start: startRule, end: endRule}];
+                        for (let ex of exceptions) {
                             if(ex.fecha === fecha && (ex.cancha === 'TODAS' || String(ex.cancha) === String(canchaId))) {
                                 const exStart = timeStringToMinutes(ex.inicio);
                                 const exEnd = timeStringToMinutes(ex.fin);
-                                if(startRule < exEnd && endRule > exStart) {
-                                    isExcepted = true;
-                                    break; // La clase está suspendida, se ignora la regla
+                                let newBlocks = [];
+                                for(let block of ruleBlocks) {
+                                    if (block.start < exEnd && block.end > exStart) {
+                                        // Hay superposición, fraccionamos el bloque
+                                        if (block.start < exStart) newBlocks.push({start: block.start, end: exStart});
+                                        if (block.end > exEnd) newBlocks.push({start: exEnd, end: block.end});
+                                    } else {
+                                        newBlocks.push(block);
+                                    }
                                 }
+                                ruleBlocks = newBlocks;
                             }
                         }
 
-                        if (!isExcepted && startNuevo < endRule && endNuevo > startRule) {
-                            return {
-                                disponible: false,
-                                conflicto: { horaInicio: rule.start, horaFin: rule.end },
-                                mensaje: `⛔ Horario bloqueado por Clase Fija: ${rule.label} (${rule.start} a ${rule.end} hs).`
-                            };
+                        // Verificar colisión solo con los fragmentos de clase que quedaron activos
+                        for (let block of ruleBlocks) {
+                            if (startNuevo < block.end && endNuevo > block.start) {
+                                const hIn = String(Math.floor(block.start / 60)).padStart(2, '0') + ':' + String(block.start % 60).padStart(2, '0');
+                                const hOut = String(Math.floor(block.end / 60)).padStart(2, '0') + ':' + String(block.end % 60).padStart(2, '0');
+                                return {
+                                    disponible: false,
+                                    conflicto: { horaInicio: hIn, horaFin: hOut },
+                                    mensaje: `⛔ Horario bloqueado por Clase Fija: ${rule.label} (${hIn} a ${hOut} hs).`
+                                };
+                            }
                         }
                     }
                 }

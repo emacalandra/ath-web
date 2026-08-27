@@ -1512,25 +1512,37 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     rules.forEach(rule => {
                         if (String(rule.day) === String(dayOfWeek) && (rule.court === 'TODAS' || String(rule.court) === String(currentWidgetCourt))) {
-                            let isExcepted = false;
                             const startRuleMin = parseInt(rule.start.split(':')[0])*60 + parseInt(rule.start.split(':')[1]);
                             const endRuleMin = parseInt(rule.end.split(':')[0])*60 + parseInt(rule.end.split(':')[1]);
+                            
+                            let ruleBlocks = [{start: startRuleMin, end: endRuleMin}];
 
-                            for(let ex of exceptions) {
-                                if(ex.fecha === currentWidgetDate && (ex.cancha === 'TODAS' || String(ex.cancha) === String(currentWidgetCourt))) {
+                            for (let ex of exceptions) {
+                                if (ex.fecha === currentWidgetDate && (ex.cancha === 'TODAS' || String(ex.cancha) === String(currentWidgetCourt))) {
                                     const exStartMin = parseInt(ex.inicio.split(':')[0])*60 + parseInt(ex.inicio.split(':')[1]);
                                     const exEndMin = parseInt(ex.fin.split(':')[0])*60 + parseInt(ex.fin.split(':')[1]);
-                                    if(startRuleMin < exEndMin && endRuleMin > exStartMin) {
-                                        isExcepted = true; break;
+                                    
+                                    let newBlocks = [];
+                                    for (let block of ruleBlocks) {
+                                        if (block.start < exEndMin && block.end > exStartMin) {
+                                            if (block.start < exStartMin) newBlocks.push({start: block.start, end: exStartMin});
+                                            if (block.end > exEndMin) newBlocks.push({start: exEndMin, end: block.end});
+                                        } else {
+                                            newBlocks.push(block);
+                                        }
                                     }
+                                    ruleBlocks = newBlocks;
                                 }
                             }
 
-                            if(!isExcepted) {
+                            // Dibujar solo los fragmentos de clase que sobrevivieron a las excepciones
+                            ruleBlocks.forEach(block => {
+                                const hIn = String(Math.floor(block.start / 60)).padStart(2, '0') + ':' + String(block.start % 60).padStart(2, '0');
+                                const hOut = String(Math.floor(block.end / 60)).padStart(2, '0') + ':' + String(block.end % 60).padStart(2, '0');
                                 reservasCancha.push({
-                                    tipo: 'bloqueo_admin', motivo: rule.label, horaInicio: rule.start, horaFin: rule.end
+                                    tipo: 'bloqueo_admin', motivo: rule.label, horaInicio: hIn, horaFin: hOut
                                 });
-                            }
+                            });
                         }
                     });
                 }

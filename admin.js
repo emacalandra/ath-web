@@ -10,6 +10,15 @@
 /* Estado de Sub-Navegación de Reservas ('activas' vs 'historial') */
 window.subtabActualReservas = window.subtabActualReservas || 'activas';
 
+// Helper para formatear fechas ISO (YYYY-MM-DD) al formato local de Argentina (DD/MM/YYYY)
+function formatFechaArg(isoDate) {
+    if (!isoDate) return '-';
+    if (isoDate.includes('/')) return isoDate; // Evitar re-formatear
+    const parts = isoDate.split('-');
+    if (parts.length !== 3) return isoDate;
+    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+}
+
 window.cambiarSubtabReservas = function(tab) {
     console.log(`📋 [ATH Admin] Cambiando a sub-pestaña: ${tab}`);
     window.subtabActualReservas = tab;
@@ -284,7 +293,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const canchaTexto = r.canchaNombre || `Cancha ${r.canchaId}`;
             const horarioTexto = (r.horaInicio && r.horaFin) ? `${r.horaInicio} a ${r.horaFin} hs` : (r.horario || '-');
-            const fechaTexto = r.fecha || '-';
+            const fechaTexto = formatFechaArg(r.fecha);
             const montoTexto = `$${(r.precioTotal || r.monto || 12000).toLocaleString('es-AR')} ARS`;
 
             // 1. Botón de Comprobante
@@ -562,7 +571,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return `
                     <tr>
                         <td data-label="Cancha"><strong>Cancha ${r.canchaId}</strong></td>
-                        <td data-label="Fecha & Horario">${r.fecha}<br><span style="font-weight:700; color:var(--color-ath-orange);">${r.horaInicio} a ${hFin} hs</span></td>
+                        <td data-label="Fecha & Horario">${formatFechaArg(r.fecha)}<br><span style="font-weight:700; color:var(--color-ath-orange);">${r.horaInicio} a ${hFin} hs</span></td>
                         <td data-label="Detalle / Usuario">${usuarioDetalle}</td>
                         <td data-label="Tipo / Motivo">${badgeTipo}</td>
                         <td data-label="Acción">
@@ -765,7 +774,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         statsRoles[rol].ingresos += ingresoReserva;
 
                         ultimaDataReporte.push({
-                            Fecha: r.fecha, Cancha: r.canchaId, Horario: `${r.horaInicio} a ${r.horaFin}`,
+                            Fecha: formatFechaArg(r.fecha), Cancha: r.canchaId, Horario: `${r.horaInicio} a ${r.horaFin}`,
                             Cliente: r.usuarioNombre, Rol: rol.toUpperCase(), Pago: r.metodoPago,
                             Horas_Totales: dur.toFixed(2), Horas_Nocturnas: horasNocheTurno.toFixed(2), Ingreso: ingresoReserva
                         });
@@ -1048,7 +1057,7 @@ document.addEventListener('DOMContentLoaded', () => {
         listaExcepciones.innerHTML = activas.map(ex => `
             <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 8px 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
                 <div style="font-size: 0.8rem; color: #FFF;">
-                    <strong style="color: #6EE7B7;">${ex.fecha}</strong> &bull; ${ex.inicio} a ${ex.fin} hs<br>
+                    <strong style="color: #6EE7B7;">${formatFechaArg(ex.fecha)}</strong> &bull; ${ex.inicio} a ${ex.fin} hs<br>
                     <span style="color: #A7F3D0;"><i class="fa-solid fa-unlock"></i> Cancha Liberada (${ex.cancha === 'TODAS' ? 'Todas' : 'Cancha ' + ex.cancha})</span>
                 </div>
                 <button class="btn-borrar-exc" data-id="${ex.id}" style="background: none; border: none; color: #EF4444; font-size: 1.1rem; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>

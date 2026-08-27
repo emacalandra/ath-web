@@ -1300,7 +1300,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <input type="text" id="secInputApellido" placeholder="Apellido" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
                     </div>
                     <input type="tel" id="secInputTelefono" placeholder="Teléfono" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
-                    <div style="margin-top: 8px; font-size: 0.75rem; color: #6EE7B7;"><i class="fa-solid fa-check-circle"></i> El pago se registrará automáticamente como Confirmado.</div>
+                    <div style="margin-top: 8px; font-size: 0.75rem; color: #FCA5A5;"><i class="fa-solid fa-clock"></i> El turno se agendará y el pago quedará <strong>Pendiente</strong> hasta que el cliente abone en el club.</div>
                 `;
                 confirmBtnEl.parentNode.insertBefore(secFields, confirmBtnEl);
             }
@@ -1764,7 +1764,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const finalNombre = isSecretaria && secNombre ? `${secNombre} ${secApellido || ''}`.trim() : (activeUser ? `${activeUser.nombre} ${activeUser.apellido || ''}` : 'Usuario');
             const finalTelefono = isSecretaria && secTelefono ? secTelefono : (activeUser ? activeUser.telefono : '');
-            const finalEstadoPago = isSecretaria ? '✅ Pago confirmado' : '⏳ Pago esperando aprobación';
+            const finalEstadoPago = isSecretaria ? '⏳ Pago pendiente en Club' : '⏳ Pago esperando aprobación';
             const finalMetodoPago = isSecretaria ? 'En Secretaría (Efectivo/Físico)' : selectedPaymentMethod;
 
             // DOBLE CONFIRMACIÓN ANTI-ERROR
@@ -1822,9 +1822,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 if (isSecretaria) {
-                    alert("✅ ¡TURNO AGENDADO EN MOSTRADOR!\n\nEl turno fue registrado exitosamente a nombre de " + finalNombre + " y marcado como pagado.");
+                    alert("✅ ¡TURNO AGENDADO EN MOSTRADOR!\n\nEl turno de " + finalNombre + " ha sido registrado exitosamente.\n\n⚠️ RECORDATORIO: El pago ha quedado PENDIENTE. Cuando el cliente abone en el club, recuerda presionar 'Aprobar' en el Panel de Administración para que impacte en el reporte financiero.");
                 } else {
-                    alert("✅ ¡RESERVA REGISTRADA CON ÉXITO!\n\nEstado actual: ⏳ PAGO ESPERANDO APROBACIÓN\n\nTu solicitud y/o comprobante ya están en poder de la secretaría del Club Ciudad Verde. En cuanto un administrador verifique el ingreso, tu estado cambiará automáticamente a 'Pago confirmado'.");
+                    alert("✅ ¡RESERVA REGISTRADA CON ÉXITO!\n\nEstado actual: ⏳ PAGO ESPERANDO APROBACIÓN.");
                 }
 
                 closeAppBookingModal();

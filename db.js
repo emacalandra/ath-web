@@ -5,6 +5,15 @@
    ========================================================================== */
 
 const SALT_ATH = '_ATH_SALT_2026';
+
+function formatFechaArg(isoDate) {
+    if (!isoDate) return '-';
+    if (isoDate.includes('/')) return isoDate;
+    const parts = isoDate.split('-');
+    if (parts.length !== 3) return isoDate;
+    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+}
+
 const USERS_STORAGE_KEY = 'ath_users_db';
 const BOOKINGS_STORAGE_KEY = 'ath_bookings_db';
 const STAFF_STORAGE_KEY = 'ath_staff_db';
@@ -622,7 +631,7 @@ class ATHDatabaseEngine {
                 const users = this.getUsersRaw();
                 const admins = users.filter(u => u.role === 'admin' || u.role === 'secretaria');
                 admins.forEach(adm => {
-                    this.notificarUsuario(adm.id, `⚠️ CANCELACIÓN CON REEMBOLSO: El usuario ${reserva.usuarioNombre} canceló su turno pagado del ${reserva.fecha} (${reserva.horaInicio} hs - Cancha ${reserva.canchaId}). Requiere devolución de dinero.`, 'error');
+                    this.notificarUsuario(adm.id, `⚠️ CANCELACIÓN CON REEMBOLSO: El usuario ${reserva.usuarioNombre} canceló su turno pagado del ${formatFechaArg(reserva.fecha)} (${reserva.horaInicio} hs - Cancha ${reserva.canchaId}). Requiere devolución de dinero.`, 'error');
                 });
             }
 
@@ -662,13 +671,13 @@ class ATHDatabaseEngine {
         let tipoNoti = 'info';
         if (nuevoEstado.includes('✅') || nuevoEstado.includes('confirmado')) tipoNoti = 'success';
         if (nuevoEstado.includes('Rechazado') || nuevoEstado.includes('❌')) tipoNoti = 'error';
-        this.notificarUsuario(reservas[index].usuarioId, `El pago de tu reserva del ${reservas[index].fecha} (${reservas[index].horaInicio} hs) cambió a: ${nuevoEstado}`, tipoNoti);
+        this.notificarUsuario(reservas[index].usuarioId, `El pago de tu reserva del ${formatFechaArg(reservas[index].fecha)} (${reservas[index].horaInicio} hs) cambió a: ${nuevoEstado}`, tipoNoti);
 
         return reservas[index];
     }
 
     // Enviar notificación a un usuario
-    async notificarUsuario(userId, mensaje, tipo = 'info') {
+    async notificarUsuario(userId, mensaje, tipo = 'info', targetUrl = null) {
         const users = this.getUsersRaw();
         const user = users.find(u => String(u.id) === String(userId));
         if (!user) return;
@@ -678,6 +687,7 @@ class ATHDatabaseEngine {
             id: Date.now() + Math.floor(Math.random() * 1000),
             mensaje,
             tipo, // 'success', 'warning', 'error', 'info'
+            targetUrl,
             fecha: new Date().toISOString(),
             leida: false
         });
@@ -716,7 +726,7 @@ class ATHDatabaseEngine {
             if (r.fecha === fecha && !estado.includes('Rechazado') && !estado.includes('Cancelado')) {
                 r.estadoPago = '❌ Cancelado (Mal Tiempo)';
                 afectadas++;
-                this.notificarUsuario(r.usuarioId, `🌧️ Tu turno del ${r.fecha} (${r.horaInicio} hs) fue suspendido por mal tiempo: ${motivo}. Comunicate para reprogramar.`, 'error');
+                this.notificarUsuario(r.usuarioId, `🌧️ Tu turno del ${formatFechaArg(r.fecha)} (${r.horaInicio} hs) fue suspendido por mal tiempo: ${motivo}. Comunicate para reprogramar.`, 'error');
             }
         });
         if (afectadas > 0) this.saveReservasRaw(reservas);
@@ -1002,16 +1012,23 @@ class ATHDatabaseEngine {
         reservas.push(nuevaReserva);
         this.saveReservasRaw(reservas);
 
-        // Notificar a todos los administradores en tiempo real con mensaje inteligente
+        // Notificar a administradores con formato argentino y enlace directo
         const todosUsuarios = this.getUsersRaw();
         const administradores = todosUsuarios.filter(u => u.role === 'admin' || u.role === 'secretaria');
         const esMostrador = (metodoNombre && metodoNombre.includes('Secretaría'));
+        const fechaArg = formatFechaArg(fecha);
+        
         const textoNotificacion = esMostrador 
-            ? `🏟️ Nuevo turno en Mostrador: Cancha ${canchaId} el ${fecha} de ${horaInicio} a ${horaFin} hs a nombre de ${usuarioNombre}. ⚠️ Pago pendiente de cobro presencial en el club.`
-            : `📥 Nueva reserva online: Cancha ${canchaId} el ${fecha} de ${horaInicio} a ${horaFin} hs. ⏳ Requiere revisión de comprobante.`;
+            ? `🏟️ Nuevo turno en Mostrador: Cancha ${canchaId} el ${fechaArg} de ${horaInicio} a ${horaFin} hs a nombre de ${usuarioNombre}. ⚠️ Pago pendiente de cobro presencial en el club.`
+            : `📥 Nueva reserva online: Cancha ${canchaId} el ${fechaArg} de ${horaInicio} a ${horaFin} hs. ⏳ Requiere revisión de comprobante.`;
 
         administradores.forEach(admin => {
-            this.notificarUsuario(admin.id, textoNotificacion, esMostrador ? 'info' : 'warning');
+            this.notificarUsuario(
+                admin.id, 
+                textoNotificacion, 
+                esMostrador ? 'info' : 'warning', 
+                `admin.html?tab=reservas&resId=${nuevaReserva.id}`
+            );
         });
 
         console.log(`🎾 Reserva creada para Cancha ${canchaId} el ${fecha} (${horaInicio} a ${horaFin} hs) - Estado: ${estadoInicial} - Total: $${calculo.precioTotal} ARS`);

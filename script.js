@@ -2167,8 +2167,9 @@ function setupNotificationDropdown() {
                         `;
                     } else {
                         listContainer.innerHTML = notifs.slice(0, 6).map(n => {
-                            const clickAttr = isAdminOrSec ? `onclick="window.location.href='admin.html';" style="cursor: pointer; background: rgba(255,255,255,0.07); padding: 8px; border-radius: 6px; font-size: 0.8rem; color: #E2E8F0; border-left: 3px solid ${n.tipo === 'success' ? '#10B981' : (n.tipo === 'error' ? '#EF4444' : 'var(--color-ath-orange)')}; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.12)'" onmouseout="this.style.background='rgba(255,255,255,0.07)'"` : `style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 6px; font-size: 0.8rem; color: #E2E8F0; border-left: 3px solid ${n.tipo === 'success' ? '#10B981' : (n.tipo === 'error' ? '#EF4444' : 'var(--color-ath-orange)')};"`;
-                            const adminHint = isAdminOrSec ? `<div style="font-size: 0.68rem; color: var(--color-ath-orange); font-weight: 700; margin-top: 4px;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ver en Panel de Control</div>` : '';
+                            const targetLink = n.targetUrl || (isAdminOrSec ? 'admin.html?tab=reservas' : 'perfil.html');
+                            const clickAttr = `onclick="window.location.href='${targetLink}';" style="cursor: pointer; background: rgba(255,255,255,0.07); padding: 8px; border-radius: 6px; font-size: 0.8rem; color: #E2E8F0; border-left: 3px solid ${n.tipo === 'success' ? '#10B981' : (n.tipo === 'error' ? '#EF4444' : 'var(--color-ath-orange)')}; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.12)'" onmouseout="this.style.background='rgba(255,255,255,0.07)'"`;
+                            const adminHint = `<div style="font-size: 0.68rem; color: var(--color-ath-orange); font-weight: 700; margin-top: 4px;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ver Detalles</div>`;
                             return `
                                 <div ${clickAttr}>
                                     <div>${n.mensaje}</div>

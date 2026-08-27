@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            fetch('/log', { method: 'POST', body: 'ERROR: ' + msg + ' at ' + url + ':' + lineNo + ':' + columnNo });
+        };
+    </script>
+    <script src="db.js"></script>
+    <script src="script.js"></script>
+    <script src="admin.js"></script>
+    <script>
+        window.onload = function() {
+            fetch('/log', { method: 'POST', body: 'DONE' });
+        };
+    </script>
+</head>
+<body></body>
+</html>

@@ -1206,18 +1206,19 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const avatar = s.foto ? s.foto : 'assets/avatar.png';
             
-            card.innerHTML = 
+            card.innerHTML = `
                 <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
-                    <img src="" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--color-ath-orange);" onerror="this.src='assets/avatar.png'">
+                    <img src="${avatar}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--color-ath-orange);" onerror="this.src='assets/avatar.png'">
                     <div>
-                        <div style="font-weight: 700; color: #FFF; font-size: 0.95rem;"></div>
-                        <div style="color: var(--color-ath-orange); font-size: 0.75rem;"></div>
+                        <div style="font-weight: 700; color: #FFF; font-size: 0.95rem;">${s.nombre}</div>
+                        <div style="color: var(--color-ath-orange); font-size: 0.75rem;">${s.puesto}</div>
                     </div>
                 </div>
                 <div style="display: flex; gap: 8px;">
-                    <button class="btn-edit-staff" data-id="" style="background: rgba(59, 130, 246, 0.15); color: #60A5FA; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer;"><i class="fa-solid fa-pen"></i></button>
-                    <button class="btn-del-staff" data-id="" style="background: rgba(239, 68, 68, 0.15); color: #EF4444; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer;"><i class="fa-solid fa-trash"></i></button>
+                    <button class="btn-edit-staff" data-id="${s.id}" style="background: rgba(59, 130, 246, 0.15); color: #60A5FA; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer;"><i class="fa-solid fa-pen"></i></button>
+                    <button class="btn-del-staff" data-id="${s.id}" style="background: rgba(239, 68, 68, 0.15); color: #EF4444; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer;"><i class="fa-solid fa-trash"></i></button>
                 </div>
+            `;
             ;
             container.appendChild(card);
         });

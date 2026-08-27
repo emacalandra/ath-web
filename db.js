@@ -813,29 +813,29 @@ class ATHDatabaseEngine {
 
     // 2. Algoritmo Anti-Colisión (Solapamiento)
     verificarDisponibilidad(canchaId, fecha, horaInicio, horaFin) {
+        // Verificar margen de 15 minutos de descanso/reacondicionamiento
         const reservas = this.getReservasRaw();
         const startNuevo = timeStringToMinutes(horaInicio);
         const endNuevo = timeStringToMinutes(horaFin);
         const canchaStr = String(canchaId);
 
-        const reservasConflictivas = reservas.filter(r => {
-            if (String(r.canchaId) !== canchaStr || r.fecha !== fecha) return false;
-            if (r.estadoPago === 'Rechazado' || r.estadoPago === 'Cancelado') return false;
+        for (let r of reservas) {
+            if (String(r.canchaId) !== canchaStr || r.fecha !== fecha) continue;
+            const est = String(r.estadoPago || '');
+            if (est.includes('Rechazado') || est.includes('Cancelado')) continue;
 
             const startExistente = timeStringToMinutes(r.horaInicio);
             const endExistente = timeStringToMinutes(r.horaFin || r.hora);
 
-            // Fórmula de solapamiento: (inicioNuevo < finExistente && finNuevo > inicioExistente)
-            return (startNuevo < endExistente && endNuevo > startExistente);
-        });
-
-        if (reservasConflictivas.length > 0) {
-            const c = reservasConflictivas[0];
-            return {
-                disponible: false,
-                conflicto: c,
-                mensaje: `⛔ La Cancha ${canchaId} ya se encuentra reservada el ${fecha} de ${c.horaInicio} a ${c.horaFin || c.hora} hs.`
-            };
+            // Margen obligatorio de 15 minutos (el nuevo turno debe terminar 15 min antes o empezar 15 min después)
+            // Es decir, no puede haber menos de 15 minutos libres entre el fin del anterior y el inicio del nuevo
+            if (startNuevo < (endExistente + 15) && endNuevo > (startExistente - 15)) {
+                return {
+                    disponible: false,
+                    conflicto: r,
+                    mensaje: `⚠️ Se requiere un intervalo obligatorio de 15 minutos entre turnos para el mantenimiento de la cancha (Conflicto con turno de ${r.horaInicio} a ${r.horaFin || r.hora} hs).`
+                };
+            }
         }
 
         // Evaluación de Plantilla Semanal Fija

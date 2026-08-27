@@ -433,15 +433,27 @@ document.addEventListener('DOMContentLoaded', () => {
             let roleBadgeHtml = '';
             let adminBtnHtml = '';
 
-            if (usuario.role === 'admin' || usuario.role === 'secretaria') {
+            if (usuario.role === 'admin' || usuario.role === 'secretaria' || usuario.role === 'canchero') {
                 const isAdmin = usuario.role === 'admin';
-                roleBadgeHtml = isAdmin 
-                    ? `<span class="user-role-tag tag-admin"><i class="fa-solid fa-shield-halved"></i> Admin</span>`
-                    : `<span class="user-role-tag tag-admin" style="background: rgba(16, 185, 129, 0.2); color: #34D399; border: 1px solid #10B981;"><i class="fa-solid fa-address-book"></i> SecretarÃ­a</span>`;
+                const isSecretaria = usuario.role === 'secretaria';
+                const isCanchero = usuario.role === 'canchero';
                 
+                if (isAdmin) {
+                    roleBadgeHtml = `<span class="user-role-tag tag-admin"><i class="fa-solid fa-shield-halved"></i> Admin</span>`;
+                } else if (isSecretaria) {
+                    roleBadgeHtml = `<span class="user-role-tag tag-admin" style="background: rgba(16, 185, 129, 0.2); color: #34D399; border: 1px solid #10B981;"><i class="fa-solid fa-address-book"></i> SecretarÃ­a</span>`;
+                } else {
+                    roleBadgeHtml = `<span class="user-role-tag tag-admin" style="background: rgba(245, 158, 11, 0.2); color: #FBBF24; border: 1px solid #F59E0B;"><i class="fa-solid fa-hammer"></i> Canchero</span>`;
+                }
+                
+                let btnTitle = isAdmin ? 'Acceder al Panel de AdministraciÃ³n' : (isSecretaria ? 'Acceder a la Agenda de SecretarÃ­a' : 'Acceder al Panel de Canchero');
+                let btnIcon = isAdmin ? 'fa-bolt' : (isSecretaria ? 'fa-calendar-check' : 'fa-tools');
+                let btnText = isAdmin ? 'Panel Admin' : (isSecretaria ? 'Agenda' : 'Operativo');
+                let btnStyle = isSecretaria ? 'background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: #FFF;' : (isCanchero ? 'background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); color: #FFF;' : '');
+
                 adminBtnHtml = `
-                    <button class="btn-admin-panel" id="adminPanelBtn" title="${isAdmin ? 'Acceder al Panel de AdministraciÃ³n' : 'Acceder a la Agenda de SecretarÃ­a'}" style="position: relative; ${!isAdmin ? 'background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: #FFF;' : ''}">
-                        <i class="fa-solid ${isAdmin ? 'fa-bolt' : 'fa-calendar-check'}"></i><span class="hide-mobile"> ${isAdmin ? 'Panel Admin' : 'Agenda'}</span>
+                    <button class="btn-admin-panel" id="${isCanchero ? 'cancheroPanelBtn' : 'adminPanelBtn'}" title="${btnTitle}" style="position: relative; ${btnStyle}">
+                        <i class="fa-solid ${btnIcon}"></i><span class="hide-mobile"> ${btnText}</span>
                         ${isAdmin ? '<span id="navAdminPendingBadge" style="display: none; align-items: center; justify-content: center; position: absolute; top: -6px; right: -6px; background: #EF4444; color: #FFF; font-size: 0.65rem; font-weight: 800; min-width: 18px; height: 18px; border-radius: 50%; box-shadow: 0 0 8px rgba(239, 68, 68, 0.8);">0</span>' : ''}
                     </button>
                 `;
@@ -496,6 +508,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (typeof window.actualizarBadgesAdmin === 'function') window.actualizarBadgesAdmin();
             if (typeof renderizarMisTurnos === 'function') renderizarMisTurnos();
             setupNotificationDropdown();
+                        const cancheroPanelBtn = document.getElementById('cancheroPanelBtn');
+            if (cancheroPanelBtn) {
+                cancheroPanelBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.location.href = 'canchero.html';
+                });
+            }
             const adminPanelBtn = document.getElementById('adminPanelBtn');
             if (adminPanelBtn) {
                 adminPanelBtn.addEventListener('click', (e) => {

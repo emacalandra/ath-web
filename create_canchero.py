@@ -1,0 +1,328 @@
+html_content = '''<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planilla Operativa - ATH</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-bg-dark: #051322;
+            --color-bg-light: #0B2447;
+            --color-ath-orange: #FF6600;
+            --color-ath-orange-hover: #E65C00;
+            --color-text-main: #F8FAFC;
+            --color-text-muted: #94A3B8;
+        }
+        body {
+            background-color: var(--color-bg-dark);
+            color: var(--color-text-main);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 20px;
+        }
+        .header-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            color: var(--color-ath-orange);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .btn-back {
+            background: rgba(255,255,255,0.1);
+            color: #FFF;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+        }
+        .btn-back:hover { background: rgba(255,255,255,0.2); }
+        .controls {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 20px;
+            align-items: center;
+            background: var(--color-bg-light);
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .controls input[type="date"], .controls select {
+            padding: 10px 16px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #FFF;
+            font-family: inherit;
+        }
+        .btn-block {
+            background: #EF4444;
+            color: #FFF;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: auto;
+        }
+        .btn-block:hover { background: #DC2626; }
+        
+        .canchero-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--color-bg-light);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .canchero-table th {
+            background: rgba(255,255,255,0.05);
+            padding: 16px;
+            text-align: left;
+            font-size: 0.9rem;
+            color: var(--color-ath-orange);
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+        .canchero-table td {
+            padding: 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.95rem;
+        }
+        .canchero-table tr:hover {
+            background: rgba(255,255,255,0.02);
+        }
+        .tag {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: inline-block;
+        }
+        
+        /* Modal */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+            display: none; align-items: center; justify-content: center; z-index: 1000;
+        }
+        .modal-content {
+            background: var(--color-bg-light); padding: 30px; border-radius: 16px;
+            width: 90%; max-width: 400px; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .modal-content h3 { margin-top: 0; color: #FFF; margin-bottom: 20px; }
+        .form-group { margin-bottom: 16px; display: flex; flex-direction: column; gap: 8px; }
+        .form-group label { font-size: 0.9rem; color: #94A3B8; font-weight: 700; }
+        .form-group input, .form-group select {
+            padding: 12px; border-radius: 8px; background: rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.2); color: #FFF; width: 100%; box-sizing: border-box;
+        }
+        .btn-submit {
+            background: var(--color-ath-orange); color: #FFF; width: 100%;
+            padding: 14px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-title"><i class="fa-solid fa-clipboard-list"></i> Planilla Operativa (Canchero)</div>
+        <a href="index.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Volver al Inicio</a>
+    </div>
+
+    <div class="controls">
+        <div>
+            <label style="font-size: 0.8rem; color: var(--color-text-muted); display: block; margin-bottom: 4px; font-weight: 700;">Fecha</label>
+            <input type="date" id="cancheroDate">
+        </div>
+        <div>
+            <label style="font-size: 0.8rem; color: var(--color-text-muted); display: block; margin-bottom: 4px; font-weight: 700;">Filtrar Cancha</label>
+            <select id="cancheroCourtFilter">
+                <option value="todas">Todas las canchas</option>
+                <option value="1">Cancha 1</option>
+                <option value="2">Cancha 2</option>
+                <option value="3">Cancha 3</option>
+            </select>
+        </div>
+        <button class="btn-block" id="btnOpenBlock"><i class="fa-solid fa-triangle-exclamation"></i> Bloquear por Mantenimiento</button>
+    </div>
+
+    <table class="canchero-table">
+        <thead>
+            <tr>
+                <th>Horario</th>
+                <th>Cancha</th>
+                <th>Tipo de Turno</th>
+                <th>Estado</th>
+                <th>Usuario / Detalles</th>
+            </tr>
+        </thead>
+        <tbody id="cancheroTbody">
+            <!-- Renderizado JS -->
+        </tbody>
+    </table>
+
+    <!-- Modal Bloqueo Rapido -->
+    <div class="modal-overlay" id="blockModal">
+        <div class="modal-content">
+            <h3><i class="fa-solid fa-hammer" style="color: #EF4444;"></i> Bloqueo Rápido</h3>
+            <form id="formBlock">
+                <div class="form-group">
+                    <label>Cancha</label>
+                    <select id="blockCancha" required>
+                        <option value="1">Cancha 1</option>
+                        <option value="2">Cancha 2</option>
+                        <option value="3">Cancha 3</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Hora Inicio</label>
+                    <input type="time" id="blockStart" required>
+                </div>
+                <div class="form-group">
+                    <label>Hora Fin</label>
+                    <input type="time" id="blockEnd" required>
+                </div>
+                <div class="form-group">
+                    <label>Motivo</label>
+                    <select id="blockReason" required>
+                        <option value="Riegue extraordinario">Riegue extraordinario</option>
+                        <option value="Repintado de líneas">Repintado de líneas</option>
+                        <option value="Clima / Lluvia">Clima / Lluvia</option>
+                        <option value="Mantenimiento de red">Mantenimiento de red</option>
+                        <option value="Otro">Otro (Mantenimiento)</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-submit" style="background: #EF4444;">Aplicar Bloqueo</button>
+                <button type="button" class="btn-submit" id="btnCloseBlock" style="background: rgba(255,255,255,0.1); margin-top: 10px;">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="db.js?v=50.0"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = window.DBHits.getCurrentUser();
+            if (!user || (user.role !== 'canchero' && user.role !== 'encargado' && user.role !== 'admin' && user.role !== 'secretaria')) {
+                alert('Acceso denegado. No tienes permisos operativos.');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const inputDate = document.getElementById('cancheroDate');
+            const selectFilter = document.getElementById('cancheroCourtFilter');
+            const tbody = document.getElementById('cancheroTbody');
+            
+            // Set today
+            const today = new Date();
+            // Format to YYYY-MM-DD
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            const todayStr = ${yyyy}--;
+            inputDate.value = todayStr;
+
+            function renderTable() {
+                const date = inputDate.value;
+                const filter = selectFilter.value;
+                const reservas = window.DBHits.getReservasRaw().filter(r => r.fecha === date);
+                
+                // Sort by time
+                reservas.sort((a,b) => {
+                    const timeA = (a.horaInicio || '').replace(':','');
+                    const timeB = (b.horaInicio || '').replace(':','');
+                    return timeA.localeCompare(timeB);
+                });
+
+                tbody.innerHTML = '';
+                
+                let found = 0;
+                reservas.forEach(r => {
+                    if (filter !== 'todas' && String(r.canchaId) !== filter) return;
+                    if (r.estadoPago && (r.estadoPago.includes('Rechazado') || r.estadoPago.includes('Cancelado'))) return;
+                    
+                    found++;
+                    const tr = document.createElement('tr');
+                    
+                    const isFijo = r.tipo === 'plantilla_semanal';
+                    const isBlock = r.tipo === 'bloqueo_admin' || r.estadoPago === 'Aprobado' && r.precioTotal === 0;
+                    
+                    let tipoHtml = <span class="tag" style="background: rgba(59,130,246,0.2); color: #60A5FA;">Reserva Normal</span>;
+                    if (isFijo) tipoHtml = <span class="tag" style="background: rgba(16,185,129,0.2); color: #34D399;"><i class="fa-solid fa-repeat"></i> Clase/Fijo</span>;
+                    if (isBlock) tipoHtml = <span class="tag" style="background: rgba(239,68,68,0.2); color: #EF4444;"><i class="fa-solid fa-lock"></i> Bloqueo/Mantenimiento</span>;
+                    
+                    let estadoHtml = <span style="color: #FBBF24;">Pendiente</span>;
+                    if (r.estadoPago && r.estadoPago.includes('Aprobado')) estadoHtml = <span style="color: #34D399;">Confirmado</span>;
+                    if (isBlock) estadoHtml = <span style="color: #EF4444;">Bloqueado</span>;
+
+                    let detalleHtml = <strong></strong>;
+                    if (isBlock && r.motivoBloqueo) detalleHtml = <span style="color: #EF4444;"></span>;
+
+                    tr.innerHTML = 
+                        <td><strong> -  hs</strong></td>
+                        <td>Cancha </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    ;
+                    tbody.appendChild(tr);
+                });
+
+                if (found === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #94A3B8; padding: 30px;">No hay turnos registrados para esta fecha.</td></tr>';
+                }
+            }
+
+            inputDate.addEventListener('change', renderTable);
+            selectFilter.addEventListener('change', renderTable);
+            renderTable();
+
+            // Modal Logic
+            const modal = document.getElementById('blockModal');
+            document.getElementById('btnOpenBlock').addEventListener('click', () => { modal.style.display = 'flex'; });
+            document.getElementById('btnCloseBlock').addEventListener('click', () => { modal.style.display = 'none'; });
+
+            document.getElementById('formBlock').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const cId = document.getElementById('blockCancha').value;
+                const start = document.getElementById('blockStart').value;
+                const end = document.getElementById('blockEnd').value;
+                const reason = document.getElementById('blockReason').value;
+
+                if (!start || !end || start >= end) {
+                    alert('Horario inválido.'); return;
+                }
+
+                try {
+                    await window.DBHits.bloquearCanchaRapido(cId, inputDate.value, start, end, reason);
+                    alert('Bloqueo aplicado exitosamente.');
+                    modal.style.display = 'none';
+                    renderTable();
+                } catch(err) {
+                    alert(err.message);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+'''
+with open('canchero.html', 'w', encoding='utf-8') as f:
+    f.write(html_content)

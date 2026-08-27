@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     const currentUser = getActiveUser();
-    if (!currentUser || (currentUser.role !== 'admin' && currentUser.role !== 'secretaria')) {
+    if (!currentUser || (currentUser.role !== 'admin' && currentUser.role !== 'secretaria' && currentUser.role !== 'canchero')) {
         alert('⛔ ACCESO DENEGADO: Privilegios insuficientes.');
         window.location.href = 'index.html';
         return;
@@ -106,6 +106,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             }, 100);
         }
+
+        if (currentUser.role === 'canchero' || currentUser.role === 'encargado') {
+            const navTabs = document.querySelector('.admin-tabs-nav');
+            if (navTabs) navTabs.style.display = 'none';
+            
+            document.querySelectorAll('.admin-tab-content').forEach(c => c.classList.remove('active'));
+            const tabCanchas = document.getElementById('admin-tab-canchas');
+            if (tabCanchas) {
+                tabCanchas.classList.add('active');
+            }
+        }
+
 
 
     // Cambiar Pestañas en Panel Admin
@@ -160,8 +172,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <option value="usuario" ${u.role === 'usuario' ? 'selected' : ''}>Usuario</option>
                         <option value="socio" ${u.role === 'socio' ? 'selected' : ''}>Socio SB</option>
                         <option value="alumno" ${u.role === 'alumno' ? 'selected' : ''}>Alumno ATH</option>
-                        <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>Administrador</option>
+                        <option value="canchero" ${u.role === 'canchero' ? 'selected' : ''}>Encargado / Canchero</option>
                         <option value="secretaria" ${u.role === 'secretaria' ? 'selected' : ''}>Secretaría</option>
+                        <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>Administrador</option>
                     </select>
                 </td>
                 <td data-label="Acción">

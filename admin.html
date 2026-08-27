@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome Font Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css?v=47.0">
+    <link rel="stylesheet" href="styles.css?v=48.0">
 </head>
 <body>
 
@@ -361,6 +361,29 @@
                         </form>
                     </div>
                 </div>
+
+                
+                        <!-- DATOS DE CONTACTO Y WHATSAPP OFICIAL -->
+                        <div class="admin-card" style="border: 1px solid var(--color-ath-orange); margin-top: 24px;">
+                            <h3 class="admin-card-title"><i class="fa-solid fa-address-card" style="color: var(--color-ath-orange);"></i> Datos de Contacto y WhatsApp Oficial</h3>
+                            <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 16px;">Estos datos se mostrarán en la sección de contacto y sincronizarán el botón flotante y los reenvíos de WhatsApp.</p>
+                            
+                            <form id="formClubConfig" style="display: flex; flex-direction: column; gap: 14px;">
+                                <div class="form-group">
+                                    <label style="font-weight: 700; color: #FFF;">Correo Electrónico Oficial</label>
+                                    <input type="email" id="clubEmailInput" required style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; box-sizing: border-box;">
+                                </div>
+                                <div class="form-group">
+                                    <label style="font-weight: 700; color: #FFF;">Dirección / Ubicación</label>
+                                    <input type="text" id="clubAddressInput" required style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; box-sizing: border-box;">
+                                </div>
+                                <div class="form-group">
+                                    <label style="font-weight: 700; color: #FFF;">Número de WhatsApp Oficial (con código de país, sin '+' ni espacios. Ej: 5493564...)</label>
+                                    <input type="text" id="clubWppInput" required placeholder="5493564..." style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; box-sizing: border-box;">
+                                </div>
+                                <button type="submit" class="btn-submit" style="background: var(--color-ath-orange); justify-content: center;"><i class="fa-solid fa-floppy-disk"></i> Guardar Datos del Club</button>
+                            </form>
+                        </div>
 
                 <!-- MÓDULO 5: GESTIÓN Y BLOQUEO DE CANCHAS -->
                 <div class="admin-tab-content" id="admin-tab-canchas">
@@ -776,8 +799,8 @@
     </div>
 
     <!-- Módulo de Base de Datos, Script Principal y Controlador Admin -->
-    <script src="db.js?v=47.0"></script>
-    <script src="script.js?v=47.0"></script>
-    <script src="admin.js?v=47.0"></script>
+    <script src="db.js?v=48.0"></script>
+    <script src="script.js?v=48.0"></script>
+    <script src="admin.js?v=48.0"></script>
 </body>
 </html>

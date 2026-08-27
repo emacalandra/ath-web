@@ -1976,6 +1976,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert(`🎾 ¡Reserva completada con éxito tras iniciar sesión! Cancha ${r.canchaId} el ${r.fecha} (${r.horaInicio} a ${r.horaFin} hs).`);
                 localStorage.removeItem('pending_ath_booking');
                 if (typeof renderWidgetDayTimelineGrid === 'function') renderWidgetDayTimelineGrid();
+    initFloatingWhatsApp();
             }).catch(e => {
                 console.error("Error al completar reserva pendiente:", e);
                 localStorage.removeItem('pending_ath_booking');
@@ -2147,4 +2148,48 @@ function setupNotificationDropdown() {
             }
         });
     }
+}
+
+
+// Inyector automático de Botón Flotante de WhatsApp Responsivo (Esquina Inferior Izquierda)
+function initFloatingWhatsApp() {
+    if (document.getElementById('athFloatingWpp')) return; // Evitar duplicados
+
+    const wppFloat = document.createElement('a');
+    wppFloat.id = 'athFloatingWpp';
+    wppFloat.href = '#';
+    wppFloat.setAttribute('aria-label', 'Contactar por WhatsApp');
+    wppFloat.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        z-index: 9999;
+        background-color: #25D366;
+        color: #FFF;
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        transition: transform 0.3s ease, background-color 0.3s ease;
+        text-decoration: none;
+    `;
+    wppFloat.innerHTML = `<i class="fa-brands fa-whatsapp"></i>`;
+
+    // Efecto hover
+    wppFloat.addEventListener('mouseenter', () => { wppFloat.style.transform = 'scale(1.1)'; });
+    wppFloat.addEventListener('mouseleave', () => { wppFloat.style.transform = 'scale(1.0)'; });
+
+    // Acción de clic vinculada al número oficial guardado en la BD
+    wppFloat.addEventListener('click', (e) => {
+        e.preventDefault();
+        const wppNum = window.DBHits && window.DBHits.getWhatsAppConfig ? window.DBHits.getWhatsAppConfig() : '5493564000000';
+        const mensaje = encodeURIComponent("¡Hola! Me comunico desde la web de Academia Tenis Hits para realizar una consulta.");
+        window.open(`https://wa.me/${wppNum}?text=${mensaje}`, '_blank');
+    });
+
+    document.body.appendChild(wppFloat);
 }

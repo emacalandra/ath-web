@@ -527,11 +527,35 @@ class ATHDatabaseEngine {
         return users[index];
     }
 
-            getWhatsAppConfig() {
-        return localStorage.getItem('ath_whatsapp_admin') || '5493564000000'; // Número por defecto
+            getClubConfig() {
+        try {
+            return JSON.parse(localStorage.getItem('ath_club_config')) || {
+                email: 'contacto@academiatenishits.com',
+                direccion: 'San Francisco, Córdoba, Argentina',
+                whatsapp: '5493564000000'
+            };
+        } catch {
+            return {
+                email: 'contacto@academiatenishits.com',
+                direccion: 'San Francisco, Córdoba, Argentina',
+                whatsapp: '5493564000000'
+            };
+        }
     }
+
+    saveClubConfig(config) {
+        localStorage.setItem('ath_club_config', JSON.stringify(config));
+    }
+
+    getWhatsAppConfig() {
+        const cfg = this.getClubConfig();
+        return cfg.whatsapp || '5493564000000';
+    }
+
     setWhatsAppConfig(numero) {
-        localStorage.setItem('ath_whatsapp_admin', numero);
+        const cfg = this.getClubConfig();
+        cfg.whatsapp = numero;
+        this.saveClubConfig(cfg);
     }
 
     getReservas() {

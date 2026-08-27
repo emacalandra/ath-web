@@ -1133,3 +1133,28 @@ document.addEventListener('DOMContentLoaded', () => {
             if(excFin) { excFin.disabled = isChecked; excFin.style.opacity = isChecked ? '0.4' : '1'; }
         });
     }
+
+
+    // Controlador para Datos de Contacto y WhatsApp Oficial del Club
+    const formClubConfig = document.getElementById('formClubConfig');
+    if (formClubConfig && window.DBHits) {
+        const currentCfg = window.DBHits.getClubConfig();
+        const elEmail = document.getElementById('clubEmailInput');
+        const elAddress = document.getElementById('clubAddressInput');
+        const elWpp = document.getElementById('clubWppInput');
+
+        if (elEmail) elEmail.value = currentCfg.email || '';
+        if (elAddress) elAddress.value = currentCfg.direccion || '';
+        if (elWpp) elWpp.value = currentCfg.whatsapp || '';
+
+        formClubConfig.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newCfg = {
+                email: document.getElementById('clubEmailInput').value.trim(),
+                direccion: document.getElementById('clubAddressInput').value.trim(),
+                whatsapp: document.getElementById('clubWppInput').value.trim()
+            };
+            window.DBHits.saveClubConfig(newCfg);
+            alert("✅ ¡Datos del club actualizados con éxito! El botón de WhatsApp y los enlaces se han sincronizado.");
+        });
+    }

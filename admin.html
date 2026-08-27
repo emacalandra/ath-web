@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome Font Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css?v=28.0">
+    <link rel="stylesheet" href="styles.css?v=29.0">
 </head>
 <body>
 
@@ -110,26 +110,7 @@
                                 <button id="btnAgendaClear" class="btn-submit" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 8px 12px; font-size: 0.85rem;"><i class="fa-solid fa-filter-circle-xmark"></i> Ver Todas</button>
                             </div>
 
-                            <form id="formReservaMostrador" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; background: rgba(59, 130, 246, 0.05); padding: 16px; border-radius: 8px; border: 1px solid rgba(59, 130, 246, 0.2);">
-                                <div style="grid-column: 1 / -1; font-size: 0.85rem; color: #60A5FA; font-weight: bold; margin-bottom: 4px;"><i class="fa-solid fa-user-plus"></i> Ingresar Reserva Rápida (El pago se calculará como Físico/Secretaría)</div>
-                                
-                                <input type="text" id="mostNombre" placeholder="Nombre jugador" required style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
-                                <input type="text" id="mostApellido" placeholder="Apellido" required style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
-                                <input type="text" id="mostPhone" placeholder="Teléfono" required style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
-                                
-                                <select id="mostCourt" required style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
-                                    <option value="1">Cancha 1</option><option value="2">Cancha 2</option><option value="3">Cancha 3</option>
-                                </select>
-                                
-                                <input type="date" id="mostDate" required style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
-                                
-                                <div style="display: flex; gap: 8px;">
-                                    <input type="time" id="mostStart" required style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;" title="Inicio">
-                                    <input type="time" id="mostEnd" required style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;" title="Fin">
-                                </div>
-                                
-                                <button type="submit" class="btn-submit" style="grid-column: 1 / -1; padding: 10px; font-size: 0.9rem; justify-content: center;"><i class="fa-solid fa-check"></i> Agendar y Cobrar en Secretaría</button>
-                            </form>
+                            
                         </div>
 
                         <div class="admin-table-container">
@@ -216,26 +197,7 @@
                                 <button id="btnAgendaClear" class="btn-submit" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 8px 12px; font-size: 0.85rem;"><i class="fa-solid fa-filter-circle-xmark"></i> Ver Todas</button>
                             </div>
 
-                            <form id="formReservaMostrador" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; background: rgba(59, 130, 246, 0.05); padding: 16px; border-radius: 8px; border: 1px solid rgba(59, 130, 246, 0.2);">
-                                <div style="grid-column: 1 / -1; font-size: 0.85rem; color: #60A5FA; font-weight: bold; margin-bottom: 4px;"><i class="fa-solid fa-user-plus"></i> Ingresar Reserva Rápida (El pago se calculará como Físico/Secretaría)</div>
-                                
-                                <input type="text" id="mostNombre" placeholder="Nombre jugador" required style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
-                                <input type="text" id="mostApellido" placeholder="Apellido" required style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
-                                <input type="text" id="mostPhone" placeholder="Teléfono" required style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
-                                
-                                <select id="mostCourt" required style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
-                                    <option value="1">Cancha 1</option><option value="2">Cancha 2</option><option value="3">Cancha 3</option>
-                                </select>
-                                
-                                <input type="date" id="mostDate" required style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
-                                
-                                <div style="display: flex; gap: 8px;">
-                                    <input type="time" id="mostStart" required style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;" title="Inicio">
-                                    <input type="time" id="mostEnd" required style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;" title="Fin">
-                                </div>
-                                
-                                <button type="submit" class="btn-submit" style="grid-column: 1 / -1; padding: 10px; font-size: 0.9rem; justify-content: center;"><i class="fa-solid fa-check"></i> Agendar y Cobrar en Secretaría</button>
-                            </form>
+                            
                         </div>
 
                         <div class="admin-table-container">
@@ -490,26 +452,7 @@
                                 <button id="btnAgendaClear" class="btn-submit" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 8px 12px; font-size: 0.85rem;"><i class="fa-solid fa-filter-circle-xmark"></i> Ver Todas</button>
                             </div>
 
-                            <form id="formReservaMostrador" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; background: rgba(59, 130, 246, 0.05); padding: 16px; border-radius: 8px; border: 1px solid rgba(59, 130, 246, 0.2);">
-                                <div style="grid-column: 1 / -1; font-size: 0.85rem; color: #60A5FA; font-weight: bold; margin-bottom: 4px;"><i class="fa-solid fa-user-plus"></i> Ingresar Reserva Rápida (El pago se calculará como Físico/Secretaría)</div>
-                                
-                                <input type="text" id="mostNombre" placeholder="Nombre jugador" required style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
-                                <input type="text" id="mostApellido" placeholder="Apellido" required style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
-                                <input type="text" id="mostPhone" placeholder="Teléfono" required style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
-                                
-                                <select id="mostCourt" required style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
-                                    <option value="1">Cancha 1</option><option value="2">Cancha 2</option><option value="3">Cancha 3</option>
-                                </select>
-                                
-                                <input type="date" id="mostDate" required style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
-                                
-                                <div style="display: flex; gap: 8px;">
-                                    <input type="time" id="mostStart" required style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;" title="Inicio">
-                                    <input type="time" id="mostEnd" required style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;" title="Fin">
-                                </div>
-                                
-                                <button type="submit" class="btn-submit" style="grid-column: 1 / -1; padding: 10px; font-size: 0.9rem; justify-content: center;"><i class="fa-solid fa-check"></i> Agendar y Cobrar en Secretaría</button>
-                            </form>
+                            
                         </div>
 
                         <div class="admin-table-container">
@@ -554,26 +497,7 @@
                                 <button id="btnAgendaClear" class="btn-submit" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 8px 12px; font-size: 0.85rem;"><i class="fa-solid fa-filter-circle-xmark"></i> Ver Todas</button>
                             </div>
 
-                            <form id="formReservaMostrador" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; background: rgba(59, 130, 246, 0.05); padding: 16px; border-radius: 8px; border: 1px solid rgba(59, 130, 246, 0.2);">
-                                <div style="grid-column: 1 / -1; font-size: 0.85rem; color: #60A5FA; font-weight: bold; margin-bottom: 4px;"><i class="fa-solid fa-user-plus"></i> Ingresar Reserva Rápida (El pago se calculará como Físico/Secretaría)</div>
-                                
-                                <input type="text" id="mostNombre" placeholder="Nombre jugador" required style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
-                                <input type="text" id="mostApellido" placeholder="Apellido" required style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
-                                <input type="text" id="mostPhone" placeholder="Teléfono" required style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
-                                
-                                <select id="mostCourt" required style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
-                                    <option value="1">Cancha 1</option><option value="2">Cancha 2</option><option value="3">Cancha 3</option>
-                                </select>
-                                
-                                <input type="date" id="mostDate" required style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
-                                
-                                <div style="display: flex; gap: 8px;">
-                                    <input type="time" id="mostStart" required style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;" title="Inicio">
-                                    <input type="time" id="mostEnd" required style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;" title="Fin">
-                                </div>
-                                
-                                <button type="submit" class="btn-submit" style="grid-column: 1 / -1; padding: 10px; font-size: 0.9rem; justify-content: center;"><i class="fa-solid fa-check"></i> Agendar y Cobrar en Secretaría</button>
-                            </form>
+                            
                         </div>
 
                         <div class="admin-table-container">
@@ -806,8 +730,8 @@
     </div>
 
     <!-- Módulo de Base de Datos, Script Principal y Controlador Admin -->
-    <script src="db.js?v=28.0"></script>
-    <script src="script.js?v=28.0"></script>
-    <script src="admin.js?v=28.0"></script>
+    <script src="db.js?v=29.0"></script>
+    <script src="script.js?v=29.0"></script>
+    <script src="admin.js?v=29.0"></script>
 </body>
 </html>

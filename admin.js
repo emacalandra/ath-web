@@ -881,62 +881,6 @@ document.addEventListener('DOMContentLoaded', () => {
 }); // <-- CIERRE MAESTRO DEL document.addEventListener
 
 
-    const formMostrador = document.getElementById('formReservaMostrador');
-    if (formMostrador) {
-        formMostrador.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const nombre = document.getElementById('mostNombre').value;
-            const apellido = document.getElementById('mostApellido').value;
-            const telefono = document.getElementById('mostPhone').value;
-            const canchaId = document.getElementById('mostCourt').value;
-            const fecha = document.getElementById('mostDate').value;
-            const horaInicio = document.getElementById('mostStart').value;
-            const horaFin = document.getElementById('mostEnd').value;
-
-            try {
-                const startMin = parseInt(horaInicio.split(':')[0])*60 + parseInt(horaInicio.split(':')[1]);
-                const endMin = parseInt(horaFin.split(':')[0])*60 + parseInt(horaFin.split(':')[1]);
-                const duracionHoras = (endMin - startMin) / 60;
-                
-                if (duracionHoras <= 0) return alert("Hora de fin debe ser mayor a la de inicio.");
-                
-                const chequeo = window.DBHits.verificarDisponibilidad(canchaId, fecha, horaInicio, horaFin);
-                if (!chequeo.disponible) return alert(chequeo.mensaje);
-
-                const calculo = window.DBHits.calcularPrecioReserva(horaInicio, duracionHoras, 'usuario');
-
-                const nuevaReserva = {
-                    id: Date.now(),
-                    usuarioId: 'mostrador',
-                    usuarioNombre: `${nombre} ${apellido} (Mostrador)`,
-                    usuarioEmail: 'secretaria@tenishits.com.ar',
-                    usuarioTelefono: telefono,
-                    rolUsuario: 'usuario',
-                    canchaId: String(canchaId),
-                    fecha: fecha,
-                    horaInicio: horaInicio,
-                    horaFin: horaFin,
-                    duracionHoras: duracionHoras,
-                    precioTotal: calculo.precioTotal,
-                    metodoPago: 'En Secretaría (Efectivo/Físico)',
-                    estadoPago: '✅ Pago confirmado',
-                    asistencia: '⏳ Sin confirmar',
-                    fechaCreacion: new Date().toISOString()
-                };
-
-                const reservas = await window.DBHits.listarReservas();
-                reservas.push(nuevaReserva);
-                window.DBHits.saveReservasRaw(reservas);
-
-                alert(`Reserva confirmada en mostrador para ${nombre} ${apellido}.`);
-                formMostrador.reset();
-                if (typeof cargarTablaReservas === 'function') cargarTablaReservas();
-            } catch (err) {
-                alert(err.message);
-            }
-        });
-    }
-    
     const agendaDateFilter = document.getElementById('agendaDateFilter');
     const btnAgendaClear = document.getElementById('btnAgendaClear');
     if (agendaDateFilter) agendaDateFilter.addEventListener('change', () => { if (typeof cargarTablaReservas === 'function') cargarTablaReservas(); });

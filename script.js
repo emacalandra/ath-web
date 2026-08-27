@@ -483,6 +483,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
 
             if (typeof window.actualizarBadgesAdmin === 'function') window.actualizarBadgesAdmin();
+            if (typeof renderizarMisTurnos === 'function') renderizarMisTurnos();
             const adminPanelBtn = document.getElementById('adminPanelBtn');
             if (adminPanelBtn) {
                 adminPanelBtn.addEventListener('click', (e) => {
@@ -1989,7 +1990,7 @@ async function renderizarMisTurnos() {
     const user = window.DBHits ? window.DBHits.getActiveUser() : null;
     if (!user) return;
 
-    const misTurnos = window.DBHits.getReservasPorUsuario ? window.DBHits.getReservasPorUsuario(user.id) : [];
+    const misTurnos = window.DBHits.getReservasPorUsuario ? window.DBHits.getReservasPorUsuario(user) : [];
     const ahora = new Date();
 
     if (misTurnos.length === 0) {

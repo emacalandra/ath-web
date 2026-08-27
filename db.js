@@ -535,12 +535,25 @@ class ATHDatabaseEngine {
         this.saveReservasRaw(reservas);
     }
 
-    getReservasPorUsuario(usuarioId) {
-        const reservas = this.getReservasRaw();
-        // Filtrar reservas del usuario y ordenarlas desde la más reciente a la más antigua
+        getReservasPorUsuario(user) {
+        if (!user) return [];
+        const userId = typeof user === 'object' ? user.id : user;
+        const userEmail = typeof user === 'object' ? (user.email || '') : '';
+        const reservas = this.getReservas();
+        
+        // Filtrar buscando coincidencia por ID o por Email (pasando todo a minúsculas por seguridad)
         return reservas
-            .filter(r => String(r.usuarioId) === String(usuarioId) && r.tipo !== 'bloqueo_admin')
-            .sort((a, b) => new Date(`${b.fecha}T${b.horaInicio || '00:00'}`) - new Date(`${a.fecha}T${a.horaInicio || '00:00'}`));
+            .filter(r => {
+                if (r.tipo === 'bloqueo_admin') return false;
+                const matchId = userId && r.usuarioId && String(r.usuarioId) === String(userId);
+                const matchEmail = userEmail && r.usuarioEmail && String(r.usuarioEmail).toLowerCase() === String(userEmail).toLowerCase();
+                return matchId || matchEmail;
+            })
+            .sort((a, b) => {
+                const dateA = new Date(`${a.fecha}T${a.horaInicio || '00:00'}`);
+                const dateB = new Date(`${b.fecha}T${b.horaInicio || '00:00'}`);
+                return dateB - dateA; // Ordenar de más recientes a más antiguas
+            });
     }
 
     cancelarReservaUsuario(reservaId, usuarioId) {

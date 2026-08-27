@@ -74,7 +74,7 @@
                         <i class="fa-solid fa-newspaper"></i> 3. Publicar Contenido
                     </button>
                     <button class="admin-tab-btn" data-admintab="tarifas">
-                        <i class="fa-solid fa-tags"></i> 4. Tarifas & Textos
+                        <i class="fa-solid fa-tags"></i> 4. Tarifas y Horarios
                     </button>
                     <button class="admin-tab-btn future-module" data-admintab="escuela">
                         <i class="fa-solid fa-graduation-cap"></i> 5. Escuela y Alumnos
@@ -269,16 +269,19 @@
 
                 <!-- MÓDULO 4: EDICIÓN DE PRECIOS Y TARIFAS -->
                 <div class="admin-tab-content" id="admin-tab-tarifas">
-                    <div class="admin-card">
-                        <h3 class="admin-card-title">
-                            <i class="fa-solid fa-sack-dollar" style="color: var(--color-ath-orange);"></i> 
-                            Edición de Tarifas Oficiales y Cuotas ATH
-                        </h3>
-                        <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 24px;">
-                            Actualizá los precios vigentes para alquiler de canchas y programas de entrenamiento de la academia.
-                        </p>
+                    
+                    <form id="pricingForm" class="modal-form" style="max-width: 100%;">
+                        
+                        <!-- TARJETA 1: MATRIZ DE PRECIOS Y ROLES -->
+                        <div class="admin-card" style="margin-bottom: 24px;">
+                            <h3 class="admin-card-title">
+                                <i class="fa-solid fa-sack-dollar" style="color: var(--color-ath-orange);"></i> 
+                                Matriz de Precios y Roles
+                            </h3>
+                            <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 24px;">
+                                Actualizá los precios vigentes para alquiler de canchas y programas de entrenamiento de la academia.
+                            </p>
 
-                        <form id="pricingForm" class="modal-form" style="max-width: 100%;">
                             <!-- SECCIÓN A: ALQUILER DE CANCHAS (MATRIZ POR ROLES) -->
                             <h4 style="color: var(--color-ath-orange); margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 6px;"><i class="fa-solid fa-layer-group"></i> Matriz de Alquiler de Canchas (ARS/Hora)</h4>
                             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-bottom: 24px;">
@@ -336,10 +339,18 @@
                                     <input type="number" id="priceClaseParticular" value="15000" required>
                                 </div>
                             </div>
+                        </div>
 
-                            
-                            <!-- SECCIÓN C: HORARIOS OPERATIVOS DEL CLUB -->
-                            <h4 style="color: var(--color-ath-orange); margin-top: 24px; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 6px;"><i class="fa-solid fa-clock"></i> Horarios Operativos del Club</h4>
+                        <!-- TARJETA 2: HORARIOS DE OPERACIÓN DEL CLUB -->
+                        <div class="admin-card" style="margin-bottom: 24px;">
+                            <h3 class="admin-card-title">
+                                <i class="fa-solid fa-clock" style="color: var(--color-ath-orange);"></i> 
+                                Horarios de Operación del Club
+                            </h3>
+                            <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 24px;">
+                                Configura la hora de apertura, cierre e inicio de la tarifa lumínica (nocturna).
+                            </p>
+
                             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
                                 <div class="form-group">
                                     <label><i class="fa-solid fa-door-open"></i> Hora Apertura</label>
@@ -356,34 +367,33 @@
                             </div>
 
                             <button type="submit" class="btn-submit" style="margin-top: 24px; max-width: 300px;">
-                                <i class="fa-solid fa-floppy-disk"></i> Guardar Tarifas Generales
+                                <i class="fa-solid fa-floppy-disk"></i> Guardar Tarifas y Horarios
                             </button>
+                        </div>
+                    </form>
+
+                    <!-- TARJETA 3: DATOS DE CONTACTO Y WHATSAPP OFICIAL -->
+                    <div class="admin-card" style="border: 1px solid var(--color-ath-orange); margin-bottom: 24px;">
+                        <h3 class="admin-card-title"><i class="fa-solid fa-address-card" style="color: var(--color-ath-orange);"></i> Datos de Contacto y WhatsApp Oficial</h3>
+                        <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 16px;">Estos datos se mostrarán en la sección de contacto y sincronizarán el botón flotante y los reenvíos de WhatsApp.</p>
+                        
+                        <form id="formClubConfig" style="display: flex; flex-direction: column; gap: 14px;">
+                            <div class="form-group">
+                                <label style="font-weight: 700; color: #FFF;">Correo Electrónico Oficial</label>
+                                <input type="email" id="clubEmailInput" required style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; box-sizing: border-box;">
+                            </div>
+                            <div class="form-group">
+                                <label style="font-weight: 700; color: #FFF;">Dirección / Ubicación</label>
+                                <input type="text" id="clubAddressInput" required style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; box-sizing: border-box;">
+                            </div>
+                            <div class="form-group">
+                                <label style="font-weight: 700; color: #FFF;">Número de WhatsApp Oficial (con código de país, sin '+' ni espacios. Ej: 5493564...)</label>
+                                <input type="text" id="clubWppInput" required placeholder="5493564..." style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; box-sizing: border-box;">
+                            </div>
+                            <button type="submit" class="btn-submit" style="background: var(--color-ath-orange); justify-content: center;"><i class="fa-solid fa-floppy-disk"></i> Guardar Datos del Contacto</button>
                         </form>
                     </div>
                 </div>
-
-                
-                        <!-- DATOS DE CONTACTO Y WHATSAPP OFICIAL -->
-                        <div class="admin-card" style="border: 1px solid var(--color-ath-orange); margin-top: 24px;">
-                            <h3 class="admin-card-title"><i class="fa-solid fa-address-card" style="color: var(--color-ath-orange);"></i> Datos de Contacto y WhatsApp Oficial</h3>
-                            <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 16px;">Estos datos se mostrarán en la sección de contacto y sincronizarán el botón flotante y los reenvíos de WhatsApp.</p>
-                            
-                            <form id="formClubConfig" style="display: flex; flex-direction: column; gap: 14px;">
-                                <div class="form-group">
-                                    <label style="font-weight: 700; color: #FFF;">Correo Electrónico Oficial</label>
-                                    <input type="email" id="clubEmailInput" required style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; box-sizing: border-box;">
-                                </div>
-                                <div class="form-group">
-                                    <label style="font-weight: 700; color: #FFF;">Dirección / Ubicación</label>
-                                    <input type="text" id="clubAddressInput" required style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; box-sizing: border-box;">
-                                </div>
-                                <div class="form-group">
-                                    <label style="font-weight: 700; color: #FFF;">Número de WhatsApp Oficial (con código de país, sin '+' ni espacios. Ej: 5493564...)</label>
-                                    <input type="text" id="clubWppInput" required placeholder="5493564..." style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; box-sizing: border-box;">
-                                </div>
-                                <button type="submit" class="btn-submit" style="background: var(--color-ath-orange); justify-content: center;"><i class="fa-solid fa-floppy-disk"></i> Guardar Datos del Club</button>
-                            </form>
-                        </div>
 
                 <!-- MÓDULO 5: GESTIÓN Y BLOQUEO DE CANCHAS -->
                 <div class="admin-tab-content" id="admin-tab-canchas">

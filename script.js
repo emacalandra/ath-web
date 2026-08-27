@@ -468,10 +468,21 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </a>
                     
-                    <a href="perfil.html?tab=notificaciones" class="nav-bell-icon" style="position: relative; margin-left: 15px; margin-right: 15px; color: #FFF; text-decoration: none; font-size: 1.2rem;">
-                        <i class="fa-solid fa-bell"></i>
-                        ${badgeHtml}
-                    </a>
+                    <div style="position: relative; display: inline-block;">
+                        <button class="nav-bell-icon" id="notificationBell" style="background: none; border: none; cursor: pointer; position: relative; margin-left: 12px; margin-right: 12px; color: #FFF; font-size: 1.2rem; display: flex; align-items: center;" title="Notificaciones">
+                            <i class="fa-solid fa-bell"></i>
+                            ${badgeHtml}
+                        </button>
+                        <div id="notificationDropdownMenu" style="display: none; position: absolute; right: 0; top: 40px; width: 300px; background: #0F172A; border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; padding: 14px; z-index: 1000; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 6px;">
+                                <span style="font-weight: 700; color: #FFF; font-size: 0.9rem;"><i class="fa-solid fa-bell"></i> Notificaciones</span>
+                                <span id="closeNotifDropdown" style="cursor: pointer; color: #94A3B8; font-size: 0.9rem;"><i class="fa-solid fa-xmark"></i></span>
+                            </div>
+                            <div id="notificationDropdownList" style="display: flex; flex-direction: column; gap: 8px; max-height: 250px; overflow-y: auto;">
+                                <span style="color: #94A3B8; font-size: 0.8rem; text-align: center; padding: 10px;">No hay notificaciones nuevas.</span>
+                            </div>
+                        </div>
+                    </div>
 
                     <button class="btn-logout" id="logoutBtn" title="Cerrar Sesión">
                         <i class="fa-solid fa-right-from-bracket"></i><span class="hide-mobile"> Salir</span>
@@ -484,6 +495,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (typeof window.actualizarBadgesAdmin === 'function') window.actualizarBadgesAdmin();
             if (typeof renderizarMisTurnos === 'function') renderizarMisTurnos();
+            setupNotificationDropdown();
             const adminPanelBtn = document.getElementById('adminPanelBtn');
             if (adminPanelBtn) {
                 adminPanelBtn.addEventListener('click', (e) => {
@@ -2050,3 +2062,56 @@ async function renderizarMisTurnos() {
     });
 }
 window.renderizarMisTurnos = renderizarMisTurnos;
+
+
+// Controlador del menú flotante de notificaciones en la barra de navegación
+function setupNotificationDropdown() {
+    const notifBell = document.getElementById('notificationBell') || document.querySelector('.nav-bell-icon');
+    const notifDropdown = document.getElementById('notificationDropdownMenu');
+    const closeNotif = document.getElementById('closeNotifDropdown');
+
+    if (notifBell && notifDropdown) {
+        notifBell.onclick = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const isVisible = notifDropdown.style.display === 'block';
+            notifDropdown.style.display = isVisible ? 'none' : 'block';
+            
+            if (!isVisible && window.DBHits) {
+                const user = window.DBHits.getActiveUser();
+                const listContainer = document.getElementById('notificationDropdownList');
+                if (user && listContainer) {
+                    const notifs = user.notificaciones || [];
+                    if (notifs.length === 0) {
+                        listContainer.innerHTML = `
+                            <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 6px; font-size: 0.8rem; color: #E2E8F0;">
+                                <i class="fa-solid fa-circle-info" style="color: var(--color-ath-orange);"></i> ¡Hola ${user.nombre || 'Usuario'}! Tus turnos y estados de pago se actualizan desde tu perfil.
+                            </div>
+                        `;
+                    } else {
+                        listContainer.innerHTML = notifs.slice(0, 5).map(n => `
+                            <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 6px; font-size: 0.8rem; color: #E2E8F0; border-left: 3px solid ${n.tipo === 'success' ? '#10B981' : (n.tipo === 'error' ? '#EF4444' : 'var(--color-ath-orange)')};">
+                                <div>${n.mensaje}</div>
+                                <div style="color: #94A3B8; font-size: 0.7rem; margin-top: 4px;">${new Date(n.fecha).toLocaleTimeString('es-AR', {hour: '2-digit', minute:'2-digit'})} hs</div>
+                            </div>
+                        `).join('');
+                        window.DBHits.marcarNotificacionesLeidas(user.id);
+                    }
+                }
+            }
+        };
+
+        if (closeNotif) {
+            closeNotif.onclick = (e) => {
+                e.stopPropagation();
+                notifDropdown.style.display = 'none';
+            };
+        }
+
+        document.addEventListener('click', (e) => {
+            if (!notifDropdown.contains(e.target) && !notifBell.contains(e.target)) {
+                notifDropdown.style.display = 'none';
+            }
+        });
+    }
+}

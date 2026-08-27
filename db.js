@@ -941,11 +941,16 @@ class ATHDatabaseEngine {
         reservas.push(nuevaReserva);
         this.saveReservasRaw(reservas);
 
-        // Notificar a todos los administradores en tiempo real
+        // Notificar a todos los administradores en tiempo real con mensaje inteligente
         const todosUsuarios = this.getUsersRaw();
-        const administradores = todosUsuarios.filter(u => u.role === 'admin');
+        const administradores = todosUsuarios.filter(u => u.role === 'admin' || u.role === 'secretaria');
+        const esMostrador = (metodoNombre && metodoNombre.includes('Secretaría'));
+        const textoNotificacion = esMostrador 
+            ? `🏟️ Nuevo turno en Mostrador: Cancha ${canchaId} el ${fecha} de ${horaInicio} a ${horaFin} hs a nombre de ${usuarioNombre}. ⚠️ Pago pendiente de cobro presencial en el club.`
+            : `📥 Nueva reserva online: Cancha ${canchaId} el ${fecha} de ${horaInicio} a ${horaFin} hs. ⏳ Requiere revisión de comprobante.`;
+
         administradores.forEach(admin => {
-            this.notificarUsuario(admin.id, `🔔 Nueva reserva: Cancha ${canchaId} el ${fecha} (${horaInicio} hs). Revisá el comprobante.`, 'warning');
+            this.notificarUsuario(admin.id, textoNotificacion, esMostrador ? 'info' : 'warning');
         });
 
         console.log(`🎾 Reserva creada para Cancha ${canchaId} el ${fecha} (${horaInicio} a ${horaFin} hs) - Estado: ${estadoInicial} - Total: $${calculo.precioTotal} ARS`);

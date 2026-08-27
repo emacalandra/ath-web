@@ -931,40 +931,85 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // Generador Automático de Clases Fijas / Recurrentes
-    const recForm = document.getElementById('adminRecurringLockForm');
-    if (recForm) {
-        recForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const cancha = document.getElementById('recCourtSelect').value;
-            const diaSemana = parseInt(document.getElementById('recDayOfWeek').value);
-            const horaIn = document.getElementById('recStartTime').value;
-            const horaOut = document.getElementById('recEndTime').value;
-            const meses = parseInt(document.getElementById('recMonths').value);
-            const motivo = document.getElementById('recReason').value;
+    
 
-            const startDate = new Date();
-            const endDate = new Date();
-            endDate.setMonth(endDate.getMonth() + meses);
+    // Controladores de Plantilla Semanal y Vacaciones
+    const formReglaSemanal = document.getElementById('formReglaSemanal');
+    const listaReglasSemanales = document.getElementById('listaReglasSemanales');
+    const diasNombres = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
 
-            let exitos = 0, fallos = 0;
-            let current = new Date(startDate);
+    function renderizarReglasSemanales() {
+        if (!listaReglasSemanales) return;
+        const reglas = window.DBHits.getWeeklyRules();
+        if (reglas.length === 0) {
+            listaReglasSemanales.innerHTML = '<span style="color: #94A3B8; font-size: 0.8rem; font-style: italic;">No hay clases fijas configuradas.</span>';
+            return;
+        }
+        listaReglasSemanales.innerHTML = reglas.map(r => `
+            <div style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-size: 0.8rem; color: #FFF; line-height: 1.3;">
+                    <strong style="color: var(--color-ath-orange);">${diasNombres[r.day]}</strong> &bull; ${r.start} a ${r.end} hs<br>
+                    <span style="color: #CBD5E1;"><i class="fa-solid fa-graduation-cap"></i> ${r.label} (${r.court === 'TODAS' ? 'Todas las canchas' : 'Cancha ' + r.court})</span>
+                </div>
+                <button class="btn-borrar-regla" data-id="${r.id}" style="background: none; border: none; color: #EF4444; font-size: 1.1rem; cursor: pointer;"><i class="fa-solid fa-trash-can"></i></button>
+            </div>
+        `).join('');
 
-            while (current <= endDate) {
-                if (current.getDay() === diaSemana) {
-                    const offset = current.getTimezoneOffset() * 60000;
-                    const fechaStr = (new Date(current - offset)).toISOString().split('T')[0];
-                    try {
-                        await window.DBHits.crearBloqueoAdministrativo({
-                            canchaId: cancha, fecha: fechaStr, horaInicio: horaIn, horaFin: horaOut, motivo: motivo
-                        });
-                        exitos++;
-                    } catch(err) { fallos++; }
-                }
-                current.setDate(current.getDate() + 1);
-            }
-            alert(`✅ Generación completada:\n- ${exitos} clases generadas exitosamente.\n- ${fallos} omitidas por solapar con turnos existentes.`);
-            recForm.reset();
-            if(typeof cargarTablaBloqueosYReservas === 'function') cargarTablaBloqueosYReservas();
+        document.querySelectorAll('.btn-borrar-regla').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const id = btn.dataset.id;
+                let rules = window.DBHits.getWeeklyRules();
+                rules = rules.filter(r => String(r.id) !== String(id));
+                window.DBHits.saveWeeklyRules(rules);
+                renderizarReglasSemanales();
+            });
         });
+    }
+
+    if (formReglaSemanal) {
+        renderizarReglasSemanales();
+        formReglaSemanal.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const startMin = timeStringToMinutes(document.getElementById('reglaInicio').value);
+            const endMin = timeStringToMinutes(document.getElementById('reglaFin').value);
+            if(startMin >= endMin) return alert("La hora de inicio debe ser anterior a la de fin.");
+
+            const rules = window.DBHits.getWeeklyRules();
+            rules.push({
+                id: Date.now(),
+                day: parseInt(document.getElementById('reglaDia').value),
+                court: document.getElementById('reglaCancha').value,
+                start: document.getElementById('reglaInicio').value,
+                end: document.getElementById('reglaFin').value,
+                label: document.getElementById('reglaNombre').value
+            });
+            window.DBHits.saveWeeklyRules(rules);
+            formReglaSemanal.reset();
+            renderizarReglasSemanales();
+        });
+    }
+
+    const btnGuardarVacaciones = document.getElementById('btnGuardarVacaciones');
+    const btnQuitarVacaciones = document.getElementById('btnQuitarVacaciones');
+    const inputVacaciones = document.getElementById('vacacionesHasta');
+
+    if (inputVacaciones) {
+        inputVacaciones.value = window.DBHits.getVacationsUntil() || '';
+        
+        if (btnGuardarVacaciones) {
+            btnGuardarVacaciones.addEventListener('click', () => {
+                if(!inputVacaciones.value) return alert('Selecciona una fecha límite para el receso.');
+                window.DBHits.setVacationsUntil(inputVacaciones.value);
+                alert(`🏖️ Modo Vacaciones Activo.\nLas canchas están liberadas para alquiler público hasta el ${inputVacaciones.value} (inclusive).`);
+            });
+        }
+
+        if (btnQuitarVacaciones) {
+            btnQuitarVacaciones.addEventListener('click', () => {
+                window.DBHits.setVacationsUntil(null);
+                inputVacaciones.value = '';
+                alert('▶️ Modo Vacaciones finalizado. La plantilla semanal vuelve a estar activa inmediatamente.');
+            });
+        }
     }

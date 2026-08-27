@@ -1497,6 +1497,23 @@ document.addEventListener('DOMContentLoaded', () => {
                        !estado.includes('❌');
             });
 
+            // Inyección virtual de la plantilla en la grilla visual
+            if (window.DBHits && window.DBHits.getWeeklyRules) {
+                const vacDate = window.DBHits.getVacationsUntil();
+                const enVacaciones = vacDate ? currentWidgetDate <= vacDate : false;
+                if (!enVacaciones) {
+                    const rules = window.DBHits.getWeeklyRules();
+                    const dayOfWeek = new Date(`${currentWidgetDate}T12:00:00`).getDay();
+                    rules.forEach(rule => {
+                        if (String(rule.day) === String(dayOfWeek) && (rule.court === 'TODAS' || String(rule.court) === String(currentWidgetCourt))) {
+                            reservasCancha.push({
+                                tipo: 'bloqueo_admin', motivo: rule.label, horaInicio: rule.start, horaFin: rule.end
+                            });
+                        }
+                    });
+                }
+            }
+
             if (reservasCancha.length === 0) {
                 gridContainer.innerHTML = `
                     <div style="color: #10B981; font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; gap: 6px;">

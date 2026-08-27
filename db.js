@@ -617,6 +617,20 @@ class ATHDatabaseEngine {
         return afectadas;
     }
 
+        getWeeklyRules() {
+        try { return JSON.parse(localStorage.getItem('ath_weekly_rules')) || []; } catch { return []; }
+    }
+    saveWeeklyRules(rules) {
+        localStorage.setItem('ath_weekly_rules', JSON.stringify(rules));
+    }
+    getVacationsUntil() {
+        return localStorage.getItem('ath_vacations_until') || null;
+    }
+    setVacationsUntil(dateStr) {
+        if(dateStr) localStorage.setItem('ath_vacations_until', dateStr);
+        else localStorage.removeItem('ath_vacations_until');
+    }
+
     getPricingRaw() {
         try {
             return JSON.parse(localStorage.getItem(PRICING_STORAGE_KEY)) || {
@@ -709,6 +723,36 @@ class ATHDatabaseEngine {
                 conflicto: c,
                 mensaje: `⛔ La Cancha ${canchaId} ya se encuentra reservada el ${fecha} de ${c.horaInicio} a ${c.horaFin || c.hora} hs.`
             };
+        }
+
+        // Evaluación de Plantilla Semanal Fija
+        const vacDate = this.getVacationsUntil();
+        let enVacaciones = false;
+        if (vacDate) {
+            // Comparar strings ISO (YYYY-MM-DD)
+            enVacaciones = fecha <= vacDate;
+        }
+
+        if (!enVacaciones) {
+            const rules = this.getWeeklyRules();
+            if (rules.length > 0) {
+                const dateObj = new Date(`${fecha}T12:00:00`);
+                const dayOfWeek = dateObj.getDay(); // 0 a 6
+                
+                for (let rule of rules) {
+                    if (String(rule.day) === String(dayOfWeek) && (rule.court === 'TODAS' || String(rule.court) === String(canchaId))) {
+                        const startRule = timeStringToMinutes(rule.start);
+                        const endRule = timeStringToMinutes(rule.end);
+                        if (startNuevo < endRule && endNuevo > startRule) {
+                            return {
+                                disponible: false,
+                                conflicto: { horaInicio: rule.start, horaFin: rule.end },
+                                mensaje: `⛔ Horario bloqueado por Clase/Plantilla Fija: ${rule.label} (${rule.start} a ${rule.end} hs).`
+                            };
+                        }
+                    }
+                }
+            }
         }
 
         return {

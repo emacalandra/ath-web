@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome Font Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css?v=33.0">
+    <link rel="stylesheet" href="styles.css?v=34.0">
 </head>
 <body>
 
@@ -434,31 +434,46 @@
                             </form>
                         </div>
 
-                                                <!-- Generador de Clases Fijas / Recurrentes -->
-                        <div class="admin-card" style="border: 1px solid var(--color-ath-orange);">
-                            <h3 class="admin-card-title"><i class="fa-solid fa-rotate"></i> Generador de Clases Fijas</h3>
-                            <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 20px;">Bloquea un horario específico para un día de la semana durante los próximos meses automáticamente.</p>
-                            <form id="adminRecurringLockForm" style="display: flex; flex-direction: column; gap: 16px;">
-                                <div style="display: flex; gap: 10px;">
-                                    <select id="recCourtSelect" required style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); color: #FFF; border: 1px solid rgba(255,255,255,0.2); font-weight: 700;">
-                                        <option value="1">Cancha 1</option><option value="2">Cancha 2</option><option value="3">Cancha 3</option><option value="TODAS">🚫 TODAS</option>
-                                    </select>
-                                    <select id="recDayOfWeek" required style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); color: #FFF; border: 1px solid rgba(255,255,255,0.2); font-weight: 700;">
-                                        <option value="1">Lunes</option><option value="2">Martes</option><option value="3">Miércoles</option><option value="4">Jueves</option><option value="5">Viernes</option><option value="6">Sábado</option><option value="0">Domingo</option>
-                                    </select>
+                                                <div class="grid-2col" style="align-items: start; grid-column: 1 / -1; margin-bottom: 20px;">
+                            <!-- Plantilla Semanal -->
+                            <div class="admin-card" style="border: 1px solid var(--color-ath-orange);">
+                                <h3 class="admin-card-title"><i class="fa-solid fa-calendar-week"></i> Plantilla Fija Semanal</h3>
+                                <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 16px;">Configura los horarios fijos de clases. El sistema bloqueará estos horarios automáticamente todas las semanas.</p>
+                                
+                                <form id="formReglaSemanal" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px;">
+                                    <div style="display: flex; gap: 8px;">
+                                        <select id="reglaDia" required style="width: 100%; padding: 8px; border-radius: 6px; background: rgba(0,0,0,0.3); color: #FFF; border: 1px solid rgba(255,255,255,0.2);">
+                                            <option value="1">Lunes</option><option value="2">Martes</option><option value="3">Miércoles</option><option value="4">Jueves</option><option value="5">Viernes</option><option value="6">Sábado</option><option value="0">Domingo</option>
+                                        </select>
+                                        <select id="reglaCancha" required style="width: 100%; padding: 8px; border-radius: 6px; background: rgba(0,0,0,0.3); color: #FFF; border: 1px solid rgba(255,255,255,0.2);">
+                                            <option value="TODAS">Todas las Canchas</option><option value="1">Cancha 1</option><option value="2">Cancha 2</option><option value="3">Cancha 3</option>
+                                        </select>
+                                    </div>
+                                    <div style="display: flex; gap: 8px; align-items: center;">
+                                        <input type="time" id="reglaInicio" required style="width: 100%; padding: 8px; border-radius: 6px; background: rgba(0,0,0,0.3); color: #FFF; border: 1px solid rgba(255,255,255,0.2);" title="Inicio">
+                                        <span style="color: #94A3B8;">a</span>
+                                        <input type="time" id="reglaFin" required style="width: 100%; padding: 8px; border-radius: 6px; background: rgba(0,0,0,0.3); color: #FFF; border: 1px solid rgba(255,255,255,0.2);" title="Fin">
+                                    </div>
+                                    <input type="text" id="reglaNombre" placeholder="Ej: Escuela Formativa" required style="width: 100%; padding: 8px; border-radius: 6px; background: rgba(0,0,0,0.3); color: #FFF; border: 1px solid rgba(255,255,255,0.2);">
+                                    <button type="submit" class="btn-submit" style="padding: 8px; justify-content: center;"><i class="fa-solid fa-plus"></i> Agregar Regla</button>
+                                </form>
+                                
+                                <div id="listaReglasSemanales" style="display: flex; flex-direction: column; gap: 8px;">
+                                    <!-- Aquí se inyectan las reglas activas -->
                                 </div>
-                                <div style="display: flex; gap: 10px;">
-                                    <input type="time" id="recStartTime" required value="17:00" style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); color: #FFF; border: 1px solid rgba(255,255,255,0.2); font-weight: 700;" title="Inicio">
-                                    <input type="time" id="recEndTime" required value="19:00" style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); color: #FFF; border: 1px solid rgba(255,255,255,0.2); font-weight: 700;" title="Fin">
+                            </div>
+
+                            <!-- Modo Vacaciones -->
+                            <div class="admin-card" style="border: 1px solid #3B82F6; background: rgba(59, 130, 246, 0.05);">
+                                <h3 class="admin-card-title"><i class="fa-solid fa-umbrella-beach" style="color: #3B82F6;"></i> Modo Vacaciones / Receso</h3>
+                                <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 16px;">Pausa la plantilla semanal. Las canchas quedarán liberadas para alquiler público hasta la fecha indicada.</p>
+                                <div style="display: flex; flex-direction: column; gap: 10px;">
+                                    <label style="font-size: 0.8rem; color: #93C5FD; font-weight: 700;">Liberar horarios fijos HASTA EL (incluido):</label>
+                                    <input type="date" id="vacacionesHasta" style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.3); color: #FFF; border: 1px solid #3B82F6;">
+                                    <button id="btnGuardarVacaciones" class="btn-submit" style="background: #3B82F6; border: none; justify-content: center;"><i class="fa-solid fa-floppy-disk"></i> Aplicar Receso</button>
+                                    <button id="btnQuitarVacaciones" class="btn-submit" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #EF4444; color: #FCA5A5; margin-top: 5px; justify-content: center;"><i class="fa-solid fa-power-off"></i> Finalizar Receso Ahora</button>
                                 </div>
-                                <div style="display: flex; gap: 10px;">
-                                    <select id="recMonths" required style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); color: #FFF; border: 1px solid rgba(255,255,255,0.2); font-weight: 700;" title="Duración">
-                                        <option value="1">Por 1 Mes</option><option value="3">Por 3 Meses</option><option value="6">Por 6 Meses</option>
-                                    </select>
-                                    <input type="text" id="recReason" value="Escuela de Tenis" required style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); color: #FFF; border: 1px solid rgba(255,255,255,0.2); font-weight: 700;">
-                                </div>
-                                <button type="submit" class="btn-submit" style="background: var(--color-ath-orange); justify-content: center;"><i class="fa-solid fa-wand-magic-sparkles"></i> Generar Bloqueos</button>
-                            </form>
+                            </div>
                         </div>
 
                         <!-- Tarjeta de Alerta Climática (Suspensión Masiva) -->
@@ -767,8 +782,8 @@
     </div>
 
     <!-- Módulo de Base de Datos, Script Principal y Controlador Admin -->
-    <script src="db.js?v=33.0"></script>
-    <script src="script.js?v=33.0"></script>
-    <script src="admin.js?v=33.0"></script>
+    <script src="db.js?v=34.0"></script>
+    <script src="script.js?v=34.0"></script>
+    <script src="admin.js?v=34.0"></script>
 </body>
 </html>

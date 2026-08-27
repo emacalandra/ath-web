@@ -601,8 +601,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             e.preventDefault();
             const canchaId = document.getElementById('lockCourtSelect').value;
             const fecha = document.getElementById('lockDate').value;
-            const horaInicio = document.getElementById('lockStartTime').value;
-            const horaFin = document.getElementById('lockEndTime').value;
+            const pricingConfig = window.DBHits.getPricingRaw();
+            const esTodoElDia = document.getElementById('lockTodoElDia')?.checked;
+            const horaInicio = esTodoElDia ? (pricingConfig.timeOpen || '08:00') : document.getElementById('lockStartTime').value;
+            const horaFin = esTodoElDia ? (pricingConfig.timeClose || '23:00') : document.getElementById('lockEndTime').value;
             const motivoInput = document.getElementById('lockReasonInput') ? document.getElementById('lockReasonInput').value.trim() : '';
             const motivo = motivoInput !== '' ? motivoInput : 'Bloqueo Excepcional';
 
@@ -1075,9 +1077,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         formExcepcion.addEventListener('submit', (e) => {
             e.preventDefault();
-            const inicio = document.getElementById('excInicio').value;
-            const fin = document.getElementById('excFin').value;
-            if(inicio >= fin) return alert("La hora de inicio debe ser anterior a la de fin.");
+            const pricingConfig = window.DBHits.getPricingRaw();
+            const esTodoElDia = document.getElementById('excTodoElDia')?.checked;
+            const inicio = esTodoElDia ? (pricingConfig.timeOpen || '08:00') : document.getElementById('excInicio').value;
+            const fin = esTodoElDia ? (pricingConfig.timeClose || '23:00') : document.getElementById('excFin').value;
+            if(!esTodoElDia && inicio >= fin) return alert("La hora de inicio debe ser anterior a la de fin.");
 
             const excs = window.DBHits.getExceptions();
             excs.push({
@@ -1092,5 +1096,31 @@ document.addEventListener('DOMContentLoaded', () => {
             formExcepcion.reset();
             if (inputExcFecha) inputExcFecha.value = (new Date(hoy - offset)).toISOString().split('T')[0];
             renderizarExcepciones();
+        });
+    }
+
+
+    // Lógica visual para checkboxes "Todo el Día"
+    const lockTodoElDia = document.getElementById('lockTodoElDia');
+    const lockStartTime = document.getElementById('lockStartTime');
+    const lockEndTime = document.getElementById('lockEndTime');
+
+    if (lockTodoElDia) {
+        lockTodoElDia.addEventListener('change', (e) => {
+            const isChecked = e.target.checked;
+            if(lockStartTime) { lockStartTime.disabled = isChecked; lockStartTime.style.opacity = isChecked ? '0.4' : '1'; }
+            if(lockEndTime) { lockEndTime.disabled = isChecked; lockEndTime.style.opacity = isChecked ? '0.4' : '1'; }
+        });
+    }
+
+    const excTodoElDia = document.getElementById('excTodoElDia');
+    const excInicio = document.getElementById('excInicio');
+    const excFin = document.getElementById('excFin');
+
+    if (excTodoElDia) {
+        excTodoElDia.addEventListener('change', (e) => {
+            const isChecked = e.target.checked;
+            if(excInicio) { excInicio.disabled = isChecked; excInicio.style.opacity = isChecked ? '0.4' : '1'; }
+            if(excFin) { excFin.disabled = isChecked; excFin.style.opacity = isChecked ? '0.4' : '1'; }
         });
     }

@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome Font Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css?v=36.0">
+    <link rel="stylesheet" href="styles.css?v=37.0">
 </head>
 <body>
 
@@ -96,20 +96,6 @@
                         </p>
 
                         <input type="text" class="admin-search-bar" id="userSearchInput" placeholder="🔍 Buscar por Nombre, Apellido, DNI o Email...">
-
-                        
-                                                <!-- AGENDA DIARIA Y FILTROS RÁPIDOS -->
-                        <div class="quick-filter-bar" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; background: rgba(255,255,255,0.05); padding: 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
-                            <label style="font-size: 0.85rem; color: #94A3B8; font-weight: 700;"><i class="fa-solid fa-filter"></i> Filtro Rápido de Turnos:</label>
-                            <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
-                                <button type="button" class="btn-submit btn-filter-hoy" style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10B981; color: #6EE7B7; padding: 8px 16px; font-size: 0.85rem; border-radius: 8px; flex: 1; min-width: 90px;"><i class="fa-solid fa-calendar-day"></i> Hoy</button>
-                                <button type="button" class="btn-submit btn-filter-manana" style="background: rgba(59, 130, 246, 0.2); border: 1px solid #3B82F6; color: #93C5FD; padding: 8px 16px; font-size: 0.85rem; border-radius: 8px; flex: 1; min-width: 100px;"><i class="fa-solid fa-calendar-plus"></i> Mañana</button>
-                                <div style="flex: 2; min-width: 150px;">
-                                    <input type="date" class="agendaDateFilterInput" style="width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--color-ath-orange); background: rgba(0,0,0,0.4); color: #FFF; font-weight: 700; outline: none; cursor: pointer;" title="Abrir Calendario">
-                                </div>
-                                <button type="button" class="btn-submit btn-filter-clear" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #EF4444; color: #FCA5A5; padding: 8px 16px; font-size: 0.85rem; border-radius: 8px; flex: 1; min-width: 120px;"><i class="fa-solid fa-filter-circle-xmark"></i> Ver Todas</button>
-                            </div>
-                        </div>
 
                         <div class="admin-table-container">
                             <table class="admin-table">
@@ -497,20 +483,6 @@
                                 Administrá la disponibilidad en vivo. Podés liberar un horario cancelando o eliminando un bloqueo.
                             </p>
 
-                            
-                                                <!-- AGENDA DIARIA Y FILTROS RÁPIDOS -->
-                        <div class="quick-filter-bar" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; background: rgba(255,255,255,0.05); padding: 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
-                            <label style="font-size: 0.85rem; color: #94A3B8; font-weight: 700;"><i class="fa-solid fa-filter"></i> Filtro Rápido de Turnos:</label>
-                            <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
-                                <button type="button" class="btn-submit btn-filter-hoy" style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10B981; color: #6EE7B7; padding: 8px 16px; font-size: 0.85rem; border-radius: 8px; flex: 1; min-width: 90px;"><i class="fa-solid fa-calendar-day"></i> Hoy</button>
-                                <button type="button" class="btn-submit btn-filter-manana" style="background: rgba(59, 130, 246, 0.2); border: 1px solid #3B82F6; color: #93C5FD; padding: 8px 16px; font-size: 0.85rem; border-radius: 8px; flex: 1; min-width: 100px;"><i class="fa-solid fa-calendar-plus"></i> Mañana</button>
-                                <div style="flex: 2; min-width: 150px;">
-                                    <input type="date" class="agendaDateFilterInput" style="width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--color-ath-orange); background: rgba(0,0,0,0.4); color: #FFF; font-weight: 700; outline: none; cursor: pointer;" title="Abrir Calendario">
-                                </div>
-                                <button type="button" class="btn-submit btn-filter-clear" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #EF4444; color: #FCA5A5; padding: 8px 16px; font-size: 0.85rem; border-radius: 8px; flex: 1; min-width: 120px;"><i class="fa-solid fa-filter-circle-xmark"></i> Ver Todas</button>
-                            </div>
-                        </div>
-
                         <div class="admin-table-container">
                             <table class="admin-table">
                                     <thead>
@@ -530,8 +502,10 @@
                                 </table>
                             </div>
                         </div>
+                    </div>
+                </div>
 
-                <!-- MÓDULO 5: GESTIÓN DE ESCUELA DE TENIS -->
+                <!-- MÓDULO 6: GESTIÓN DE ESCUELA DE TENIS -->
                 <div class="admin-tab-content" id="admin-tab-escuela">
                     <div class="admin-card">
                         <h3 class="admin-card-title"><i class="fa-solid fa-users-viewfinder" style="color: var(--color-ath-orange);"></i> Gestión de Escuela de Tenis</h3>
@@ -539,19 +513,6 @@
                         <div style="display: flex; gap: 10px; margin-bottom: 16px;">
                             <button class="btn-submit btn-accent"><i class="fa-solid fa-user-plus"></i> Inscribir Nuevo Alumno</button>
                             <button class="btn-submit" style="background: rgba(255,255,255,0.1);"><i class="fa-solid fa-file-invoice-dollar"></i> Control de Cuotas Mensuales</button>
-                        </div>
-                        
-                                                <!-- AGENDA DIARIA Y FILTROS RÁPIDOS -->
-                        <div class="quick-filter-bar" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; background: rgba(255,255,255,0.05); padding: 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
-                            <label style="font-size: 0.85rem; color: #94A3B8; font-weight: 700;"><i class="fa-solid fa-filter"></i> Filtro Rápido de Turnos:</label>
-                            <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
-                                <button type="button" class="btn-submit btn-filter-hoy" style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10B981; color: #6EE7B7; padding: 8px 16px; font-size: 0.85rem; border-radius: 8px; flex: 1; min-width: 90px;"><i class="fa-solid fa-calendar-day"></i> Hoy</button>
-                                <button type="button" class="btn-submit btn-filter-manana" style="background: rgba(59, 130, 246, 0.2); border: 1px solid #3B82F6; color: #93C5FD; padding: 8px 16px; font-size: 0.85rem; border-radius: 8px; flex: 1; min-width: 100px;"><i class="fa-solid fa-calendar-plus"></i> Mañana</button>
-                                <div style="flex: 2; min-width: 150px;">
-                                    <input type="date" class="agendaDateFilterInput" style="width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--color-ath-orange); background: rgba(0,0,0,0.4); color: #FFF; font-weight: 700; outline: none; cursor: pointer;" title="Abrir Calendario">
-                                </div>
-                                <button type="button" class="btn-submit btn-filter-clear" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #EF4444; color: #FCA5A5; padding: 8px 16px; font-size: 0.85rem; border-radius: 8px; flex: 1; min-width: 120px;"><i class="fa-solid fa-filter-circle-xmark"></i> Ver Todas</button>
-                            </div>
                         </div>
 
                         <div class="admin-table-container">
@@ -784,8 +745,8 @@
     </div>
 
     <!-- Módulo de Base de Datos, Script Principal y Controlador Admin -->
-    <script src="db.js?v=36.0"></script>
-    <script src="script.js?v=36.0"></script>
-    <script src="admin.js?v=36.0"></script>
+    <script src="db.js?v=37.0"></script>
+    <script src="script.js?v=37.0"></script>
+    <script src="admin.js?v=37.0"></script>
 </body>
 </html>

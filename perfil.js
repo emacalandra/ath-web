@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (editEmail) editEmail.value = activeUser.email || '';
 
     async function cargarDatosPerfil() {
+        if (typeof renderizarMisTurnos === 'function') renderizarMisTurnos();
         const reservas = await window.DBHits.listarReservas();
         const misReservas = reservas.filter(r => String(r.usuarioId) === String(activeUser.id) && r.tipo !== 'bloqueo_admin');
         misReservas.sort((a, b) => b.id - a.id);

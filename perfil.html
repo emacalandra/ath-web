@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome Font Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css?v=43.0">
+    <link rel="stylesheet" href="styles.css?v=44.0">
     <!-- ESTILOS MÓVILES RESPONSIVOS DEDICADOS PARA PERFIL Y AUTOGESTIÓN -->
     <style>
     .future-module { display: none !important; }
@@ -268,25 +268,10 @@
                                     </a>
                                 </h3>
 
-                                <div class="admin-table-container" style="margin-top: 16px;">
-                                    <table class="admin-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Cancha</th>
-                                                <th>Fecha & Horario</th>
-                                                <th>Monto Total</th>
-                                                <th>Estado de Pago</th>
-                                                <th>Acción</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="userBookingsTableBody">
-                                            <tr>
-                                                <td colspan="5" style="text-align: center; padding: 24px; color: var(--color-text-muted);">
-                                                    <i class="fa-solid fa-spinner fa-spin"></i> Cargando tus reservas...
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                                                <div style="margin-top: 24px;">
+                                    <h4 style="color: var(--color-ath-orange); margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;"><i class="fa-solid fa-clock-rotate-left"></i> Historial de Mis Turnos</h4>
+                                    <!-- Aquí se inyectarán dinámicamente las tarjetas responsivas -->
+                                    <div id="misTurnosContainer" style="width: 100%; min-height: 100px;"></div>
                                 </div>
                             </div>
                         </div>
@@ -403,8 +388,8 @@
     </footer>
 
     <!-- Scripts de la Aplicación -->
-        <script src="db.js?v=43.0"></script>
-    <script src="script.js?v=43.0"></script>
-    <script src="perfil.js?v=43.0"></script>
+        <script src="db.js?v=44.0"></script>
+    <script src="script.js?v=44.0"></script>
+    <script src="perfil.js?v=44.0"></script>
 </body>
 </html>

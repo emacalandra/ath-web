@@ -527,6 +527,38 @@ class ATHDatabaseEngine {
         return users[index];
     }
 
+        getReservas() {
+        return this.getReservasRaw();
+    }
+
+    saveReservas(reservas) {
+        this.saveReservasRaw(reservas);
+    }
+
+    getReservasPorUsuario(usuarioId) {
+        const reservas = this.getReservasRaw();
+        // Filtrar reservas del usuario y ordenarlas desde la más reciente a la más antigua
+        return reservas
+            .filter(r => String(r.usuarioId) === String(usuarioId) && r.tipo !== 'bloqueo_admin')
+            .sort((a, b) => new Date(`${b.fecha}T${b.horaInicio || '00:00'}`) - new Date(`${a.fecha}T${a.horaInicio || '00:00'}`));
+    }
+
+    cancelarReservaUsuario(reservaId, usuarioId) {
+        let reservas = this.getReservasRaw();
+        const index = reservas.findIndex(r => String(r.id) === String(reservaId) && String(r.usuarioId) === String(usuarioId));
+        if (index !== -1) {
+            const estadoStr = String(reservas[index].estadoPago || '');
+            // Solo permitir cancelar si no está pagado físicamente o confirmado
+            if (estadoStr.includes('✅') || estadoStr.toLowerCase().includes('confirmado') || estadoStr.toLowerCase().includes('aprobado')) {
+                throw new Error("No puedes cancelar un turno que ya está confirmado y pagado. Comunícate con secretaría.");
+            }
+            reservas.splice(index, 1); // Eliminar la reserva para liberar la cancha
+            this.saveReservasRaw(reservas);
+            return true;
+        }
+        return false;
+    }
+
     getReservasRaw() {
         try {
             let data = JSON.parse(localStorage.getItem(BOOKINGS_STORAGE_KEY)) || [];

@@ -1972,3 +1972,80 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+
+
+// Helper de fecha para Mis Turnos
+function formatFechaLocal(isoDate) {
+    if (!isoDate || !isoDate.includes('-')) return isoDate;
+    const parts = isoDate.split('-');
+    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+}
+
+async function renderizarMisTurnos() {
+    // Buscar el contenedor de Mis Turnos en el HTML
+    const container = document.getElementById('misTurnosContainer') || document.querySelector('.mis-turnos-list');
+    if (!container) return;
+
+    const user = window.DBHits ? window.DBHits.getActiveUser() : null;
+    if (!user) return;
+
+    const misTurnos = window.DBHits.getReservasPorUsuario ? window.DBHits.getReservasPorUsuario(user.id) : [];
+    const ahora = new Date();
+
+    if (misTurnos.length === 0) {
+        container.innerHTML = `<div style="text-align:center; color:#94A3B8; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 8px;">No tienes turnos registrados.</div>`;
+        return;
+    }
+
+    container.innerHTML = `<div style="display: flex; flex-direction: column; gap: 12px; width: 100%;">` + misTurnos.map(turno => {
+        const fechaTurno = new Date(`${turno.fecha}T${turno.horaInicio || '00:00'}`);
+        const esPasado = fechaTurno < ahora;
+        
+        let colorEstado = '#94A3B8'; // default
+        let estadoStr = turno.estadoPago || 'Pendiente';
+        if(estadoStr.includes('✅') || estadoStr.includes('confirmado') || estadoStr.includes('Aprobado')) colorEstado = '#10B981';
+        else if(estadoStr.includes('⏳') || estadoStr.includes('pendiente') || estadoStr.includes('esperando')) colorEstado = '#F59E0B';
+        else if(estadoStr.includes('❌') || estadoStr.includes('Rechazado') || estadoStr.includes('Cancelado')) colorEstado = '#EF4444';
+
+        // Botón de cancelar: Solo si es futuro y NO está confirmado
+        let btnCancelar = '';
+        if (!esPasado && !estadoStr.includes('✅') && !estadoStr.includes('confirmado') && !estadoStr.includes('Aprobado')) {
+            btnCancelar = `<button class="btn-cancelar-turno" data-id="${turno.id}" style="margin-top: 10px; width: 100%; padding: 8px; border-radius: 6px; background: rgba(239, 68, 68, 0.1); border: 1px solid #EF4444; color: #FCA5A5; cursor: pointer; font-size: 0.8rem; font-weight: 700;"><i class="fa-solid fa-xmark"></i> Cancelar Turno</button>`;
+        }
+
+        return `
+        <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-left: 4px solid ${colorEstado}; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; opacity: ${esPasado ? '0.6' : '1'};">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px;">
+                <div>
+                    <strong style="color: #FFF; font-size: 1rem;">${formatFechaLocal(turno.fecha)}</strong><br>
+                    <span style="color: var(--color-ath-orange); font-weight: 700;">${turno.horaInicio} a ${turno.horaFin || turno.hora} hs</span>
+                </div>
+                <div style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; color: #E2E8F0;">
+                    ${turno.canchaId === '1' ? 'Cancha 1' : turno.canchaId === '2' ? 'Cancha 2' : 'Cancha 3'}
+                </div>
+            </div>
+            <div style="margin-top: 8px; font-size: 0.85rem; color: ${colorEstado}; font-weight: 700;">
+                ${estadoStr}
+            </div>
+            ${btnCancelar}
+        </div>
+        `;
+    }).join('') + `</div>`;
+
+    // Asignar eventos de cancelación
+    document.querySelectorAll('.btn-cancelar-turno').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            const id = e.target.closest('.btn-cancelar-turno').dataset.id;
+            if (confirm("¿Estás seguro de que deseas cancelar este turno? La cancha quedará liberada para otros usuarios.")) {
+                try {
+                    window.DBHits.cancelarReservaUsuario(id, user.id);
+                    alert("Turno cancelado exitosamente.");
+                    renderizarMisTurnos();
+                } catch(err) {
+                    alert(err.message);
+                }
+            }
+        });
+    });
+}
+window.renderizarMisTurnos = renderizarMisTurnos;

@@ -687,7 +687,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 7. FORMULARIO DE INICIO DE SESIÓN
     const loginForm = document.getElementById('loginForm');
-
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -714,31 +713,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 renderUserNavbarState(usuario);
                 initCmsVisualEditor(usuario);
-
-                if (pendingCourtReservation) {
-                    openModal('booking', true);
-                    if (courtSelect) {
-                        courtSelect.value = pendingCourtReservation;
-                    }
-                    pendingCourtReservation = null;
-                } else {
-                    closeModal();
-                }
-
-                setTimeout(() => {
-                    if (usuario.role === 'admin') {
-                        alert(`⚡ ¡Bienvenido Administrador ${usuario.nombre}! Se ha habilitado la opción "⚡ Panel de Administración" y el Botón Flotante "Modo Edición ATH".`);
-                    } else if (usuario.role === 'secretaria') {
-                        alert(`📅 ¡Bienvenida Secretaría! Se ha habilitado el botón "📅 Agenda" para gestionar el mostrador.`);
-                    } else if (usuario.role === 'alumno') {
-                        alert(`🎾 ¡Bienvenido/a Alumno/a ${usuario.nombre}! Sesión iniciada con éxito.`);
-                    } else {
-                        alert(`¡Bienvenido/a de nuevo a Tenis Hits, ${usuario.nombre}!`);
-                    }
-                }, 200);
-
+                closeModal();
+                window.location.reload(); // Recargar para sincronizar estados de sesión y perfil
             } catch (error) {
-                console.error("Error en inicio de sesión:", error);
                 showErrorAlert(loginAlertError, error.message || "Error al autenticar usuario.");
             }
         });
@@ -2194,11 +2171,4 @@ function initFloatingWhatsApp() {
     document.body.appendChild(wppFloat);
 }
 
-// Ejecución global incondicional de WhatsApp
-if (typeof document !== 'undefined') {
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => { initFloatingWhatsApp(); });
-    } else {
-        initFloatingWhatsApp();
-    }
-}
+

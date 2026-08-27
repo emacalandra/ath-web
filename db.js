@@ -768,7 +768,7 @@ class ATHDatabaseEngine {
     }
 
     // 3. Crear Reserva con Horarios Libres, Comprobante y Validación Estricta
-    async crearReserva({ usuarioId, usuarioNombre, usuarioEmail, usuarioTelefono, usuarioRole, canchaId, fecha, horaInicio, duracionHoras, metodoPago, comprobanteBase64 }) {
+    async crearReserva({ usuarioId, usuarioNombre, usuarioEmail, usuarioTelefono, usuarioRole, canchaId, fecha, horaInicio, duracionHoras, metodoPago, comprobanteBase64, overrideEstadoPago }) {
         const dur = parseFloat(duracionHoras);
         const startMin = timeStringToMinutes(horaInicio);
         const endMin = startMin + Math.round(dur * 60);
@@ -788,8 +788,8 @@ class ATHDatabaseEngine {
         // Calcular tarifa exacta por rol
         const calculo = this.calcularPrecioReserva(horaInicio, dur, usuarioRole || 'usuario');
 
-        const estadoInicial = '⏳ Pago esperando aprobación';
-        const metodoNombre = (metodoPago === 'transferencia' || metodoPago === 'mercadopago') ? 'Transferencia Bancaria / MP' : 'En Secretaría del Club';
+        const estadoInicial = overrideEstadoPago || '⏳ Pago esperando aprobación';
+        const metodoNombre = (metodoPago === 'En Secretaría (Efectivo/Físico)') ? metodoPago : ((metodoPago === 'transferencia' || metodoPago === 'mercadopago') ? 'Transferencia Bancaria / MP' : 'En Secretaría del Club');
 
         const reservas = this.getReservasRaw();
         const nuevaReserva = {

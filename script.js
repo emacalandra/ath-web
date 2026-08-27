@@ -1282,6 +1282,36 @@ document.addEventListener('DOMContentLoaded', () => {
         renderWidgetDayTimelineGrid();
         calculateAndVerifyMinuteByMinute();
 
+                const activeUserModal = getActiveUser();
+        const confirmBtnEl = document.getElementById('appConfirmBtn') || document.getElementById('widgetConfirmBtn');
+        let secFields = document.getElementById('secretariaBookingFields');
+        const paymentCardEl = document.getElementById('paymentTransferCard');
+        const weatherNoticeEl = document.getElementById('appWeatherNotice');
+
+        if (activeUserModal && (activeUserModal.role === 'admin' || activeUserModal.role === 'secretaria')) {
+            if (!secFields && confirmBtnEl && confirmBtnEl.parentNode) {
+                secFields = document.createElement('div');
+                secFields.id = 'secretariaBookingFields';
+                secFields.style.cssText = "background: rgba(16, 185, 129, 0.1); border: 1px solid #10B981; border-radius: 8px; padding: 12px; margin-bottom: 14px;";
+                secFields.innerHTML = `
+                    <div style="font-size: 0.85rem; color: #10B981; font-weight: bold; margin-bottom: 8px;"><i class="fa-solid fa-user-shield"></i> Modo Secretaría: Cargar turno a cliente</div>
+                    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                        <input type="text" id="secInputNombre" placeholder="Nombre" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
+                        <input type="text" id="secInputApellido" placeholder="Apellido" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
+                    </div>
+                    <input type="tel" id="secInputTelefono" placeholder="Teléfono" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
+                    <div style="margin-top: 8px; font-size: 0.75rem; color: #6EE7B7;"><i class="fa-solid fa-check-circle"></i> El pago se registrará automáticamente como Confirmado.</div>
+                `;
+                confirmBtnEl.parentNode.insertBefore(secFields, confirmBtnEl);
+            }
+            if (paymentCardEl) paymentCardEl.style.display = 'none'; // Ocultar carga de comprobante
+            if (weatherNoticeEl) weatherNoticeEl.style.display = 'none';
+        } else {
+            if (secFields) secFields.remove();
+            if (paymentCardEl) paymentCardEl.style.display = 'block';
+            if (weatherNoticeEl) weatherNoticeEl.style.display = 'flex';
+        }
+
         modalApp.classList.add('active');
         modalApp.style.display = 'flex';
         document.body.style.overflow = 'hidden';
@@ -1707,20 +1737,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let comprobanteBase64 = null;
 
-            // VALIDACIÓN BLOQUEANTE ESTRICTA PARA TRANSFERENCIA ÚNICA
+            const isSecretaria = activeUser && (activeUser.role === 'admin' || activeUser.role === 'secretaria');
+            
+            // VALIDACIÓN BLOQUEANTE ESTRICTA PARA TRANSFERENCIA ÚNICA (Solo si NO es secretaria)
             const file = (fileInput && fileInput.files && fileInput.files.length > 0) ? fileInput.files[0] : null;
-            if (!file) {
+            if (!isSecretaria && !file) {
                 if (fileInput) { fileInput.style.border = '2px solid #EF4444'; fileInput.focus(); }
                 alert("⛔ ATENCIÓN: Solo aceptamos pagos por transferencia. Es obligatorio adjuntar la captura del comprobante de pago para reservar la cancha.");
                 return;
             }
-            if (fileInput) fileInput.style.border = '1px dashed #FF8800';
-            try {
-                comprobanteBase64 = await window.DBHits.convertFileToBase64(file);
-            } catch (err) {
-                alert("Error al procesar la captura del comprobante: " + err.message);
-                return;
+
+            if (file) {
+                if (fileInput) fileInput.style.border = '1px dashed #FF8800';
+                try {
+                    comprobanteBase64 = await window.DBHits.convertFileToBase64(file);
+                } catch (err) {
+                    alert("Error al procesar la captura del comprobante: " + err.message);
+                    return;
+                }
             }
+
+            // Capturar datos de secretaría si existen
+            const secNombre = document.getElementById('secInputNombre')?.value.trim();
+            const secApellido = document.getElementById('secInputApellido')?.value.trim();
+            const secTelefono = document.getElementById('secInputTelefono')?.value.trim();
+
+            const finalNombre = isSecretaria && secNombre ? `${secNombre} ${secApellido || ''}`.trim() : (activeUser ? `${activeUser.nombre} ${activeUser.apellido || ''}` : 'Usuario');
+            const finalTelefono = isSecretaria && secTelefono ? secTelefono : (activeUser ? activeUser.telefono : '');
+            const finalEstadoPago = isSecretaria ? '✅ Pago confirmado' : '⏳ Pago esperando aprobación';
+            const finalMetodoPago = isSecretaria ? 'En Secretaría (Efectivo/Físico)' : selectedPaymentMethod;
 
             // DOBLE CONFIRMACIÓN ANTI-ERROR
             const fechaFormateada = formatFriendlyDate(currentWidgetDate);
@@ -1761,21 +1806,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 const nuevaReserva = await window.DBHits.crearReserva({
-                    usuarioId: activeUser.id,
-                    usuarioNombre: `${activeUser.nombre} ${activeUser.apellido || ''}`,
+                    usuarioId: isSecretaria ? 'mostrador' : activeUser.id,
+                    usuarioNombre: finalNombre,
                     usuarioEmail: activeUser.email,
-                    usuarioTelefono: activeUser.telefono,
+                    usuarioTelefono: finalTelefono,
                     usuarioRole: activeUser.role || 'usuario',
                     canchaId: currentWidgetCourt,
                     fecha: currentWidgetDate,
                     horaInicio: horaInicio,
                     duracionHoras: duracionHoras,
-                    metodoPago: selectedPaymentMethod,
+                    metodoPago: finalMetodoPago,
                     comprobanteBase64: comprobanteBase64,
-                    rolUsuario: userRole
+                    rolUsuario: isSecretaria ? 'usuario' : userRole,
+                    overrideEstadoPago: finalEstadoPago // Parámetro nuevo
                 });
 
-                alert("✅ ¡RESERVA REGISTRADA CON ÉXITO!\n\nEstado actual: ⏳ PAGO ESPERANDO APROBACIÓN\n\nTu solicitud y/o comprobante ya están en poder de la secretaría del Club Ciudad Verde. En cuanto un administrador verifique el ingreso, tu estado cambiará automáticamente a 'Pago confirmado'.");
+                if (isSecretaria) {
+                    alert("✅ ¡TURNO AGENDADO EN MOSTRADOR!\n\nEl turno fue registrado exitosamente a nombre de " + finalNombre + " y marcado como pagado.");
+                } else {
+                    alert("✅ ¡RESERVA REGISTRADA CON ÉXITO!\n\nEstado actual: ⏳ PAGO ESPERANDO APROBACIÓN\n\nTu solicitud y/o comprobante ya están en poder de la secretaría del Club Ciudad Verde. En cuanto un administrador verifique el ingreso, tu estado cambiará automáticamente a 'Pago confirmado'.");
+                }
 
                 closeAppBookingModal();
                 localStorage.removeItem('pending_ath_booking');

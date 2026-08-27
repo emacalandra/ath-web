@@ -1500,7 +1500,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (reservasCancha.length === 0) {
                 gridContainer.innerHTML = `
                     <div style="color: #10B981; font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; gap: 6px;">
-                        <i class="fa-solid fa-circle-check"></i> Cancha 100% despejada en todo el día (08:00 a 23:00 hs).
+                        <i class="fa-solid fa-circle-check"></i> Cancha 100% despejada en todo el día.
                     </div>
                 `;
                 return;
@@ -1584,9 +1584,13 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        if (startMin < 480 || endMin > 1380) {
+        const pricingConfig = window.DBHits.getPricingRaw();
+        const openMin = timeStringToMinutes(pricingConfig.timeOpen || '08:00');
+        const closeMin = timeStringToMinutes(pricingConfig.timeClose || '23:00');
+
+        if (startMin < openMin || endMin > closeMin) {
             priceSummary.className = 'booking-summary-card occupied status-busy';
-            if (summaryStatus) summaryStatus.innerHTML = '❌ El complejo opera únicamente entre las 08:00 y las 23:00 hs';
+            if (summaryStatus) summaryStatus.innerHTML = `❌ El club opera entre las ${pricingConfig.timeOpen || '08:00'} y ${pricingConfig.timeClose || '23:00'} hs`;
             if (summaryDetails) summaryDetails.innerHTML = 'Fuera de rango operativo';
             if (summaryLighting) summaryLighting.innerHTML = '-';
             if (summaryPrice) summaryPrice.innerHTML = '$0 ARS';

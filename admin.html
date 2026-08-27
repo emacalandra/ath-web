@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome Font Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css?v=32.0">
+    <link rel="stylesheet" href="styles.css?v=33.0">
 </head>
 <body>
 
@@ -351,6 +351,24 @@
                                 </div>
                             </div>
 
+                            
+                            <!-- SECCIÓN C: HORARIOS OPERATIVOS DEL CLUB -->
+                            <h4 style="color: var(--color-ath-orange); margin-top: 24px; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 6px;"><i class="fa-solid fa-clock"></i> Horarios Operativos del Club</h4>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-door-open"></i> Hora Apertura</label>
+                                    <input type="time" id="configTimeOpen" value="08:00" required style="padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; font-weight: 700; width: 100%;">
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-door-closed"></i> Hora Cierre</label>
+                                    <input type="time" id="configTimeClose" value="23:00" required style="padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; font-weight: 700; width: 100%;">
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-moon"></i> Inicio Tarifa Nocturna (LED)</label>
+                                    <input type="time" id="configTimeNight" value="18:30" required style="padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; font-weight: 700; width: 100%;">
+                                </div>
+                            </div>
+
                             <button type="submit" class="btn-submit" style="margin-top: 24px; max-width: 300px;">
                                 <i class="fa-solid fa-floppy-disk"></i> Guardar Tarifas Generales
                             </button>
@@ -413,6 +431,33 @@
                                 <button type="submit" class="btn-submit" style="background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%); justify-content: center;">
                                     <i class="fa-solid fa-lock"></i> Registrar Bloqueo Administrativo
                                 </button>
+                            </form>
+                        </div>
+
+                                                <!-- Generador de Clases Fijas / Recurrentes -->
+                        <div class="admin-card" style="border: 1px solid var(--color-ath-orange);">
+                            <h3 class="admin-card-title"><i class="fa-solid fa-rotate"></i> Generador de Clases Fijas</h3>
+                            <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 20px;">Bloquea un horario específico para un día de la semana durante los próximos meses automáticamente.</p>
+                            <form id="adminRecurringLockForm" style="display: flex; flex-direction: column; gap: 16px;">
+                                <div style="display: flex; gap: 10px;">
+                                    <select id="recCourtSelect" required style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); color: #FFF; border: 1px solid rgba(255,255,255,0.2); font-weight: 700;">
+                                        <option value="1">Cancha 1</option><option value="2">Cancha 2</option><option value="3">Cancha 3</option><option value="TODAS">🚫 TODAS</option>
+                                    </select>
+                                    <select id="recDayOfWeek" required style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); color: #FFF; border: 1px solid rgba(255,255,255,0.2); font-weight: 700;">
+                                        <option value="1">Lunes</option><option value="2">Martes</option><option value="3">Miércoles</option><option value="4">Jueves</option><option value="5">Viernes</option><option value="6">Sábado</option><option value="0">Domingo</option>
+                                    </select>
+                                </div>
+                                <div style="display: flex; gap: 10px;">
+                                    <input type="time" id="recStartTime" required value="17:00" style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); color: #FFF; border: 1px solid rgba(255,255,255,0.2); font-weight: 700;" title="Inicio">
+                                    <input type="time" id="recEndTime" required value="19:00" style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); color: #FFF; border: 1px solid rgba(255,255,255,0.2); font-weight: 700;" title="Fin">
+                                </div>
+                                <div style="display: flex; gap: 10px;">
+                                    <select id="recMonths" required style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); color: #FFF; border: 1px solid rgba(255,255,255,0.2); font-weight: 700;" title="Duración">
+                                        <option value="1">Por 1 Mes</option><option value="3">Por 3 Meses</option><option value="6">Por 6 Meses</option>
+                                    </select>
+                                    <input type="text" id="recReason" value="Escuela de Tenis" required style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); color: #FFF; border: 1px solid rgba(255,255,255,0.2); font-weight: 700;">
+                                </div>
+                                <button type="submit" class="btn-submit" style="background: var(--color-ath-orange); justify-content: center;"><i class="fa-solid fa-wand-magic-sparkles"></i> Generar Bloqueos</button>
                             </form>
                         </div>
 
@@ -722,8 +767,8 @@
     </div>
 
     <!-- Módulo de Base de Datos, Script Principal y Controlador Admin -->
-    <script src="db.js?v=32.0"></script>
-    <script src="script.js?v=32.0"></script>
-    <script src="admin.js?v=32.0"></script>
+    <script src="db.js?v=33.0"></script>
+    <script src="script.js?v=33.0"></script>
+    <script src="admin.js?v=33.0"></script>
 </body>
 </html>

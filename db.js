@@ -653,13 +653,13 @@ class ATHDatabaseEngine {
         const startMin = timeStringToMinutes(horaInicio);
         const endMin = startMin + Math.round(dur * 60);
 
-        // Rangos de minutos desde 00:00
-        // Diurno: 08:00 (480 min) a 18:30 (1110 min)
-        // Nocturno LED: 18:30 (1110 min) a 23:00 (1380 min)
-        const dayStart = 480;   // 08:00 hs
-        const dayEnd = 1110;    // 18:30 hs
-        const nightStart = 1110;// 18:30 hs
-        const nightEnd = 1380;  // 23:00 hs
+        const openMin = timeStringToMinutes(pricing.timeOpen || '08:00');
+        const nightStartMin = timeStringToMinutes(pricing.timeNight || '18:30');
+
+        const dayStart = openMin;
+        const dayEnd = nightStartMin;
+        const nightStart = nightStartMin;
+        const nightEnd = timeStringToMinutes(pricing.timeClose || '23:00');
 
         const dayMins = Math.max(0, Math.min(endMin, dayEnd) - Math.max(startMin, dayStart));
         const nightMins = Math.max(0, Math.min(endMin, nightEnd) - Math.max(startMin, nightStart));
@@ -773,8 +773,11 @@ class ATHDatabaseEngine {
         const startMin = timeStringToMinutes(horaInicio);
         const endMin = startMin + Math.round(dur * 60);
 
-        if (startMin < 480 || endMin > 1380) {
-            throw new Error("El horario de juego debe estar comprendido entre las 08:00 hs y las 23:00 hs.");
+        const pricing = this.getPricingRaw();
+        const openMin = timeStringToMinutes(pricing.timeOpen || '08:00');
+        const closeMin = timeStringToMinutes(pricing.timeClose || '23:00');
+        if (startMin < openMin || endMin > closeMin) {
+            throw new Error(`El horario debe estar entre las ${pricing.timeOpen || '08:00'} y las ${pricing.timeClose || '23:00'} hs.`);
         }
 
         const horaFin = minutesToTimeString(endMin);

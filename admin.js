@@ -496,6 +496,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (document.getElementById('priceEscuela')) document.getElementById('priceEscuela').value = savedPricing.priceEscuela || 25000;
                 if (document.getElementById('priceAltoRend')) document.getElementById('priceAltoRend').value = savedPricing.priceAltoRend || 45000;
                 if (document.getElementById('priceClaseParticular')) document.getElementById('priceClaseParticular').value = savedPricing.priceClaseParticular || 15000;
+                if (document.getElementById('configTimeOpen')) document.getElementById('configTimeOpen').value = savedPricing.timeOpen || '08:00';
+                if (document.getElementById('configTimeClose')) document.getElementById('configTimeClose').value = savedPricing.timeClose || '23:00';
+                if (document.getElementById('configTimeNight')) document.getElementById('configTimeNight').value = savedPricing.timeNight || '18:30';
             }
         } catch(e) {}
 
@@ -510,7 +513,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 priceCourtNightAlumno: document.getElementById('priceCourtNightAlumno').value,
                 priceEscuela: document.getElementById('priceEscuela').value,
                 priceAltoRend: document.getElementById('priceAltoRend').value,
-                priceClaseParticular: document.getElementById('priceClaseParticular').value
+                priceClaseParticular: document.getElementById('priceClaseParticular').value,
+                timeOpen: document.getElementById('configTimeOpen') ? document.getElementById('configTimeOpen').value : '08:00',
+                timeClose: document.getElementById('configTimeClose') ? document.getElementById('configTimeClose').value : '23:00',
+                timeNight: document.getElementById('configTimeNight') ? document.getElementById('configTimeNight').value : '18:30'
             };
             localStorage.setItem('ath_pricing_db', JSON.stringify(newPricing));
             alert('¡Tarifas y matriz de roles actualizadas con éxito en todo el sistema ATH!');
@@ -923,3 +929,42 @@ document.addEventListener('DOMContentLoaded', () => {
             if (typeof cargarTablaBloqueosYReservas === 'function') cargarTablaBloqueosYReservas();
         }
     });
+
+
+    // Generador Automático de Clases Fijas / Recurrentes
+    const recForm = document.getElementById('adminRecurringLockForm');
+    if (recForm) {
+        recForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const cancha = document.getElementById('recCourtSelect').value;
+            const diaSemana = parseInt(document.getElementById('recDayOfWeek').value);
+            const horaIn = document.getElementById('recStartTime').value;
+            const horaOut = document.getElementById('recEndTime').value;
+            const meses = parseInt(document.getElementById('recMonths').value);
+            const motivo = document.getElementById('recReason').value;
+
+            const startDate = new Date();
+            const endDate = new Date();
+            endDate.setMonth(endDate.getMonth() + meses);
+
+            let exitos = 0, fallos = 0;
+            let current = new Date(startDate);
+
+            while (current <= endDate) {
+                if (current.getDay() === diaSemana) {
+                    const offset = current.getTimezoneOffset() * 60000;
+                    const fechaStr = (new Date(current - offset)).toISOString().split('T')[0];
+                    try {
+                        await window.DBHits.crearBloqueoAdministrativo({
+                            canchaId: cancha, fecha: fechaStr, horaInicio: horaIn, horaFin: horaOut, motivo: motivo
+                        });
+                        exitos++;
+                    } catch(err) { fallos++; }
+                }
+                current.setDate(current.getDate() + 1);
+            }
+            alert(`✅ Generación completada:\n- ${exitos} clases generadas exitosamente.\n- ${fallos} omitidas por solapar con turnos existentes.`);
+            recForm.reset();
+            if(typeof cargarTablaBloqueosYReservas === 'function') cargarTablaBloqueosYReservas();
+        });
+    }

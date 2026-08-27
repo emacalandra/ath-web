@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             // 4. Setear filtro de fecha automáticamente a HOY (dejándolo libre para edición)
             setTimeout(() => {
-                const agendaFilter = document.getElementById('agendaDateFilter');
+                const agendaFilter = document.querySelector('.agendaDateFilterInput') || document.getElementById('agendaDateFilter');
                 if (agendaFilter && !agendaFilter.value) {
                     const today = new Date();
                     const offset = today.getTimezoneOffset() * 60000;
@@ -236,7 +236,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (badgeActivas) badgeActivas.textContent = reservasActivas.length;
         if (badgeHistorial) badgeHistorial.textContent = reservasHistorial.length;
 
-        const agendaFilterDate = document.getElementById('agendaDateFilter') ? document.getElementById('agendaDateFilter').value : '';
+        const agendaFilterDate = document.querySelector('.agendaDateFilterInput')?.value || (document.getElementById('agendaDateFilter') ? document.getElementById('agendaDateFilter').value : '');
         const listaARenderizarRaw = window.subtabActualReservas === 'activas' ? reservasActivas : reservasHistorial;
         const listaARenderizar = agendaFilterDate ? listaARenderizarRaw.filter(r => r.fecha === agendaFilterDate) : listaARenderizarRaw;
 
@@ -881,7 +881,39 @@ document.addEventListener('DOMContentLoaded', () => {
 }); // <-- CIERRE MAESTRO DEL document.addEventListener
 
 
-    const agendaDateFilter = document.getElementById('agendaDateFilter');
-    const btnAgendaClear = document.getElementById('btnAgendaClear');
-    if (agendaDateFilter) agendaDateFilter.addEventListener('change', () => { if (typeof cargarTablaReservas === 'function') cargarTablaReservas(); });
-    if (btnAgendaClear) btnAgendaClear.addEventListener('click', (e) => { e.preventDefault(); if(agendaDateFilter) agendaDateFilter.value = ''; if (typeof cargarTablaReservas === 'function') cargarTablaReservas(); });
+    // Lógica de Filtros Rápidos (Hoy, Mañana, Limpiar)
+    document.addEventListener('click', (e) => {
+        const btnHoy = e.target.closest('.btn-filter-hoy');
+        const btnManana = e.target.closest('.btn-filter-manana');
+        const btnClear = e.target.closest('.btn-filter-clear');
+        
+        if (btnHoy || btnManana || btnClear) {
+            e.preventDefault();
+            const dateInputs = document.querySelectorAll('.agendaDateFilterInput');
+            let targetDate = '';
+
+            if (btnHoy) {
+                const today = new Date();
+                const offset = today.getTimezoneOffset() * 60000;
+                targetDate = (new Date(today - offset)).toISOString().split('T')[0];
+            } else if (btnManana) {
+                const tmr = new Date();
+                tmr.setDate(tmr.getDate() + 1);
+                const offset = tmr.getTimezoneOffset() * 60000;
+                targetDate = (new Date(tmr - offset)).toISOString().split('T')[0];
+            } // Si es btnClear, targetDate queda vacío
+
+            dateInputs.forEach(input => input.value = targetDate);
+            if (typeof cargarTablaReservas === 'function') cargarTablaReservas();
+            if (typeof cargarTablaBloqueosYReservas === 'function') cargarTablaBloqueosYReservas();
+        }
+    });
+
+    document.addEventListener('change', (e) => {
+        if (e.target.classList.contains('agendaDateFilterInput')) {
+            const allInputs = document.querySelectorAll('.agendaDateFilterInput');
+            allInputs.forEach(input => input.value = e.target.value); // Sincronizar todos los inputs
+            if (typeof cargarTablaReservas === 'function') cargarTablaReservas();
+            if (typeof cargarTablaBloqueosYReservas === 'function') cargarTablaBloqueosYReservas();
+        }
+    });

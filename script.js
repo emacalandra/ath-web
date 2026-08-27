@@ -1326,6 +1326,58 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // LISTENER UNIVERSAL PARA SELECCIONAR CANCHA EN EL MODAL (#appCourtSelectBtns)
+    document.addEventListener('click', (e) => {
+        const courtPill = e.target.closest('.court-select-pill');
+        if (courtPill && courtPill.dataset.court) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const selectedCourtId = String(courtPill.dataset.court);
+            currentWidgetCourt = selectedCourtId;
+
+            const nameEl = document.getElementById('appCourtName') || document.getElementById('unifiedCourtName');
+            const badgeEl = document.getElementById('appCourtBadge') || document.getElementById('widgetCourtBadge');
+            const imgEl = document.getElementById('appCourtImg') || document.getElementById('unifiedCourtImg');
+
+            const courtDataMap = {
+                '1': { nombre: 'Cancha 1 (Polvo de Ladrillo)', img: 'assets/cancha1.jpg', badge: 'Polvo de Ladrillo • LED Pro' },
+                '2': { nombre: 'Cancha 2 (Polvo de Ladrillo)', img: 'assets/cancha2.jpg', badge: 'Polvo de Ladrillo • Central' },
+                '3': { nombre: 'Cancha 3 (Polvo de Ladrillo)', img: 'assets/cancha3.jpg', badge: 'Polvo de Ladrillo • Torneos' }
+            };
+
+            const data = courtDataMap[currentWidgetCourt] || courtDataMap['1'];
+            if (nameEl) nameEl.textContent = data.nombre;
+            if (badgeEl) badgeEl.innerHTML = data.badge;
+            if (imgEl) imgEl.src = data.img;
+
+            // Actualizar estilo visual de las pastillas
+            const courtPillsContainer = document.getElementById('appCourtSelectBtns');
+            if (courtPillsContainer) {
+                const pills = courtPillsContainer.querySelectorAll('.court-select-pill');
+                pills.forEach(p => {
+                    const isSelected = String(p.dataset.court) === String(currentWidgetCourt);
+                    if (isSelected) {
+                        p.classList.add('active');
+                        p.style.background = 'var(--color-ath-orange)';
+                        p.style.borderColor = 'var(--color-ath-orange)';
+                        p.style.color = '#FFFFFF';
+                        p.style.fontWeight = '800';
+                    } else {
+                        p.classList.remove('active');
+                        p.style.background = 'rgba(255,255,255,0.08)';
+                        p.style.borderColor = 'rgba(255,255,255,0.2)';
+                        p.style.color = '#CBD5E1';
+                        p.style.fontWeight = '700';
+                    }
+                });
+            }
+
+            renderWidgetDayTimelineGrid();
+            calculateAndVerifyMinuteByMinute();
+        }
+    });
+
     // Amarrar con Delegación de Eventos Resiliente a todos los botones de reserva del sitio
     document.addEventListener('click', (e) => {
         const trigger = e.target.closest('.open-booking-trigger, .btn-court-book, .view-court-trigger');
@@ -1865,56 +1917,3 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
-
-
-    // LISTENER UNIVERSAL PARA SELECCIONAR CANCHA EN EL MODAL (#appCourtSelectBtns)
-    document.addEventListener('click', (e) => {
-        const courtPill = e.target.closest('.court-select-pill');
-        if (courtPill && courtPill.dataset.court) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            const selectedCourtId = String(courtPill.dataset.court);
-            currentWidgetCourt = selectedCourtId;
-
-            const nameEl = document.getElementById('appCourtName') || document.getElementById('unifiedCourtName');
-            const badgeEl = document.getElementById('appCourtBadge') || document.getElementById('widgetCourtBadge');
-            const imgEl = document.getElementById('appCourtImg') || document.getElementById('unifiedCourtImg');
-
-            const courtDataMap = {
-                '1': { nombre: 'Cancha 1 (Polvo de Ladrillo)', img: 'assets/cancha1.jpg', badge: 'Polvo de Ladrillo • LED Pro' },
-                '2': { nombre: 'Cancha 2 (Polvo de Ladrillo)', img: 'assets/cancha2.jpg', badge: 'Polvo de Ladrillo • Central' },
-                '3': { nombre: 'Cancha 3 (Polvo de Ladrillo)', img: 'assets/cancha3.jpg', badge: 'Polvo de Ladrillo • Torneos' }
-            };
-
-            const data = courtDataMap[currentWidgetCourt] || courtDataMap['1'];
-            if (nameEl) nameEl.textContent = data.nombre;
-            if (badgeEl) badgeEl.innerHTML = data.badge;
-            if (imgEl) imgEl.src = data.img;
-
-            // Actualizar estilo visual de las pastillas
-            const courtPillsContainer = document.getElementById('appCourtSelectBtns');
-            if (courtPillsContainer) {
-                const pills = courtPillsContainer.querySelectorAll('.court-select-pill');
-                pills.forEach(p => {
-                    const isSelected = String(p.dataset.court) === String(currentWidgetCourt);
-                    if (isSelected) {
-                        p.classList.add('active');
-                        p.style.background = 'var(--color-ath-orange)';
-                        p.style.borderColor = 'var(--color-ath-orange)';
-                        p.style.color = '#FFFFFF';
-                        p.style.fontWeight = '800';
-                    } else {
-                        p.classList.remove('active');
-                        p.style.background = 'rgba(255,255,255,0.08)';
-                        p.style.borderColor = 'rgba(255,255,255,0.2)';
-                        p.style.color = '#CBD5E1';
-                        p.style.fontWeight = '700';
-                    }
-                });
-            }
-
-            renderWidgetDayTimelineGrid();
-            calculateAndVerifyMinuteByMinute();
-        }
-    });

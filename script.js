@@ -1499,8 +1499,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Inyección virtual de la plantilla en la grilla visual
             if (window.DBHits && window.DBHits.getWeeklyRules) {
-                const vacDate = window.DBHits.getVacationsUntil();
-                const enVacaciones = vacDate ? currentWidgetDate <= vacDate : false;
+                const vacDates = window.DBHits.getVacationsDates ? window.DBHits.getVacationsDates() : null;
+                let enVacaciones = false;
+                if (vacDates && vacDates.desde && vacDates.hasta) {
+                    enVacaciones = (currentWidgetDate >= vacDates.desde && currentWidgetDate <= vacDates.hasta);
+                }
+                
                 if (!enVacaciones) {
                     const rules = window.DBHits.getWeeklyRules();
                     const dayOfWeek = new Date(`${currentWidgetDate}T12:00:00`).getDay();

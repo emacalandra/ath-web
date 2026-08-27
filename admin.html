@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome Font Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css?v=35.0">
+    <link rel="stylesheet" href="styles.css?v=36.0">
 </head>
 <body>
 
@@ -457,17 +457,25 @@
                                 </div>
                             </div>
 
-                            <!-- Modo Vacaciones -->
-                            <div class="admin-card" style="border: 1px solid #3B82F6; background: rgba(59, 130, 246, 0.05);">
-                                <h3 class="admin-card-title"><i class="fa-solid fa-umbrella-beach" style="color: #3B82F6;"></i> Modo Vacaciones / Receso</h3>
-                                <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 16px;">Pausa la plantilla semanal. Las canchas quedarán liberadas para alquiler público hasta la fecha indicada.</p>
-                                <div style="display: flex; flex-direction: column; gap: 10px;">
-                                    <label style="font-size: 0.8rem; color: #93C5FD; font-weight: 700;">Liberar horarios fijos HASTA EL (incluido):</label>
-                                    <input type="date" id="vacacionesHasta" style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.3); color: #FFF; border: 1px solid #3B82F6;">
-                                    <button id="btnGuardarVacaciones" class="btn-submit" style="background: #3B82F6; border: none; justify-content: center;"><i class="fa-solid fa-floppy-disk"></i> Aplicar Receso</button>
-                                    <button id="btnQuitarVacaciones" class="btn-submit" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #EF4444; color: #FCA5A5; margin-top: 5px; justify-content: center;"><i class="fa-solid fa-power-off"></i> Finalizar Receso Ahora</button>
-                                </div>
-                            </div>
+                                <!-- Modo Vacaciones -->
+    <div class="admin-card" style="border: 1px solid #3B82F6; background: rgba(59, 130, 246, 0.05);">
+        <h3 class="admin-card-title"><i class="fa-solid fa-umbrella-beach" style="color: #3B82F6;"></i> Modo Vacaciones / Receso</h3>
+        <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 16px;">Programa un receso. Las canchas quedarán liberadas para alquiler público en el rango indicado, ignorando la plantilla semanal.</p>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;">
+            <div style="flex: 1; min-width: 130px;">
+                <label style="font-size: 0.8rem; color: #93C5FD; font-weight: 700;">Desde (Inicio):</label>
+                <input type="date" id="vacacionesDesde" style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.3); color: #FFF; border: 1px solid #3B82F6;">
+            </div>
+            <div style="flex: 1; min-width: 130px;">
+                <label style="font-size: 0.8rem; color: #93C5FD; font-weight: 700;">Hasta (Fin incluido):</label>
+                <input type="date" id="vacacionesHasta" style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.3); color: #FFF; border: 1px solid #3B82F6;">
+            </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+            <button id="btnGuardarVacaciones" class="btn-submit" style="background: #3B82F6; border: none; justify-content: center;"><i class="fa-solid fa-calendar-check"></i> Programar Receso</button>
+            <button id="btnQuitarVacaciones" class="btn-submit" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #EF4444; color: #FCA5A5; justify-content: center;"><i class="fa-solid fa-power-off"></i> Cancelar Receso Programado</button>
+        </div>
+    </div>
                         </div>
 
                         <!-- Tarjeta de Alerta Climática (Suspensión Masiva) -->
@@ -776,8 +784,8 @@
     </div>
 
     <!-- Módulo de Base de Datos, Script Principal y Controlador Admin -->
-    <script src="db.js?v=35.0"></script>
-    <script src="script.js?v=35.0"></script>
-    <script src="admin.js?v=35.0"></script>
+    <script src="db.js?v=36.0"></script>
+    <script src="script.js?v=36.0"></script>
+    <script src="admin.js?v=36.0"></script>
 </body>
 </html>

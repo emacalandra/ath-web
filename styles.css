@@ -2209,3 +2209,9 @@ body.cms-editing-active [data-editable]:focus {
     align-items: center !important;
     justify-content: center !important;
 }
+
+/* Corrección de visibilidad para los menús desplegables */
+select option {
+    background-color: #051322 !important; 
+    color: #FFFFFF !important;
+}

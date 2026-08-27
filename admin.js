@@ -993,24 +993,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const btnGuardarVacaciones = document.getElementById('btnGuardarVacaciones');
     const btnQuitarVacaciones = document.getElementById('btnQuitarVacaciones');
-    const inputVacaciones = document.getElementById('vacacionesHasta');
+    const inputVacDesde = document.getElementById('vacacionesDesde');
+    const inputVacHasta = document.getElementById('vacacionesHasta');
 
-    if (inputVacaciones) {
-        inputVacaciones.value = window.DBHits.getVacationsUntil() || '';
+    if (inputVacDesde && inputVacHasta) {
+        const currentVacs = window.DBHits.getVacationsDates ? window.DBHits.getVacationsDates() : null;
+        if (currentVacs) {
+            inputVacDesde.value = currentVacs.desde || '';
+            inputVacHasta.value = currentVacs.hasta || '';
+        }
         
         if (btnGuardarVacaciones) {
             btnGuardarVacaciones.addEventListener('click', () => {
-                if(!inputVacaciones.value) return alert('Selecciona una fecha límite para el receso.');
-                window.DBHits.setVacationsUntil(inputVacaciones.value);
-                alert(`🏖️ Modo Vacaciones Activo.\nLas canchas están liberadas para alquiler público hasta el ${inputVacaciones.value} (inclusive).`);
+                if(!inputVacDesde.value || !inputVacHasta.value) return alert('Selecciona la fecha Desde y Hasta para el receso.');
+                if(inputVacDesde.value > inputVacHasta.value) return alert('La fecha "Desde" no puede ser mayor que "Hasta".');
+                
+                if(window.DBHits.setVacationsDates) window.DBHits.setVacationsDates(inputVacDesde.value, inputVacHasta.value);
+                alert(`🏖️ Modo Vacaciones Programado.\nLas canchas estarán liberadas para alquiler público desde el ${inputVacDesde.value} hasta el ${inputVacHasta.value} (inclusive).`);
             });
         }
 
         if (btnQuitarVacaciones) {
             btnQuitarVacaciones.addEventListener('click', () => {
-                window.DBHits.setVacationsUntil(null);
-                inputVacaciones.value = '';
-                alert('▶️ Modo Vacaciones finalizado. La plantilla semanal vuelve a estar activa inmediatamente.');
+                if(window.DBHits.setVacationsDates) window.DBHits.setVacationsDates(null, null);
+                inputVacDesde.value = '';
+                inputVacHasta.value = '';
+                alert('▶️ Receso cancelado. La plantilla semanal está activa nuevamente.');
             });
         }
     }

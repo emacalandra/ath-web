@@ -623,12 +623,12 @@ class ATHDatabaseEngine {
     saveWeeklyRules(rules) {
         localStorage.setItem('ath_weekly_rules', JSON.stringify(rules));
     }
-    getVacationsUntil() {
-        return localStorage.getItem('ath_vacations_until') || null;
+    getVacationsDates() {
+        try { return JSON.parse(localStorage.getItem('ath_vacations_dates')); } catch { return null; }
     }
-    setVacationsUntil(dateStr) {
-        if(dateStr) localStorage.setItem('ath_vacations_until', dateStr);
-        else localStorage.removeItem('ath_vacations_until');
+    setVacationsDates(desde, hasta) {
+        if(desde && hasta) localStorage.setItem('ath_vacations_dates', JSON.stringify({desde, hasta}));
+        else localStorage.removeItem('ath_vacations_dates');
     }
 
     getPricingRaw() {
@@ -726,11 +726,10 @@ class ATHDatabaseEngine {
         }
 
         // Evaluación de Plantilla Semanal Fija
-        const vacDate = this.getVacationsUntil();
+        const vacDates = this.getVacationsDates();
         let enVacaciones = false;
-        if (vacDate) {
-            // Comparar strings ISO (YYYY-MM-DD)
-            enVacaciones = fecha <= vacDate;
+        if (vacDates && vacDates.desde && vacDates.hasta) {
+            enVacaciones = (fecha >= vacDates.desde && fecha <= vacDates.hasta);
         }
 
         if (!enVacaciones) {

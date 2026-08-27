@@ -2011,19 +2011,25 @@ async function renderizarMisTurnos() {
     }
 
     container.innerHTML = `<div style="display: flex; flex-direction: column; gap: 12px; width: 100%;">` + misTurnos.map(turno => {
-        const fechaTurno = new Date(`${turno.fecha}T${turno.horaInicio || '00:00'}`);
-        const esPasado = fechaTurno < ahora;
+        const fechaHoraTurno = new Date(`${turno.fecha}T${turno.horaInicio || '00:00'}`);
+        const esPasado = fechaHoraTurno < ahora;
+        const minutosFaltantes = (fechaHoraTurno - ahora) / (1000 * 60);
         
         let colorEstado = '#94A3B8'; // default
         let estadoStr = turno.estadoPago || 'Pendiente';
-        if(estadoStr.includes('✅') || estadoStr.includes('confirmado') || estadoStr.includes('Aprobado')) colorEstado = '#10B981';
+        const estaPagado = estadoStr.includes('✅') || estadoStr.toLowerCase().includes('confirmado') || estadoStr.toLowerCase().includes('aprobado');
+        
+        if(estaPagado) colorEstado = '#10B981';
         else if(estadoStr.includes('⏳') || estadoStr.includes('pendiente') || estadoStr.includes('esperando')) colorEstado = '#F59E0B';
         else if(estadoStr.includes('❌') || estadoStr.includes('Rechazado') || estadoStr.includes('Cancelado')) colorEstado = '#EF4444';
 
-        // Botón de cancelar: Solo si es futuro y NO está confirmado
+        // Botón de cancelar: Permitir si faltan >= 30 minutos
         let btnCancelar = '';
-        if (!esPasado && !estadoStr.includes('✅') && !estadoStr.includes('confirmado') && !estadoStr.includes('Aprobado')) {
-            btnCancelar = `<button class="btn-cancelar-turno" data-id="${turno.id}" style="margin-top: 10px; width: 100%; padding: 8px; border-radius: 6px; background: rgba(239, 68, 68, 0.1); border: 1px solid #EF4444; color: #FCA5A5; cursor: pointer; font-size: 0.8rem; font-weight: 700;"><i class="fa-solid fa-xmark"></i> Cancelar Turno</button>`;
+        if (!esPasado && minutosFaltantes >= 30) {
+            const textoBtn = estaPagado ? '<i class="fa-solid fa-triangle-exclamation"></i> Cancelar y Pedir Reembolso' : '<i class="fa-solid fa-xmark"></i> Cancelar Turno';
+            const colorBtn = estaPagado ? 'rgba(245, 158, 11, 0.2); border: 1px solid #F59E0B; color: #FCD34D;' : 'rgba(239, 68, 68, 0.1); border: 1px solid #EF4444; color: #FCA5A5;';
+            
+            btnCancelar = `<button class="btn-cancelar-turno" data-id="${turno.id}" data-pagado="${estaPagado ? '1' : '0'}" data-fecha="${turno.fecha}" data-hora="${turno.horaInicio}" data-cancha="${turno.canchaId}" style="margin-top: 10px; width: 100%; padding: 8px; border-radius: 6px; background: ${colorBtn} cursor: pointer; font-size: 0.8rem; font-weight: 700;">${textoBtn}</button>`;
         }
 
         return `
@@ -2048,12 +2054,32 @@ async function renderizarMisTurnos() {
     // Asignar eventos de cancelación
     document.querySelectorAll('.btn-cancelar-turno').forEach(btn => {
         btn.addEventListener('click', async (e) => {
-            const id = e.target.closest('.btn-cancelar-turno').dataset.id;
-            if (confirm("¿Estás seguro de que deseas cancelar este turno? La cancha quedará liberada para otros usuarios.")) {
+            const buttonEl = e.target.closest('.btn-cancelar-turno');
+            const id = buttonEl.dataset.id;
+            const estabaPagado = buttonEl.dataset.pagado === '1';
+            const fechaTurno = buttonEl.dataset.fecha || '';
+            const horaTurno = buttonEl.dataset.hora || '';
+            const canchaTurno = buttonEl.dataset.cancha || '';
+
+            let mensajeConfirmacion = "⚠️ ¿Estás seguro de que deseas cancelar este turno? La cancha quedará liberada.";
+            if (estabaPagado) {
+                mensajeConfirmacion = "⚠️ ATENCIÓN: Este turno ya figura como PAGADO.
+
+Al cancelar, el sistema liberará la cancha y te abrirá un chat de WhatsApp con la administración para coordinar la devolución de tu dinero. ¿Deseas continuar?";
+            }
+
+            if (confirm(mensajeConfirmacion)) {
                 try {
-                    window.DBHits.cancelarReservaUsuario(id, user.id);
+                    window.DBHits.cancelarReservaUsuario(id, user);
                     alert("Turno cancelado exitosamente.");
                     renderizarMisTurnos();
+
+                    if (estabaPagado) {
+                        const wppNum = window.DBHits.getWhatsAppConfig ? window.DBHits.getWhatsAppConfig() : '5493564000000';
+                        const fechaFormat = typeof formatFechaLocal === 'function' ? formatFechaLocal(fechaTurno) : fechaTurno;
+                        const textoWpp = encodeURIComponent(`Hola! Acabo de cancelar mi turno pagado para el día ${fechaFormat} (${horaTurno} hs - Cancha ${canchaTurno}) en Academia Tenis Hits y necesito coordinar la devolución del dinero.`);
+                        window.open(`https://wa.me/${wppNum}?text=${textoWpp}`, '_blank');
+                    }
                 } catch(err) {
                     alert(err.message);
                 }
@@ -2082,19 +2108,26 @@ function setupNotificationDropdown() {
                 const listContainer = document.getElementById('notificationDropdownList');
                 if (user && listContainer) {
                     const notifs = user.notificaciones || [];
+                    const isAdminOrSec = (user.role === 'admin' || user.role === 'secretaria');
+
                     if (notifs.length === 0) {
                         listContainer.innerHTML = `
                             <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 6px; font-size: 0.8rem; color: #E2E8F0;">
-                                <i class="fa-solid fa-circle-info" style="color: var(--color-ath-orange);"></i> ¡Hola ${user.nombre || 'Usuario'}! Tus turnos y estados de pago se actualizan desde tu perfil.
+                                <i class="fa-solid fa-circle-info" style="color: var(--color-ath-orange);"></i> ¡Hola ${user.nombre || 'Usuario'}! Tus turnos y avisos se actualizarán aquí.
                             </div>
                         `;
                     } else {
-                        listContainer.innerHTML = notifs.slice(0, 5).map(n => `
-                            <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 6px; font-size: 0.8rem; color: #E2E8F0; border-left: 3px solid ${n.tipo === 'success' ? '#10B981' : (n.tipo === 'error' ? '#EF4444' : 'var(--color-ath-orange)')};">
-                                <div>${n.mensaje}</div>
-                                <div style="color: #94A3B8; font-size: 0.7rem; margin-top: 4px;">${new Date(n.fecha).toLocaleTimeString('es-AR', {hour: '2-digit', minute:'2-digit'})} hs</div>
-                            </div>
-                        `).join('');
+                        listContainer.innerHTML = notifs.slice(0, 6).map(n => {
+                            const clickAttr = isAdminOrSec ? `onclick="window.location.href='admin.html';" style="cursor: pointer; background: rgba(255,255,255,0.07); padding: 8px; border-radius: 6px; font-size: 0.8rem; color: #E2E8F0; border-left: 3px solid ${n.tipo === 'success' ? '#10B981' : (n.tipo === 'error' ? '#EF4444' : 'var(--color-ath-orange)')}; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.12)'" onmouseout="this.style.background='rgba(255,255,255,0.07)'"` : `style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 6px; font-size: 0.8rem; color: #E2E8F0; border-left: 3px solid ${n.tipo === 'success' ? '#10B981' : (n.tipo === 'error' ? '#EF4444' : 'var(--color-ath-orange)')};"`;
+                            const adminHint = isAdminOrSec ? `<div style="font-size: 0.68rem; color: var(--color-ath-orange); font-weight: 700; margin-top: 4px;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ver en Panel de Control</div>` : '';
+                            return `
+                                <div ${clickAttr}>
+                                    <div>${n.mensaje}</div>
+                                    <div style="color: #94A3B8; font-size: 0.7rem; margin-top: 4px;">${new Date(n.fecha).toLocaleTimeString('es-AR', {hour: '2-digit', minute:'2-digit'})} hs</div>
+                                    ${adminHint}
+                                </div>
+                            `;
+                        }).join('');
                         window.DBHits.marcarNotificacionesLeidas(user.id);
                     }
                 }

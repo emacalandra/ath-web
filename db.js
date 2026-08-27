@@ -527,7 +527,14 @@ class ATHDatabaseEngine {
         return users[index];
     }
 
-        getReservas() {
+            getWhatsAppConfig() {
+        return localStorage.getItem('ath_whatsapp_admin') || '5493564000000'; // Número por defecto
+    }
+    setWhatsAppConfig(numero) {
+        localStorage.setItem('ath_whatsapp_admin', numero);
+    }
+
+    getReservas() {
         return this.getReservasRaw();
     }
 
@@ -556,20 +563,39 @@ class ATHDatabaseEngine {
             });
     }
 
-    cancelarReservaUsuario(reservaId, usuarioId) {
-        let reservas = this.getReservasRaw();
-        const index = reservas.findIndex(r => String(r.id) === String(reservaId) && String(r.usuarioId) === String(usuarioId));
+        cancelarReservaUsuario(reservaId, usuarioId) {
+        let reservas = this.getReservas();
+        const index = reservas.findIndex(r => String(r.id) === String(reservaId) && (String(r.usuarioId) === String(usuarioId) || (usuarioId && typeof usuarioId === 'object' && String(r.usuarioId) === String(usuarioId.id)) || (usuarioId && typeof usuarioId === 'object' && usuarioId.email && String(r.usuarioEmail).toLowerCase() === String(usuarioId.email).toLowerCase())));
+        
         if (index !== -1) {
-            const estadoStr = String(reservas[index].estadoPago || '');
-            // Solo permitir cancelar si no está pagado físicamente o confirmado
-            if (estadoStr.includes('✅') || estadoStr.toLowerCase().includes('confirmado') || estadoStr.toLowerCase().includes('aprobado')) {
-                throw new Error("No puedes cancelar un turno que ya está confirmado y pagado. Comunícate con secretaría.");
+            const reserva = reservas[index];
+            const ahora = new Date();
+            const fechaHoraTurno = new Date(`${reserva.fecha}T${reserva.horaInicio || '00:00'}`);
+            const diferenciaMinutos = (fechaHoraTurno - ahora) / (1000 * 60);
+
+            // Validar límite de 30 minutos antes
+            if (diferenciaMinutos < 30) {
+                throw new Error("No puedes cancelar un turno con menos de 30 minutos de anticipación. Comunícate directamente con la administración.");
             }
-            reservas.splice(index, 1); // Eliminar la reserva para liberar la cancha
-            this.saveReservasRaw(reservas);
-            return true;
+
+            const estadoStr = String(reserva.estadoPago || '');
+            const estaPagado = estadoStr.includes('✅') || estadoStr.toLowerCase().includes('confirmado') || estadoStr.toLowerCase().includes('aprobado');
+
+            // Si está pagado, guardamos una alerta o notificamos a administradores sobre la devolución
+            if (estaPagado) {
+                // Notificar a administradores
+                const users = this.getUsersRaw();
+                const admins = users.filter(u => u.role === 'admin' || u.role === 'secretaria');
+                admins.forEach(adm => {
+                    this.notificarUsuario(adm.id, `⚠️ CANCELACIÓN CON REEMBOLSO: El usuario ${reserva.usuarioNombre} canceló su turno pagado del ${reserva.fecha} (${reserva.horaInicio} hs - Cancha ${reserva.canchaId}). Requiere devolución de dinero.`, 'error');
+                });
+            }
+
+            reservas.splice(index, 1); // Liberar cancha
+            this.saveReservas(reservas);
+            return { success: true, requirioDevolucion: estaPagado, fecha: reserva.fecha, horaInicio: reserva.horaInicio, canchaId: reserva.canchaId };
         }
-        return false;
+        throw new Error("Reserva no encontrada.");
     }
 
     getReservasRaw() {

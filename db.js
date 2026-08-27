@@ -539,11 +539,19 @@ class ATHDatabaseEngine {
 
             getClubConfig() {
         try {
-            return JSON.parse(localStorage.getItem('ath_club_config')) || {
-                email: 'contacto@academiatenishits.com',
-                direccion: 'San Francisco, Córdoba, Argentina',
-                whatsapp: '5493564000000'
-            };
+            let cfg = JSON.parse(localStorage.getItem('ath_club_config'));
+            if (!cfg) {
+                cfg = {
+                    email: 'contacto@academiatenishits.com',
+                    direccion: 'San Francisco, Córdoba, Argentina',
+                    whatsapp: '5493564000000',
+                    apertura: '08:00',
+                    cierre: '23:00'
+                };
+            }
+            if (!cfg.apertura) cfg.apertura = '08:00';
+            if (!cfg.cierre) cfg.cierre = '23:00';
+            return cfg;
         } catch {
             return {
                 email: 'contacto@academiatenishits.com',

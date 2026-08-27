@@ -259,9 +259,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (badgeHistorial) badgeHistorial.textContent = reservasHistorial.length;
 
         const agendaFilterDate = document.querySelector('.agendaDateFilterInput')?.value || (document.getElementById('agendaDateFilter') ? document.getElementById('agendaDateFilter').value : '');
-        const listaARenderizarRaw = window.subtabActualReservas === 'activas' ? reservasActivas : reservasHistorial;
-        const listaARenderizar = agendaFilterDate ? listaARenderizarRaw.filter(r => r.fecha === agendaFilterDate) : listaARenderizarRaw;
+        const searchInputEl = document.getElementById('adminBookingsSearchInput');
+        const searchTerm = searchInputEl ? searchInputEl.value.toLowerCase().trim() : '';
 
+        const listaARenderizarRaw = window.subtabActualReservas === 'activas' ? reservasActivas : reservasHistorial;
+        
+        let listaARenderizar = listaARenderizarRaw;
+        if (agendaFilterDate) {
+            listaARenderizar = listaARenderizar.filter(r => r.fecha === agendaFilterDate);
+        }
+        if (searchTerm) {
+            listaARenderizar = listaARenderizar.filter(r => 
+                (r.usuarioNombre && r.usuarioNombre.toLowerCase().includes(searchTerm)) ||
+                (r.usuarioEmail && r.usuarioEmail.toLowerCase().includes(searchTerm)) ||
+                (r.usuarioDNI && String(r.usuarioDNI).toLowerCase().includes(searchTerm))
+            );
+        }
         // Si la lista está vacía, mostrar mensaje amigable
         if (listaARenderizar.length === 0) {
             bookingsTableBody.innerHTML = `
@@ -823,9 +836,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 reportResultsBox.innerHTML = `
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; background: rgba(0,0,0,0.2); padding: 16px; border-radius: 8px; margin-bottom: 12px;">
                         <div style="border-left: 3px solid #3B82F6; padding-left: 10px;">
-                            <span style="font-size: 0.75rem; color: #94A3B8; text-transform: uppercase;">Total Horas Vendidas</span>
-                            <div style="font-size: 1.4rem; color: #FFF; font-weight: 800;">${totalHoras.toFixed(1)} hs</div>
-                            <div style="font-size: 0.75rem; color: #60A5FA;">(${totalHorasNocturnas.toFixed(1)} hs con LED)</div>
+                            <span style="font-size: 0.75rem; color: #94A3B8; text-transform: uppercase;">Volumen de Uso</span>
+                            <div style="font-size: 1.4rem; color: #FFF; font-weight: 800;">${turnosConfirmados} turnos</div>
+                            <div style="font-size: 0.75rem; color: #60A5FA;">(${totalHoras.toFixed(1)} horas netas de cancha)</div>
                         </div>
                         <div style="border-left: 3px solid #FF8800; padding-left: 10px;">
                             <span style="font-size: 0.75rem; color: #94A3B8; text-transform: uppercase;">Ingreso Base (Diurno)</span>
@@ -838,7 +851,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div style="font-size: 0.75rem; color: #34D399;">Diferencia extra nocturna</div>
                         </div>
                         <div style="border-left: 3px solid #A855F7; padding-left: 10px;">
-                            <span style="font-size: 0.75rem; color: #94A3B8; text-transform: uppercase;">Total Bruto Semanal</span>
+                            <span style="font-size: 0.75rem; color: #94A3B8; text-transform: uppercase;">Total Bruto del Periodo</span>
                             <div style="font-size: 1.6rem; color: #A855F7; font-weight: 900;">$${totalFacturado.toLocaleString('es-AR')}</div>
                         </div>
                     </div>
@@ -1273,6 +1286,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 btnCancelStaff.style.display = 'none';
             });
         }
+    }
+
+
+    const adminSearch = document.getElementById('adminBookingsSearchInput');
+    if (adminSearch) {
+        adminSearch.addEventListener('input', () => {
+            if (typeof cargarTablaReservas === 'function') {
+                cargarTablaReservas();
+            }
+        });
     }
 
 });

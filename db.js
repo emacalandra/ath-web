@@ -566,19 +566,29 @@ class ATHDatabaseEngine {
         this.saveReservasRaw(reservas);
     }
 
-        getReservasPorUsuario(user) {
+            getReservasPorUsuario(user) {
         if (!user) return [];
-        const userId = typeof user === 'object' ? user.id : user;
-        const userEmail = typeof user === 'object' ? (user.email || '') : '';
+        const userId = typeof user === 'object' ? String(user.id || '').trim() : String(user || '').trim();
+        const userEmail = typeof user === 'object' ? String(user.email || '').trim().toLowerCase() : '';
+        const userDni = typeof user === 'object' ? String(user.dni || '').trim() : '';
+        const userNombre = typeof user === 'object' ? String(user.nombre || '').trim().toLowerCase() : '';
         const reservas = this.getReservas();
         
-        // Filtrar buscando coincidencia por ID o por Email (pasando todo a minúsculas por seguridad)
+        // Filtrar buscando coincidencia tolerante por ID, Email, DNI o Nombre
         return reservas
             .filter(r => {
-                if (r.tipo === 'bloqueo_admin') return false;
-                const matchId = userId && r.usuarioId && String(r.usuarioId) === String(userId);
-                const matchEmail = userEmail && r.usuarioEmail && String(r.usuarioEmail).toLowerCase() === String(userEmail).toLowerCase();
-                return matchId || matchEmail;
+                if (!r || r.tipo === 'bloqueo_admin') return false;
+                const rUserId = String(r.usuarioId || '').trim();
+                const rEmail = String(r.usuarioEmail || r.email || '').trim().toLowerCase();
+                const rDni = String(r.usuarioDni || r.dni || '').trim();
+                const rNombre = String(r.usuarioNombre || '').trim().toLowerCase();
+
+                const matchId = userId && rUserId && (rUserId === userId);
+                const matchEmail = userEmail && rEmail && (rEmail === userEmail);
+                const matchDni = userDni && rDni && (rDni === userDni);
+                const matchNombre = userNombre && rNombre && (rNombre.includes(userNombre) || userNombre.includes(rNombre));
+
+                return matchId || matchEmail || matchDni || matchNombre;
             })
             .sort((a, b) => {
                 const dateA = new Date(`${a.fecha}T${a.horaInicio || '00:00'}`);

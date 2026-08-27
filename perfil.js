@@ -89,13 +89,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
     
-    document.querySelectorAll('.admin-tab-btn[data-profiletab]').forEach(btn => {
+        document.querySelectorAll('.admin-tab-btn[data-profiletab]').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.admin-tab-btn[data-profiletab]').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.profile-tab-content').forEach(c => c.style.display = 'none');
             btn.classList.add('active');
             const target = document.getElementById(`profile-tab-${btn.dataset.profiletab}`);
             if (target) target.style.display = 'block';
+            if (btn.dataset.profiletab === 'turnos' && typeof renderizarMisTurnos === 'function') {
+                renderizarMisTurnos();
+            }
         });
     });
 

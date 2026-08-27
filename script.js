@@ -2160,27 +2160,27 @@ function initFloatingWhatsApp() {
     wppFloat.href = '#';
     wppFloat.setAttribute('aria-label', 'Contactar por WhatsApp');
     wppFloat.style.cssText = `
-        position: fixed;
-        bottom: 20px;
-        left: 20px;
-        z-index: 9999;
-        background-color: #25D366;
-        color: #FFF;
-        width: 55px;
-        height: 55px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 28px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-        transition: transform 0.3s ease, background-color 0.3s ease;
-        text-decoration: none;
+        position: fixed !important;
+        bottom: 20px !important;
+        left: 20px !important;
+        z-index: 9999 !important;
+        background-color: #25D366 !important;
+        color: #FFF !important;
+        width: 55px !important;
+        height: 55px !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 28px !important;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.5) !important;
+        transition: transform 0.3s ease, background-color 0.3s ease !important;
+        text-decoration: none !important;
     `;
     wppFloat.innerHTML = `<i class="fa-brands fa-whatsapp"></i>`;
 
     // Efecto hover
-    wppFloat.addEventListener('mouseenter', () => { wppFloat.style.transform = 'scale(1.1)'; });
+    wppFloat.addEventListener('mouseenter', () => { wppFloat.style.transform = 'scale(1.12)'; });
     wppFloat.addEventListener('mouseleave', () => { wppFloat.style.transform = 'scale(1.0)'; });
 
     // Acción de clic vinculada al número oficial guardado en la BD
@@ -2192,4 +2192,13 @@ function initFloatingWhatsApp() {
     });
 
     document.body.appendChild(wppFloat);
+}
+
+// Ejecución global incondicional de WhatsApp
+if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => { initFloatingWhatsApp(); });
+    } else {
+        initFloatingWhatsApp();
+    }
 }

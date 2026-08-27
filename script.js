@@ -446,7 +446,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </button>
                 `;
             } else if (usuario.role === 'socio') {
-                roleBadgeHtml = `<span class="user-role-tag tag-socio" style="background: rgba(59, 130, 246, 0.2); color: #60A5FA; border: 1px solid #3B82F6;"><i class="fa-solid fa-star"></i> Socio ATH</span>`;
+                roleBadgeHtml = `<span class="user-role-tag tag-socio" style="background: rgba(59, 130, 246, 0.2); color: #60A5FA; border: 1px solid #3B82F6;"><i class="fa-solid fa-star"></i> Socio SB</span>`;
             } else if (usuario.role === 'alumno') {
                 roleBadgeHtml = `<span class="user-role-tag tag-alumno"><i class="fa-solid fa-graduation-cap"></i> Alumno ATH</span>`;
             } else {

@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <td data-label="Rol">
                     <select class="role-select-dropdown" data-userid="${u.id}">
                         <option value="usuario" ${u.role === 'usuario' ? 'selected' : ''}>Usuario</option>
-                        <option value="socio" ${u.role === 'socio' ? 'selected' : ''}>Socio ATH</option>
+                        <option value="socio" ${u.role === 'socio' ? 'selected' : ''}>Socio SB</option>
                         <option value="alumno" ${u.role === 'alumno' ? 'selected' : ''}>Alumno ATH</option>
                         <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>Administrador</option>
                         <option value="secretaria" ${u.role === 'secretaria' ? 'selected' : ''}>Secretaría</option>
@@ -849,7 +849,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div style="font-size: 0.75rem; color: #94A3B8;">${statsRoles.usuario.turnos} alquiler(es)</div>
                         </div>
                         <div style="background: rgba(59, 130, 246, 0.1); padding: 12px; border-radius: 8px; border: 1px solid rgba(59, 130, 246, 0.3);">
-                            <div style="font-size: 0.8rem; color: #60A5FA; font-weight: 700; margin-bottom: 4px;"><i class="fa-solid fa-id-card"></i> Socios ATH</div>
+                            <div style="font-size: 0.8rem; color: #60A5FA; font-weight: 700; margin-bottom: 4px;"><i class="fa-solid fa-id-card"></i> Socios SB</div>
                             <div style="font-size: 1.2rem; color: #FFF; font-weight: 800;">$${statsRoles.socio.ingresos.toLocaleString('es-AR')}</div>
                             <div style="font-size: 0.75rem; color: #94A3B8;">${statsRoles.socio.turnos} alquiler(es)</div>
                         </div>

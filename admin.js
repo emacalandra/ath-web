@@ -669,7 +669,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // Inicializar Datos de Tablas
+    // Inicializar sub-módulos visuales
+    initAdminStats();
+    if (typeof initAgendaTurnos === 'function') initAgendaTurnos();
     cargarTablaUsuarios();
         if (typeof cargarTablaStaff === "function") cargarTablaStaff();
     cargarTablaReservas();
@@ -1341,3 +1343,81 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     
+
+
+
+
+// ==========================================
+// MÓDULO: AGENDA OPERATIVA DE TURNOS
+// ==========================================
+function initAgendaTurnos() {
+    const btnHoy = document.getElementById('btnFilterHoy');
+    const btnManana = document.getElementById('btnFilterManana');
+    const inputFecha = document.getElementById('inputFilterFecha');
+    const btnClear = document.getElementById('btnFilterClear');
+
+    const getHoyStr = () => {
+        const d = new Date();
+        return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    };
+    const getMananaStr = () => {
+        const d = new Date();
+        d.setDate(d.getDate() + 1);
+        return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    };
+
+    if(btnHoy) btnHoy.addEventListener('click', () => { inputFecha.value = getHoyStr(); cargarAgendaTurnos(); });
+    if(btnManana) btnManana.addEventListener('click', () => { inputFecha.value = getMananaStr(); cargarAgendaTurnos(); });
+    if(inputFecha) inputFecha.addEventListener('change', cargarAgendaTurnos);
+    if(btnClear) btnClear.addEventListener('click', () => { inputFecha.value = ''; cargarAgendaTurnos(); });
+
+    if(inputFecha && !inputFecha.value) inputFecha.value = getHoyStr();
+    setInterval(cargarAgendaTurnos, 30000);
+}
+
+function timeToMinutes(tStr) {
+    if(!tStr) return 0;
+    const p = tStr.split(':');
+    return parseInt(p[0])*60 + parseInt(p[1]);
+}
+
+window.cargarAgendaTurnos = function() {
+    const tbody = document.getElementById('turnosTableBody');
+    const inputFecha = document.getElementById('inputFilterFecha');
+    if (!tbody || !window.DBHits) return;
+
+    let reservas = window.DBHits.getReservasRaw().filter(r => r.estado === 'confirmada' || r.estado === 'pendiente_pago' || r.estado === 'bloqueada');
+    
+    if (inputFecha && inputFecha.value) {
+        reservas = reservas.filter(r => r.fecha === inputFecha.value);
+    }
+
+    reservas.sort((a, b) => {
+        if (a.fecha !== b.fecha) return a.fecha.localeCompare(b.fecha);
+        return timeToMinutes(a.horaInicio) - timeToMinutes(b.horaInicio);
+    });
+
+    const now = new Date();
+    const currentMins = now.getHours() * 60 + now.getMinutes();
+    const todayStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
+
+    const filtered = reservas.filter(r => {
+        if (r.fecha < todayStr) return false;
+        if (r.fecha === todayStr && timeToMinutes(r.horaInicio) < currentMins) return false;
+        return true;
+    });
+
+    tbody.innerHTML = '';
+    if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #94A3B8;">No hay turnos próximos.</td></tr>';
+        return;
+    }
+
+    filtered.forEach(r => {
+        const isBloqueo = r.estado === 'bloqueada';
+        const nombreStr = isBloqueo ? '<span style="color: #EF4444;">Bloqueo: ' + (r.motivo || 'Mantenimiento') + '</span>' : r.usuarioNombre;
+        const colorHora = r.fecha === todayStr && (timeToMinutes(r.horaInicio) - currentMins < 60) ? '#34D399' : '#FFF';
+
+        tbody.innerHTML += '<tr><td>' + r.fecha.split('-').reverse().join('/') + '</td><td style="font-weight: 700; color: ' + colorHora + ';">' + r.horaInicio + ' - ' + r.horaFin + '</td><td><span class="user-role-tag tag-socio">Cancha ' + r.canchaId + '</span></td><td style="font-weight: 600;">' + nombreStr + '</td></tr>';
+    });
+}

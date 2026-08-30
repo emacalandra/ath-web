@@ -1,0 +1,35 @@
+with open('test_sync.html', 'w', encoding='utf-8') as f:
+    f.write('''
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="db.js"></script>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Setup a fake active user
+            const fakeUser = { id: "123", nombre: "Test", email: "test@test.com", role: "usuario" };
+            window.DBHits.saveUsersRaw([fakeUser]);
+            window.DBHits.saveActiveUserSession(fakeUser);
+            
+            setTimeout(() => {
+                console.log("Before sync:", document.getElementById('navActions').innerHTML);
+                
+                // Simulate Firebase update
+                const updatedUser = { id: "123", nombre: "Test", email: "test@test.com", role: "admin" };
+                localStorage.setItem('ath_users', JSON.stringify([updatedUser]));
+                
+                // Call the logic from onSnapshot
+                window.DBHits.getActiveUser();
+                if (typeof window.syncRealtimeUserUI === 'function') window.syncRealtimeUserUI();
+                
+                console.log("After sync:", document.getElementById('navActions').innerHTML);
+            }, 1000);
+        });
+    </script>
+</head>
+<body>
+    <div id="navActions"></div>
+</body>
+</html>
+''')

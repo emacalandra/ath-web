@@ -74,7 +74,22 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     window.syncRealtimeUserUI = function() {
+        console.log("SYNC REALTIME USER UI TRIGGERED");
         const user = getActiveUser();
+        
+        if (window.__ath_role_changed) {
+            window.__ath_role_changed = false;
+            // Mostramos un toast nativo de la app si existe, o un alert simple, y recargamos
+            if (typeof showCmsToast === 'function') {
+                showCmsToast('🎾 Tus permisos han sido actualizados. Aplicando cambios...');
+                setTimeout(() => window.location.reload(), 1500);
+            } else {
+                alert('🎾 Tus permisos han sido actualizados por la Administración. La página se recargará.');
+                window.location.reload();
+            }
+            return;
+        }
+
         renderUserNavbarState(user);
         initCmsVisualEditor(user);
         if (typeof window.cargarTablaUsuarios === "function") {

@@ -66,28 +66,44 @@ class ATHDatabaseEngine {
 
     // 0. GESTIÓN DUAL DE SESIÓN (LOCALSTORAGE + WINDOW.NAME FALLBACK PARA FILE:///)
     getActiveUser() {
+        let userObj = null;
         try {
             const stored = localStorage.getItem('ath_active_user');
             if (stored) {
-                const userObj = JSON.parse(stored);
-                if (userObj && userObj.id) return userObj;
+                userObj = JSON.parse(stored);
+                if (!userObj || !userObj.id) userObj = null;
             }
-        } catch (e) {}
+        } catch (e) { userObj = null; }
 
         // Fallback de persistencia para protocolo local file:/// (Explorador de Windows)
-        try {
-            if (window.name && window.name.includes('ath_active_user')) {
-                const winData = JSON.parse(window.name);
-                if (winData && winData.ath_active_user) {
-                    try {
-                        localStorage.setItem('ath_active_user', JSON.stringify(winData.ath_active_user));
-                    } catch (e) {}
-                    return winData.ath_active_user;
+        if (!userObj) {
+            try {
+                if (window.name && window.name.includes('ath_active_user')) {
+                    const winData = JSON.parse(window.name);
+                    if (winData && winData.ath_active_user) {
+                        userObj = winData.ath_active_user;
+                        try { localStorage.setItem('ath_active_user', JSON.stringify(userObj)); } catch (e) {}
+                    }
                 }
+            } catch (e) {}
+        }
+
+        if (!userObj) return null;
+
+        // SINCRONIZACIÓN CRÍTICA: Siempre verificar el rol REAL desde la base de datos de usuarios
+        try {
+            const users = this.getUsersRaw();
+            const dbUser = users.find(u => u.id === userObj.id || String(u.id) === String(userObj.id));
+            if (dbUser && (dbUser.role !== userObj.role || dbUser.nombre !== userObj.nombre || dbUser.apellido !== userObj.apellido)) {
+                // El rol u otros datos cambiaron en la BD. Actualizar la sesión activa.
+                const merged = Object.assign({}, userObj, { role: dbUser.role, nombre: dbUser.nombre, apellido: dbUser.apellido, notificaciones: dbUser.notificaciones || userObj.notificaciones });
+                this.saveActiveUserSession(merged);
+                console.log("[SYNC] Sesión actualizada. Rol anterior:", userObj.role, "→ Rol nuevo:", dbUser.role);
+                return merged;
             }
         } catch (e) {}
 
-        return null;
+        return userObj;
     }
 
     saveActiveUserSession(usuario) {
@@ -200,6 +216,24 @@ class ATHDatabaseEngine {
                     let cloudData = docSnap.data().array || [];
                     if (cloudData.length > 0) {
                         localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(cloudData));
+                        
+                        // SINCRONIZACIÓN DE SESIÓN ACTIVA EN TIEMPO REAL
+                        // Si el usuario logueado fue modificado en la nube, actualizar su sesión local
+                        try {
+                            const activeUser = JSON.parse(localStorage.getItem('ath_active_user'));
+                            if (activeUser && activeUser.id) {
+                                const freshUser = cloudData.find(u => u.id === activeUser.id || String(u.id) === String(activeUser.id));
+                                if (freshUser && freshUser.role !== activeUser.role) {
+                                    console.log("[FIREBASE SYNC] Rol cambiado en la nube:", activeUser.role, "→", freshUser.role);
+                                    const merged = Object.assign({}, activeUser, { role: freshUser.role, nombre: freshUser.nombre, apellido: freshUser.apellido });
+                                    this.saveActiveUserSession(merged);
+                                    // Recargar la página para aplicar el nuevo rol limpiamente
+                                    if (typeof window !== 'undefined') {
+                                        window.location.reload();
+                                    }
+                                }
+                            }
+                        } catch(e) { console.warn("[FIREBASE SYNC] Error al sincronizar sesión:", e); }
                     }
                     await this.seedDefaultAdmin();
                 } else if (localData.length > 0) {

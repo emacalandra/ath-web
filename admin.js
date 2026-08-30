@@ -390,6 +390,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             `;
         }).join('');
 
+        window.cargarTablaUsuarios = cargarTablaUsuarios;
         window.cargarTablaReservas = cargarTablaReservas;
         window.cargarTablaReservasFn = cargarTablaReservas;
 

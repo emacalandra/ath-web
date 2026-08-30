@@ -532,8 +532,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (document.getElementById('priceEscuela')) document.getElementById('priceEscuela').value = savedPricing.priceEscuela || 25000;
                 if (document.getElementById('priceAltoRend')) document.getElementById('priceAltoRend').value = savedPricing.priceAltoRend || 45000;
                 if (document.getElementById('priceClaseParticular')) document.getElementById('priceClaseParticular').value = savedPricing.priceClaseParticular || 15000;
-                if (document.getElementById('configTimeOpen')) document.getElementById('configTimeOpen').value = savedPricing.timeOpen || '08:00';
-                if (document.getElementById('configTimeClose')) document.getElementById('configTimeClose').value = savedPricing.timeClose || '23:00';
+                if (document.getElementById('configTimeOpenLV')) document.getElementById('configTimeOpenLV').value = savedPricing.timeOpenLV || savedPricing.timeOpen || '08:00';
+                if (document.getElementById('configTimeCloseLV')) document.getElementById('configTimeCloseLV').value = savedPricing.timeCloseLV || savedPricing.timeClose || '23:00';
+                if (document.getElementById('configTimeOpenSD')) document.getElementById('configTimeOpenSD').value = savedPricing.timeOpenSD || savedPricing.timeOpen || '08:00';
+                if (document.getElementById('configTimeCloseSD')) document.getElementById('configTimeCloseSD').value = savedPricing.timeCloseSD || savedPricing.timeClose || '22:00';
+                if (document.getElementById('configTimeOpenF')) document.getElementById('configTimeOpenF').value = savedPricing.timeOpenF || savedPricing.timeOpen || '09:00';
+                if (document.getElementById('configTimeCloseF')) document.getElementById('configTimeCloseF').value = savedPricing.timeCloseF || savedPricing.timeClose || '21:00';
                 if (document.getElementById('configTimeNight')) document.getElementById('configTimeNight').value = savedPricing.timeNight || '18:30';
             }
         } catch(e) {}
@@ -550,11 +554,22 @@ document.addEventListener('DOMContentLoaded', async () => {
                 priceEscuela: document.getElementById('priceEscuela').value,
                 priceAltoRend: document.getElementById('priceAltoRend').value,
                 priceClaseParticular: document.getElementById('priceClaseParticular').value,
-                timeOpen: document.getElementById('configTimeOpen') ? document.getElementById('configTimeOpen').value : '08:00',
-                timeClose: document.getElementById('configTimeClose') ? document.getElementById('configTimeClose').value : '23:00',
+                timeOpenLV: document.getElementById('configTimeOpenLV') ? document.getElementById('configTimeOpenLV').value : '08:00',
+                timeCloseLV: document.getElementById('configTimeCloseLV') ? document.getElementById('configTimeCloseLV').value : '23:00',
+                timeOpenSD: document.getElementById('configTimeOpenSD') ? document.getElementById('configTimeOpenSD').value : '08:00',
+                timeCloseSD: document.getElementById('configTimeCloseSD') ? document.getElementById('configTimeCloseSD').value : '22:00',
+                timeOpenF: document.getElementById('configTimeOpenF') ? document.getElementById('configTimeOpenF').value : '09:00',
+                timeCloseF: document.getElementById('configTimeCloseF') ? document.getElementById('configTimeCloseF').value : '21:00',
+                // Keep the old ones for fallback compatibility if needed
+                timeOpen: document.getElementById('configTimeOpenLV') ? document.getElementById('configTimeOpenLV').value : '08:00',
+                timeClose: document.getElementById('configTimeCloseLV') ? document.getElementById('configTimeCloseLV').value : '23:00',
                 timeNight: document.getElementById('configTimeNight') ? document.getElementById('configTimeNight').value : '18:30'
             };
-            localStorage.setItem('ath_pricing_db', JSON.stringify(newPricing));
+            if (window.DBHits && window.DBHits.savePricingConfig) {
+                window.DBHits.savePricingConfig(newPricing);
+            } else {
+                localStorage.setItem('ath_pricing_db', JSON.stringify(newPricing));
+            }
             alert('¡Tarifas y matriz de roles actualizadas con éxito en todo el sistema ATH!');
         });
     }

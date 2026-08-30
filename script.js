@@ -1733,6 +1733,31 @@ document.addEventListener('DOMContentLoaded', () => {
         return `${diaNombre} ${day} de ${mesNombre}`;
     }
 
+    
+    function getHorariosParaFecha(fechaStr) {
+        const pricingConfig = window.DBHits.getPricingRaw();
+        let tOpen = pricingConfig.timeOpenLV || pricingConfig.timeOpen || '08:00';
+        let tClose = pricingConfig.timeCloseLV || pricingConfig.timeClose || '23:00';
+        
+        if (fechaStr) {
+            const parts = fechaStr.split('-');
+            if (parts.length === 3) {
+                const d = new Date(parts[0], parts[1] - 1, parts[2]);
+                const day = d.getDay();
+                
+                // Fin de semana
+                if (day === 0 || day === 6) {
+                    tOpen = pricingConfig.timeOpenSD || tOpen;
+                    tClose = pricingConfig.timeCloseSD || tClose;
+                }
+                
+                // TODO: Lógica de feriados si existiera un array de feriados.
+                // Por ahora, asumimos que si no es sábado/domingo, es día de semana regular.
+            }
+        }
+        return { openMin: timeStringToMinutes(tOpen), closeMin: timeStringToMinutes(tClose), timeOpen: tOpen, timeClose: tClose };
+    }
+
     function calculateAndVerifyMinuteByMinute() {
         const timeStart = document.getElementById('appTimeStart') || document.getElementById('widgetTimeStart');
         const timeEnd = document.getElementById('appTimeEnd') || document.getElementById('widgetTimeEnd');

@@ -254,6 +254,22 @@ class ATHDatabaseEngine {
                 }
             });
 
+            // Listener Tiempo Real: Pricing y Horarios
+            onSnapshot(doc(this.db, "ath_core", "pricing"), (docSnap) => {
+                const localData = JSON.parse(localStorage.getItem(PRICING_STORAGE_KEY)) || null;
+                if (docSnap.exists()) {
+                    const cloudData = docSnap.data().pricing;
+                    if (JSON.stringify(localData) !== JSON.stringify(cloudData)) {
+                        localStorage.setItem(PRICING_STORAGE_KEY, JSON.stringify(cloudData));
+                        if (typeof window.renderWidgetDayTimelineGrid === 'function') window.renderWidgetDayTimelineGrid();
+                        if (typeof window.calculateAndVerifyMinuteByMinute === 'function') window.calculateAndVerifyMinuteByMinute();
+                    }
+                } else if (localData) {
+                    this.setDoc(doc(this.db, "ath_core", "pricing"), { pricing: localData }).catch(e => console.warn(e));
+                }
+            });
+
+
             console.log("☁️ ¡Conectado a Firebase Firestore en tiempo real (Reservas, Usuarios y CMS)!");
         } catch (err) {
             console.error("Error crítico al inicializar Firebase:", err);
@@ -794,6 +810,14 @@ class ATHDatabaseEngine {
     setVacationsDates(desde, hasta) {
         if(desde && hasta) localStorage.setItem('ath_vacations_dates', JSON.stringify({desde, hasta}));
         else localStorage.removeItem('ath_vacations_dates');
+    }
+
+    
+    savePricingConfig(pricingObj) {
+        localStorage.setItem(PRICING_STORAGE_KEY, JSON.stringify(pricingObj));
+        if (this.db) {
+            this.setDoc(this.doc(this.db, "ath_core", "pricing"), { pricing: pricingObj }).catch(e => console.warn(e));
+        }
     }
 
     getPricingRaw() {

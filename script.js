@@ -451,7 +451,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     code: generatedCode
                 };
 
-                console.log(`âï¸ [SIMULACIÓN EMAIL ATH] Código para ${emailInput}: ${generatedCode}`);
+                console.log(`✉️ [SIMULACIÓN EMAIL ATH] Código para ${emailInput}: ${generatedCode}`);
 
                 if (recAlertSuccess) {
                     recAlertSuccess.innerHTML = `
@@ -703,7 +703,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const usuario = usuarioActual || getActiveUser();
 
         if (!usuario || (usuario.role !== 'admin' && usuario.role !== 'secretaria')) {
-            alert('â ACCESO DENEGADO: Se requieren privilegios de Administrador para acceder al Panel de Gestión de la Academia.');
+            alert('⛔ ACCESO DENEGADO: Se requieren privilegios de Administrador para acceder al Panel de Gestión de la Academia.');
             window.location.href = 'index.html';
             return;
         }
@@ -716,7 +716,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentPath.includes('admin.html')) {
             const activeUser = getActiveUser();
             if (!activeUser || (activeUser.role !== 'admin' && activeUser.role !== 'secretaria')) {
-                alert('â ACCESO DENEGADO: Se requieren privilegios de Administrador.');
+                alert('⛔ ACCESO DENEGADO: Se requieren privilegios de Administrador.');
                 window.location.href = 'index.html';
             }
         }
@@ -729,7 +729,7 @@ document.addEventListener('DOMContentLoaded', () => {
             containerElement.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${message}`;
             containerElement.style.display = 'flex';
         } else {
-            alert(`â ï¸ ATH Atención: ${message}`);
+            alert(`⚠️ ATH Atención: ${message}`);
         }
     }
 
@@ -802,7 +802,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     regAlertSuccess.innerHTML = '<i class="fa-solid fa-circle-check"></i> ¡Cuenta creada con éxito! Ya podés iniciar sesión con tu Correo o DNI.';
                     regAlertSuccess.style.display = 'flex';
                 } else {
-                    alert(`ð¾ ¡Bienvenido/a ${nuevoUsuario.nombre}! Tu cuenta ha sido registrada con éxito.`);
+                    alert(`🎾 ¡Bienvenido/a ${nuevoUsuario.nombre}! Tu cuenta ha sido registrada con éxito.`);
                 }
 
                 registerForm.reset();
@@ -963,22 +963,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     <div id="cmsInactiveControls" style="display: flex; flex-direction: column; gap: 8px;">
                         <button class="btn-submit" id="cmsEnableEditBtn" style="padding: 11px; font-size: 0.88rem; border-radius: 8px; margin-top: 2px; background: linear-gradient(135deg, var(--color-ath-orange) 0%, #FF8C00 100%); font-weight: 800;">
-                            <i class="fa-solid fa-wand-magic-sparkles"></i> ð ï¸ Activar Modo Edición
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> 🛠️ Activar Modo Edición
                         </button>
                     </div>
 
                     <div id="cmsActiveControls" style="display: none; flex-direction: column; gap: 8px;">
                         <button class="cms-save-btn" id="cmsSaveBtn" style="width: 100%; justify-content: center; padding: 11px; font-size: 0.88rem; border-radius: 8px;">
-                            <i class="fa-solid fa-floppy-disk"></i> ð¾ Guardar y Publicar para Todos
+                            <i class="fa-solid fa-floppy-disk"></i> 💾 Guardar y Publicar para Todos
                         </button>
                         <button class="btn-submit" id="cmsChangeHeroBgBtn" style="background: rgba(255, 215, 0, 0.12); border: 1px solid #FFD700; color: #FFD700; padding: 10px; font-size: 0.84rem; border-radius: 8px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: none; margin-top: 0;">
-                            <i class="fa-solid fa-image"></i> ð¼ï¸ Cambiar Fondo de la Página
+                            <i class="fa-solid fa-image"></i> 🖼️ Cambiar Fondo de la Página
                         </button>
                         <button class="btn-submit" id="cmsEditModalBtn" style="background: rgba(16, 185, 129, 0.15); border: 1px solid #10B981; color: #6EE7B7; padding: 10px; font-size: 0.84rem; border-radius: 8px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: none; margin-top: 0;">
-                            <i class="fa-solid fa-pen-to-square"></i> ð¾ Abrir y Editar Menú de Reservas
+                            <i class="fa-solid fa-pen-to-square"></i> 🎾 Abrir y Editar Menú de Reservas
                         </button>
                         <button class="btn-submit" id="cmsExitEditBtn" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #EF4444; color: #FCA5A5; padding: 9px; font-size: 0.82rem; border-radius: 8px; box-shadow: none; margin-top: 0;">
-                            <i class="fa-solid fa-xmark"></i> â Salir del Modo Edición
+                            <i class="fa-solid fa-xmark"></i> ❌ Salir del Modo Edición
                         </button>
                         <button class="cms-reset-btn" id="cmsResetBtn" style="justify-content: center; width: 100%; padding: 6px; font-size: 0.75rem; border-radius: 6px;">
                             <i class="fa-solid fa-rotate-left"></i> Restablecer de Fábrica
@@ -1101,7 +1101,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 const file = event.target.files[0];
                                 if (file) {
                                     try {
-                                        showCmsToast('â³ Optimizando imagen...');
+                                        showCmsToast('⏳ Optimizando imagen...');
                                         const base64Data = await window.DBHits.convertFileToBase64(file, 1600, 1600, 0.85);
                                         
                                         if (el.tagName === 'IMG') {
@@ -1116,10 +1116,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                         tempImagesMap[imgKey] = base64Data;
                                         window.DBHits.guardarImagenCMS(imgKey, base64Data, pageKey);
-                                        showCmsToast('ð· ¡Foto actualizada y guardada!');
+                                        showCmsToast('📷 ¡Foto actualizada y guardada!');
                                     } catch (err) {
                                         console.error("Error al procesar imagen:", err);
-                                        alert("â ï¸ No se pudo procesar la imagen seleccionada.");
+                                        alert("⚠️ No se pudo procesar la imagen seleccionada.");
                                     }
                                 }
                                 fileInput.remove();
@@ -1138,7 +1138,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Handler para el botón "ð¼ï¸ Cambiar Fondo de la Página" del panel Admin CMS
+        // Handler para el botón "🖼️ Cambiar Fondo de la Página" del panel Admin CMS
         const cmsChangeHeroBgBtn = document.getElementById('cmsChangeHeroBgBtn');
         if (cmsChangeHeroBgBtn) {
             cmsChangeHeroBgBtn.addEventListener('click', () => {
@@ -1155,7 +1155,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const file = event.target.files[0];
                     if (file) {
                         try {
-                            showCmsToast('â³ Optimizando fondo de pantalla...');
+                            showCmsToast('⏳ Optimizando fondo de pantalla...');
                             const base64Data = await window.DBHits.convertFileToBase64(file, 1920, 1080, 0.85);
                             
                             if (bgEl) {
@@ -1166,10 +1166,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                             tempImagesMap[bgKey] = base64Data;
                             window.DBHits.guardarImagenCMS(bgKey, base64Data, pageKey);
-                            showCmsToast('ð¼ï¸ ¡Fondo de página actualizado y sincronizado!');
+                            showCmsToast('🖼️ ¡Fondo de página actualizado y sincronizado!');
                         } catch (err) {
                             console.error("Error al cambiar fondo:", err);
-                            alert("â ï¸ No se pudo cargar la imagen de fondo.");
+                            alert("⚠️ No se pudo cargar la imagen de fondo.");
                         }
                     }
                     fileInput.remove();
@@ -1198,7 +1198,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (cmsEnableEditBtn) {
             cmsEnableEditBtn.addEventListener('click', () => {
                 setVisualEditingState(true);
-                showCmsToast(`ð ï¸ Modo Edición Activado en ${pageName}. Podés hacer clic en cualquier texto para editarlo o en "Cambiar Imagen" en cualquier foto o fondo.`);
+                showCmsToast(`🛠️ Modo Edición Activado en ${pageName}. Podés hacer clic en cualquier texto para editarlo o en "Cambiar Imagen" en cualquier foto o fondo.`);
             });
         }
 
@@ -1212,7 +1212,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (cmsSaveBtn) {
             cmsSaveBtn.addEventListener('click', async () => {
-                showCmsToast('â³ Publicando y sincronizando cambios en la nube...');
+                showCmsToast('⏳ Publicando y sincronizando cambios en la nube...');
 
                 // 1. Guardar en localStorage y Firebase Firestore
                 const textsMap = {};
@@ -1247,19 +1247,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                     
                     if (res.ok) {
-                        extraMsg = '<br><span style="color:#10B981;font-size:0.8rem;">â Código fuente (.html) actualizado en disco</span>';
+                        extraMsg = '<br><span style="color:#10B981;font-size:0.8rem;">✓ Código fuente (.html) actualizado en disco</span>';
                     }
                 } catch (e) {
                     // Servidor Python no activo, continúa con Firebase y LocalStorage
                 }
 
-                showCmsToast(`ð¾ ¡Cambios guardados y publicados para todos los usuarios en ${pageName}!${extraMsg}`);
+                showCmsToast(`💾 ¡Cambios guardados y publicados para todos los usuarios en ${pageName}!${extraMsg}`);
             });
         }
 
         if (cmsResetBtn) {
             cmsResetBtn.addEventListener('click', () => {
-                if (confirm('ð ¿Estás seguro de que querés restablecer esta página al diseño original de fábrica?')) {
+                if (confirm('🔄 ¿Estás seguro de que querés restablecer esta página al diseño original de fábrica?')) {
                     window.DBHits.resetToDefaults();
                 }
             });
@@ -1361,7 +1361,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = courtDataMap[currentWidgetCourt] || courtDataMap['1'];
         if (imgEl) imgEl.src = data.img;
         if (nameEl) nameEl.textContent = data.nombre;
-        if (badgeEl) badgeEl.textContent = `Polvo de Ladrillo â¢ Cancha ${currentWidgetCourt}`;
+        if (badgeEl) badgeEl.textContent = `Polvo de Ladrillo • Cancha ${currentWidgetCourt}`;
 
         // Sincronizar botones de selección de cancha en el modal
         const courtPillsContainer = document.getElementById('appCourtSelectBtns');
@@ -1397,7 +1397,7 @@ document.addEventListener('DOMContentLoaded', () => {
             weatherNotice.innerHTML = `
                 <i class="fa-solid fa-cloud-sun-rain" style="color: #60A5FA; font-size: 1.2rem; margin-top: 2px;"></i>
                 <div style="font-size: 0.76rem; color: #E2E8F0; line-height: 1.3;">
-                    <strong style="color: #93C5FD; display: block; margin-bottom: 2px;">ð¦ï¸ Reservas sujetas a condiciones climáticas</strong>
+                    <strong style="color: #93C5FD; display: block; margin-bottom: 2px;">🌦️ Reservas sujetas a condiciones climáticas</strong>
                     Al tratarse de canchas descubiertas de polvo de ladrillo, la jugabilidad depende del buen tiempo. En caso de lluvia o fuerza mayor, comunicate con la administración para reprogramar tu turno sin perder tu dinero.
                 </div>
             `;
@@ -1467,9 +1467,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const imgEl = document.getElementById('appCourtImg') || document.getElementById('unifiedCourtImg');
 
             const courtDataMap = {
-                '1': { nombre: 'Cancha 1 (Polvo de Ladrillo)', img: 'assets/cancha1.jpg', badge: 'Polvo de Ladrillo â¢ LED Pro' },
-                '2': { nombre: 'Cancha 2 (Polvo de Ladrillo)', img: 'assets/cancha2.jpg', badge: 'Polvo de Ladrillo â¢ Central' },
-                '3': { nombre: 'Cancha 3 (Polvo de Ladrillo)', img: 'assets/cancha3.jpg', badge: 'Polvo de Ladrillo â¢ Torneos' }
+                '1': { nombre: 'Cancha 1 (Polvo de Ladrillo)', img: 'assets/cancha1.jpg', badge: 'Polvo de Ladrillo • LED Pro' },
+                '2': { nombre: 'Cancha 2 (Polvo de Ladrillo)', img: 'assets/cancha2.jpg', badge: 'Polvo de Ladrillo • Central' },
+                '3': { nombre: 'Cancha 3 (Polvo de Ladrillo)', img: 'assets/cancha3.jpg', badge: 'Polvo de Ladrillo • Torneos' }
             };
 
             const data = courtDataMap[currentWidgetCourt] || courtDataMap['1'];
@@ -1620,7 +1620,7 @@ document.addEventListener('DOMContentLoaded', () => {
                        r.fecha === currentWidgetDate &&
                        !estado.includes('Rechazado') && 
                        !estado.includes('Cancelado') && 
-                       !estado.includes('â');
+                       !estado.includes('❌');
             });
 
             // Inyección virtual de la plantilla en la grilla visual
@@ -1686,7 +1686,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let html = '<div style="display: flex; gap: 8px; flex-wrap: wrap;">';
             reservasCancha.forEach(r => {
                 const isLock = r.tipo === 'bloqueo_admin';
-                const label = isLock ? `ð« Bloqueo: ${r.motivo || 'Uso Interno'}` : `ð¾ Reservado`;
+                const label = isLock ? `🚫 Bloqueo: ${r.motivo || 'Uso Interno'}` : `🎾 Reservado`;
                 html += `
                     <span class="occupancy-slot-pill busy">
                         ${label} (${r.horaInicio} a ${r.horaFin} hs)
@@ -1751,11 +1751,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (endMin <= startMin) {
             priceSummary.className = 'booking-summary-card occupied status-busy';
-            if (summaryStatus) summaryStatus.innerHTML = 'â La hora de finalización debe ser posterior a la de inicio';
+            if (summaryStatus) summaryStatus.innerHTML = '❌ La hora de finalización debe ser posterior a la de inicio';
             if (summaryDetails) summaryDetails.innerHTML = 'Horario inválido';
             if (summaryLighting) summaryLighting.innerHTML = '-';
             if (summaryPrice) summaryPrice.innerHTML = '$0 ARS';
-            if (courtBadge) courtBadge.innerHTML = 'ð´ Horario Inválido';
+            if (courtBadge) courtBadge.innerHTML = '🔴 Horario Inválido';
             confirmBtn.disabled = true;
             confirmBtn.style.opacity = '0.5';
             return;
@@ -1767,11 +1767,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (startMin < openMin || endMin > closeMin) {
             priceSummary.className = 'booking-summary-card occupied status-busy';
-            if (summaryStatus) summaryStatus.innerHTML = `â El club opera entre las ${pricingConfig.timeOpen || '08:00'} y ${pricingConfig.timeClose || '23:00'} hs`;
+            if (summaryStatus) summaryStatus.innerHTML = `❌ El club opera entre las ${pricingConfig.timeOpen || '08:00'} y ${pricingConfig.timeClose || '23:00'} hs`;
             if (summaryDetails) summaryDetails.innerHTML = 'Fuera de rango operativo';
             if (summaryLighting) summaryLighting.innerHTML = '-';
             if (summaryPrice) summaryPrice.innerHTML = '$0 ARS';
-            if (courtBadge) courtBadge.innerHTML = 'ð´ Fuera de Horario';
+            if (courtBadge) courtBadge.innerHTML = '🔴 Fuera de Horario';
             confirmBtn.disabled = true;
             confirmBtn.style.opacity = '0.5';
             return;
@@ -1781,11 +1781,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!chequeo.disponible) {
             priceSummary.className = 'booking-summary-card occupied status-busy';
-            if (courtBadge) courtBadge.innerHTML = 'ð´ Turno Solapado';
+            if (courtBadge) courtBadge.innerHTML = '🔴 Turno Solapado';
             confirmBtn.disabled = true;
             confirmBtn.style.opacity = '0.5';
 
-            let statusHTML = `<div>â ${chequeo.mensaje}</div>`;
+            let statusHTML = `<div>❌ ${chequeo.mensaje}</div>`;
 
             // Buscar recomendaciones inteligentes libres ante conflicto
             if (window.DBHits && typeof window.DBHits.obtenerSugerenciasLibres === 'function') {
@@ -1793,7 +1793,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (sugerencias && sugerencias.length > 0) {
                     statusHTML += `
                         <div id="appSuggestionsBox" style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed rgba(239, 68, 68, 0.4);">
-                            <span style="color: #FCA5A5; font-size: 0.78rem; font-weight: 800; display: block; margin-bottom: 6px;">ð¥ Opciones libres recomendadas para vos:</span>
+                            <span style="color: #FCA5A5; font-size: 0.78rem; font-weight: 800; display: block; margin-bottom: 6px;">🔥 Opciones libres recomendadas para vos:</span>
                             <div style="display: flex; flex-direction: column; gap: 6px;">
                                 ${sugerencias.map(s => `
                                     <button type="button" class="btn-suggestion-item" data-cancha="${s.canchaId}" data-inicio="${s.horaInicio}" data-fin="${s.horaFin}" style="background: rgba(255, 102, 0, 0.18); border: 1px solid var(--color-ath-orange); color: #FFF; padding: 6px 10px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; text-align: left; cursor: pointer; transition: all 0.2s ease;">
@@ -1809,8 +1809,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (summaryStatus) summaryStatus.innerHTML = statusHTML;
         } else {
             priceSummary.className = 'booking-summary-card available status-available';
-            if (summaryStatus) summaryStatus.innerHTML = `ð¢ Horario 100% Libre y Disponible`;
-            if (courtBadge) courtBadge.innerHTML = 'ð¢ Cancha Disponible';
+            if (summaryStatus) summaryStatus.innerHTML = `🟢 Horario 100% Libre y Disponible`;
+            if (courtBadge) courtBadge.innerHTML = '🟢 Cancha Disponible';
             confirmBtn.disabled = false;
             confirmBtn.style.opacity = '1';
         }
@@ -1830,9 +1830,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (summaryDetails) {
                 summaryDetails.innerHTML = `
                     <div style="background: rgba(0,0,0,0.3); padding: 8px 10px; border-radius: 6px; margin: 6px 0; border-left: 3px solid var(--color-ath-orange);">
-                        <div style="color: #FFF; font-weight: 700; font-size: 0.88rem;">ð¾ Cancha: <span style="color: #FFD700;">Cancha ${currentWidgetCourt}</span></div>
-                        <div style="color: #FFF; font-weight: 700; font-size: 0.88rem;">ð Día: <span style="color: #FFD700;">${fechaFormateada}</span></div>
-                        <div style="color: #FFF; font-weight: 700; font-size: 0.88rem;">â° Horario: <span style="color: #FFD700;">${horaInicio} a ${horaFin} hs</span> (${duracionHoras.toFixed(2)} hs)</div>
+                        <div style="color: #FFF; font-weight: 700; font-size: 0.88rem;">🎾 Cancha: <span style="color: #FFD700;">Cancha ${currentWidgetCourt}</span></div>
+                        <div style="color: #FFF; font-weight: 700; font-size: 0.88rem;">📅 Día: <span style="color: #FFD700;">${fechaFormateada}</span></div>
+                        <div style="color: #FFF; font-weight: 700; font-size: 0.88rem;">⏰ Horario: <span style="color: #FFD700;">${horaInicio} a ${horaFin} hs</span> (${duracionHoras.toFixed(2)} hs)</div>
                     </div>
                 `;
             }
@@ -1938,7 +1938,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const textToCopy = btnCopy.dataset.copy;
             navigator.clipboard.writeText(textToCopy).then(() => {
                 const originalText = btnCopy.innerHTML;
-                btnCopy.innerHTML = 'â ¡Copiado!';
+                btnCopy.innerHTML = '✅ ¡Copiado!';
                 btnCopy.style.background = '#10B981';
                 setTimeout(() => {
                     btnCopy.innerHTML = originalText;
@@ -1976,7 +1976,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const file = (fileInput && fileInput.files && fileInput.files.length > 0) ? fileInput.files[0] : null;
             if (!isSecretaria && !file) {
                 if (fileInput) { fileInput.style.border = '2px solid #EF4444'; fileInput.focus(); }
-                alert("â ATENCIÓN: Solo aceptamos pagos por transferencia. Es obligatorio adjuntar la captura del comprobante de pago para reservar la cancha.");
+                alert("⛔ ATENCIÓN: Solo aceptamos pagos por transferencia. Es obligatorio adjuntar la captura del comprobante de pago para reservar la cancha.");
                 return;
             }
 
@@ -1997,17 +1997,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const finalNombre = isSecretaria && secNombre ? `${secNombre} ${secApellido || ''}`.trim() : (activeUser ? `${activeUser.nombre} ${activeUser.apellido || ''}` : 'Usuario');
             const finalTelefono = isSecretaria && secTelefono ? secTelefono : (activeUser ? activeUser.telefono : '');
-            const finalEstadoPago = isSecretaria ? 'â³ Pago pendiente en Club' : 'â³ Pago esperando aprobación';
+            const finalEstadoPago = isSecretaria ? '⏳ Pago pendiente en Club' : '⏳ Pago esperando aprobación';
             const finalMetodoPago = isSecretaria ? 'En Secretaría (Efectivo/Físico)' : selectedPaymentMethod;
 
             // DOBLE CONFIRMACIÓN ANTI-ERROR
             const fechaFormateada = formatFriendlyDate(currentWidgetDate);
             const userRole = activeUser ? activeUser.role : 'usuario';
             const calculo = window.DBHits.calcularPrecioReserva(horaInicio, duracionHoras, userRole);
-            const mensajeConfirmacion = `â CONFIRMACIÓN DE RESERVA ATH\n\n¿Estás seguro que deseas confirmar la reserva con los siguientes datos?\n\nð¾ Cancha: Cancha ${currentWidgetCourt}\nð Día: ${fechaFormateada}\nâ° Horario: ${horaInicio} a ${horaFin} hs\nð° Total a abonar: $${calculo.precioTotal.toLocaleString('es-AR')} ARS\n\nPresiona ACEPTAR para enviar tu reserva o CANCELAR para modificar los horarios.`;
+            const mensajeConfirmacion = `❓ CONFIRMACIÓN DE RESERVA ATH\n\n¿Estás seguro que deseas confirmar la reserva con los siguientes datos?\n\n🎾 Cancha: Cancha ${currentWidgetCourt}\n📅 Día: ${fechaFormateada}\n⏰ Horario: ${horaInicio} a ${horaFin} hs\n💰 Total a abonar: $${calculo.precioTotal.toLocaleString('es-AR')} ARS\n\nPresiona ACEPTAR para enviar tu reserva o CANCELAR para modificar los horarios.`;
 
             if (!confirm(mensajeConfirmacion)) {
-                console.log("ð« Reserva cancelada por el usuario en el paso de doble confirmación.");
+                console.log("🚫 Reserva cancelada por el usuario en el paso de doble confirmación.");
                 return; // Detiene la ejecución sin guardar nada
             }
 
@@ -2055,9 +2055,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 if (isSecretaria) {
-                    alert("â ¡TURNO AGENDADO EN MOSTRADOR!\n\nEl turno de " + finalNombre + " ha sido registrado exitosamente.\n\nâ ï¸ RECORDATORIO: El pago ha quedado PENDIENTE. Cuando el cliente abone en el club, recuerda presionar 'Aprobar' en el Panel de Administración para que impacte en el reporte financiero.");
+                    alert("✅ ¡TURNO AGENDADO EN MOSTRADOR!\n\nEl turno de " + finalNombre + " ha sido registrado exitosamente.\n\n⚠️ RECORDATORIO: El pago ha quedado PENDIENTE. Cuando el cliente abone en el club, recuerda presionar 'Aprobar' en el Panel de Administración para que impacte en el reporte financiero.");
                 } else {
-                    alert("â ¡RESERVA REGISTRADA CON ÉXITO!\n\nEstado actual: â³ PAGO ESPERANDO APROBACIÓN.");
+                    alert("✅ ¡RESERVA REGISTRADA CON ÉXITO!\n\nEstado actual: ⏳ PAGO ESPERANDO APROBACIÓN.");
                 }
 
                 closeAppBookingModal();
@@ -2086,7 +2086,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 horaInicio: data.horaInicio,
                 duracionHoras: data.duracionHoras
             }).then(r => {
-                alert(`ð¾ ¡Reserva completada con éxito tras iniciar sesión! Cancha ${r.canchaId} el ${r.fecha} (${r.horaInicio} a ${r.horaFin} hs).`);
+                alert(`🎾 ¡Reserva completada con éxito tras iniciar sesión! Cancha ${r.canchaId} el ${r.fecha} (${r.horaInicio} a ${r.horaFin} hs).`);
                 localStorage.removeItem('pending_ath_booking');
                 if (typeof renderWidgetDayTimelineGrid === 'function') renderWidgetDayTimelineGrid();
             }).catch(e => {
@@ -2183,11 +2183,11 @@ async function renderizarMisTurnos() {
         
         let colorEstado = '#94A3B8'; // default
         let estadoStr = turno.estadoPago || 'Pendiente';
-        const estaPagado = estadoStr.includes('â') || estadoStr.toLowerCase().includes('confirmado') || estadoStr.toLowerCase().includes('aprobado');
+        const estaPagado = estadoStr.includes('✅') || estadoStr.toLowerCase().includes('confirmado') || estadoStr.toLowerCase().includes('aprobado');
         
         if(estaPagado) colorEstado = '#10B981';
-        else if(estadoStr.includes('â³') || estadoStr.includes('pendiente') || estadoStr.includes('esperando')) colorEstado = '#F59E0B';
-        else if(estadoStr.includes('â') || estadoStr.includes('Rechazado') || estadoStr.includes('Cancelado')) colorEstado = '#EF4444';
+        else if(estadoStr.includes('⏳') || estadoStr.includes('pendiente') || estadoStr.includes('esperando')) colorEstado = '#F59E0B';
+        else if(estadoStr.includes('❌') || estadoStr.includes('Rechazado') || estadoStr.includes('Cancelado')) colorEstado = '#EF4444';
 
         // Botón de cancelar: Permitir si faltan >= 30 minutos
         let btnCancelar = '';
@@ -2227,9 +2227,9 @@ async function renderizarMisTurnos() {
             const horaTurno = buttonEl.dataset.hora || '';
             const canchaTurno = buttonEl.dataset.cancha || '';
 
-            let mensajeConfirmacion = "â ï¸ ¿Estás seguro de que deseas cancelar este turno? La cancha quedará liberada.";
+            let mensajeConfirmacion = "⚠️ ¿Estás seguro de que deseas cancelar este turno? La cancha quedará liberada.";
             if (estabaPagado) {
-                mensajeConfirmacion = `â ï¸ ATENCIÓN: Este turno ya figura como PAGADO.
+                mensajeConfirmacion = `⚠️ ATENCIÓN: Este turno ya figura como PAGADO.
 
 Al cancelar, el sistema liberará la cancha y te abrirá un chat de WhatsApp con la administración para coordinar la devolución de tu dinero. ¿Deseas continuar?`;
             }

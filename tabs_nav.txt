@@ -1,0 +1,26 @@
+<div class="admin-tabs-nav">
+                    <button class="admin-tab-btn active" data-admintab="usuarios">
+                        <i class="fa-solid fa-users-gear"></i> 1. Usuarios & Roles
+                    </button>
+                    <button class="admin-tab-btn" data-admintab="reservas">
+                        <i class="fa-solid fa-file-invoice-dollar"></i> 2. Pagos & Reservas <span id="adminPendingBadge" style="display:none; align-items:center; justify-content:center; background:#EF4444; color:#FFF; font-size:0.75rem; padding:0 6px; height:18px; border-radius:10px; margin-left:6px; box-shadow:0 0 5px rgba(239,68,68,0.5);">0</span>
+                    </button>
+                    <button class="admin-tab-btn" data-admintab="turnos">
+                        <i class="fa-solid fa-calendar-days"></i> 3. Agenda de Turnos
+                    </button>
+                    <button class="admin-tab-btn future-module" data-admintab="contenido">
+                        <i class="fa-solid fa-newspaper"></i> 4. Publicar Contenido
+                    </button>
+                    <button class="admin-tab-btn" data-admintab="tarifas">
+                        <i class="fa-solid fa-tags"></i> 5. Tarifas y Horarios
+                    </button>
+                    <button class="admin-tab-btn future-module" data-admintab="escuela">
+                        <i class="fa-solid fa-graduation-cap"></i> 6. Escuela y Alumnos
+                    </button>
+                    <button class="admin-tab-btn" data-admintab="canchas">
+                        <i class="fa-solid fa-lock"></i> 7. Gestión y Bloqueo de Canchas
+                    </button>
+                    <button class="admin-tab-btn" data-admintab="staff">
+                        <i class="fa-solid fa-users"></i> 8. Staff y Equipo
+                    </button>
+                </div>

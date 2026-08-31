@@ -1,0 +1,187 @@
+<div class="admin-tab-content" id="admin-tab-canchas">
+    
+    <div class="subtabs-container" style="margin-bottom: 24px;">
+        <button class="subtab-btn active" data-subtab="canchas-horarios"><i class="fa-solid fa-calendar-week"></i> 1. Horarios Fijos</button>
+        <button class="subtab-btn" data-subtab="canchas-controles"><i class="fa-solid fa-triangle-exclamation"></i> 2. Controles Especiales</button>
+        <button class="subtab-btn" data-subtab="canchas-monitor"><i class="fa-solid fa-desktop"></i> 3. Monitor de Canchas</button>
+    </div>
+    <div id="subtab-canchas-horarios" class="subtab-content active">
+    <!-- SECCIÓN 1: GESTIÓN DE HORARIOS FIJOS -->
+    <h4 style="color: var(--color-ath-orange); margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;"><i class="fa-solid fa-calendar-week"></i> 1. Gestión de Horarios Fijos (Escuela / Clases)</h4>
+<div class="grid-2col" style="align-items: start; margin-bottom: 30px;">
+        <!-- Plantilla Semanal -->
+        <div class="admin-card" style="border: 1px solid var(--color-ath-orange); margin-bottom: 0;">
+            <h3 class="admin-card-title"><i class="fa-solid fa-calendar-week"></i> Plantilla Fija Semanal</h3>
+            <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 16px;">Configura horarios fijos (ej: clases). El sistema los bloqueará automáticamente todas las semanas.</p>
+            <p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: -10px; margin-bottom: 20px;"><i class="fa-solid fa-lightbulb" style="color: #FFD700;"></i> Ejemplo: Lunes y Miércoles, Cancha 1, de 16:00 a 18:00 para Escuela. Nadie podrá reservar.</p>
+            
+            <form id="formReglaSemanal" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; box-sizing: border-box;">
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <select id="reglaDia" required style="flex: 1; min-width: 100px; padding: 8px; border-radius: 6px; background: rgba(0,0,0,0.3); color: #FFF; border: 1px solid rgba(255,255,255,0.2);">
+                        <option value="1">Lunes</option><option value="2">Martes</option><option value="3">Miércoles</option><option value="4">Jueves</option><option value="5">Viernes</option><option value="6">Sábado</option><option value="0">Domingo</option>
+                    </select>
+                    <select id="reglaCancha" required style="flex: 1; min-width: 130px; padding: 8px; border-radius: 6px; background: rgba(0,0,0,0.3); color: #FFF; border: 1px solid rgba(255,255,255,0.2);">
+                        <option value="TODAS">Todas las Canchas</option><option value="1">Cancha 1</option><option value="2">Cancha 2</option><option value="3">Cancha 3</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                    <input type="time" id="reglaInicio" required style="flex: 1; min-width: 90px; padding: 8px; border-radius: 6px; background: rgba(0,0,0,0.3); color: #FFF; border: 1px solid rgba(255,255,255,0.2);" title="Inicio">
+                    <span style="color: #94A3B8;">a</span>
+                    <input type="time" id="reglaFin" required style="flex: 1; min-width: 90px; padding: 8px; border-radius: 6px; background: rgba(0,0,0,0.3); color: #FFF; border: 1px solid rgba(255,255,255,0.2);" title="Fin">
+                </div>
+                <input type="text" id="reglaNombre" placeholder="Ej: Escuela Formativa" required style="width: 100%; padding: 8px; border-radius: 6px; background: rgba(0,0,0,0.3); color: #FFF; border: 1px solid rgba(255,255,255,0.2); box-sizing: border-box;">
+                <button type="submit" class="btn-submit" style="padding: 8px;"><i class="fa-solid fa-plus"></i> Agregar Regla</button>
+                            </form>
+            
+            <div id="listaReglasSemanales" style="display: flex; flex-direction: column; gap: 8px;"></div>
+        </div>
+
+        <!-- Excepciones -->
+        <div class="admin-card" style="border: 1px solid #10B981; background: rgba(16, 185, 129, 0.05); margin-bottom: 0;">
+            <h3 class="admin-card-title"><i class="fa-solid fa-lock-open" style="color: #10B981;"></i> Excepción por Día (Liberar)</h3>
+            <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 16px;">¿Falta el profesor hoy? Ingresa la fecha y horario para anular la plantilla fija <strong>solo por ese día</strong> y permitir reservas.</p>
+            <p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: -10px; margin-bottom: 20px;"><i class="fa-solid fa-lightbulb" style="color: #FFD700;"></i> Ejemplo: Falta el profe de las 18:00, anulas esa clase hoy y la cancha se abre al público.</p>
+            <form id="formExcepcionClase" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; box-sizing: border-box;">
+                <div style="flex: 1; min-width: 130px;">
+                    <label style="font-size: 0.8rem; color: #6EE7B7; font-weight: 700;">Fecha a liberar:</label>
+                    <input type="date" id="excFecha" required style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.3); color: #FFF; border: 1px solid #10B981; box-sizing: border-box;">
+                </div>
+                <div style="flex: 1; min-width: 120px;">
+                    <label style="font-size: 0.8rem; color: #6EE7B7; font-weight: 700;">Cancha:</label>
+                    <select id="excCancha" required style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.3); color: #FFF; border: 1px solid #10B981; box-sizing: border-box;">
+                        <option value="TODAS">Todas</option><option value="1">Cancha 1</option><option value="2">Cancha 2</option><option value="3">Cancha 3</option>
+                    </select>
+                </div>
+                <div style="flex: 1; min-width: 100px;">
+                    <label style="font-size: 0.8rem; color: #6EE7B7; font-weight: 700;">De (hs):</label>
+                    <input type="time" id="excInicio" required style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.3); color: #FFF; border: 1px solid #10B981; box-sizing: border-box;">
+                </div>
+                <div style="flex: 1; min-width: 100px;">
+                    <label style="font-size: 0.8rem; color: #6EE7B7; font-weight: 700;">Hasta (hs):</label>
+                    <input type="time" id="excFin" required style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.3); color: #FFF; border: 1px solid #10B981; box-sizing: border-box;">
+                </div>
+                                <div style="flex: 1 1 100%; margin-top: 4px;">
+                    <label style="font-size: 0.85rem; color: #6EE7B7; font-weight: 700; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="checkbox" id="excTodoElDia" style="width: 18px; height: 18px; accent-color: #10B981; cursor: pointer;"> Liberar Todo el Día
+                    </label>
+                </div>
+                <button type="submit" class="btn-submit" style="background: #10B981; border: none; padding: 11px 16px; width: 100%; justify-content: center;"><i class="fa-solid fa-unlock"></i> Liberar Cancha</button>
+                            </form>
+            <div id="listaExcepciones" style="margin-top: 16px; display: flex; flex-direction: column; gap: 8px;"></div>
+        </div>
+    </div>
+
+    </div>
+
+    <div id="subtab-canchas-controles" class="subtab-content">
+    <!-- SECCIÓN 2: CONTROLES ESPECIALES Y EMERGENCIAS -->
+    <h4 style="color: var(--color-ath-orange); margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;"><i class="fa-solid fa-triangle-exclamation"></i> 2. Controles Especiales y Emergencias</h4>
+<div class="grid-2col" style="align-items: start; margin-bottom: 30px;">
+        
+        <!-- Bloqueo Rápido -->
+        <div class="admin-card" style="margin-bottom: 0;">
+            <h3 class="admin-card-title"><i class="fa-solid fa-ban" style="color: #EF4444;"></i> Bloqueo Rápido / Excepcional</h3>
+            <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 20px;">Bloqueá canchas de forma inmediata por alquileres externos o clases sueltas.</p>
+            <p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: -10px; margin-bottom: 20px;"><i class="fa-solid fa-lightbulb" style="color: #FFD700;"></i> Ejemplo: Selecciona Cancha 1, fecha de hoy, de 14:00 a 16:00, motivo "Mantenimiento". Nadie podrá reservar en ese horario.</p>
+
+            <form id="adminCourtLockForm" style="display: flex; flex-direction: column; gap: 16px;">
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                        <label style="font-weight: 700; color: #FFF;"><i class="fa-solid fa-layer-group" style="color: var(--color-ath-orange);"></i> Cancha</label>
+                        <select id="lockCourtSelect" required style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; font-weight: 700; box-sizing: border-box;">
+                            <option value="1">Cancha 1</option><option value="2">Cancha 2</option><option value="3">Cancha 3</option><option value="TODAS">🚫 TODAS</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex: 1; min-width: 130px;">
+                        <label style="font-weight: 700; color: #FFF;"><i class="fa-solid fa-calendar" style="color: var(--color-ath-orange);"></i> Fecha</label>
+                        <input type="date" id="lockDate" required style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; font-weight: 700; box-sizing: border-box;">
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <div class="form-group" style="flex: 1; min-width: 100px;">
+                        <label style="font-weight: 700; color: #FFF;"><i class="fa-solid fa-clock"></i> Inicio</label>
+                        <input type="time" id="lockStartTime" required value="08:00" style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; font-weight: 700; box-sizing: border-box;">
+                    </div>
+                    <div class="form-group" style="flex: 1; min-width: 100px;">
+                        <label style="font-weight: 700; color: #FFF;"><i class="fa-solid fa-clock"></i> Fin</label>
+                        <input type="time" id="lockEndTime" required value="10:00" style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; font-weight: 700; box-sizing: border-box;">
+                    </div>
+                </div>
+
+                                <div class="form-group" style="flex: 1 1 100%; margin-top: -6px;">
+                    <label style="font-size: 0.85rem; font-weight: 700; color: #FFF; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="checkbox" id="lockTodoElDia" style="width: 18px; height: 18px; accent-color: #EF4444; cursor: pointer;"> Bloquear Todo el Día
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label style="font-weight: 700; color: #FFF;"><i class="fa-solid fa-tag" style="color: var(--color-ath-orange);"></i> Motivo (Opcional)</label>
+                    <input type="text" id="lockReasonInput" placeholder="Dejar en blanco si no hay motivo" style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; font-weight: 700; box-sizing: border-box;">
+                </div>
+
+                <button type="submit" class="btn-submit" style="background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%); justify-content: center;"><i class="fa-solid fa-lock"></i> Bloquear Ahora</button>
+                            </form>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+            <!-- Vacaciones -->
+            <div class="admin-card" style="border: 1px solid #3B82F6; background: rgba(59, 130, 246, 0.05); margin-bottom: 0;">
+                <h3 class="admin-card-title"><i class="fa-solid fa-umbrella-beach" style="color: #3B82F6;"></i> Modo Vacaciones</h3>
+                <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 16px;">Programa un receso. Las canchas quedarán liberadas al público en este rango.</p>
+            <p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: -10px; margin-bottom: 20px;"><i class="fa-solid fa-lightbulb" style="color: #FFD700;"></i> Ejemplo: Vacaciones del 01/01 al 15/01. Las clases fijas se suspenden temporalmente.</p>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;">
+                    <div style="flex: 1; min-width: 130px;">
+                        <label style="font-size: 0.8rem; color: #93C5FD; font-weight: 700;">Desde (Inicio):</label>
+                        <input type="date" id="vacacionesDesde" style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.3); color: #FFF; border: 1px solid #3B82F6; box-sizing: border-box;">
+                    </div>
+                    <div style="flex: 1; min-width: 130px;">
+                        <label style="font-size: 0.8rem; color: #93C5FD; font-weight: 700;">Hasta (Fin):</label>
+                        <input type="date" id="vacacionesHasta" style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.3); color: #FFF; border: 1px solid #3B82F6; box-sizing: border-box;">
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <button id="btnGuardarVacaciones" class="btn-submit" style="background: #3B82F6; border: none; justify-content: center;"><i class="fa-solid fa-calendar-check"></i> Programar Receso</button>
+                    <button id="btnQuitarVacaciones" class="btn-submit" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #EF4444; color: #FCA5A5; justify-content: center;"><i class="fa-solid fa-power-off"></i> Cancelar</button>
+                </div>
+            </div>
+
+            <!-- Clima -->
+            <div class="admin-card" style="border: 1px solid #EF4444; background: rgba(239, 68, 68, 0.05); margin-bottom: 0;">
+                <h3 class="admin-card-title"><i class="fa-solid fa-cloud-showers-heavy" style="color: #EF4444;"></i> Alerta Climática</h3>
+                <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 12px;">Cancela turnos activos y notifica a los jugadores.</p>
+            <p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: -10px; margin-bottom: 20px;"><i class="fa-solid fa-lightbulb" style="color: #FFD700;"></i> Ejemplo: Llueve fuerte. Seleccionas las 18:00 y todos los turnos desde esa hora se cancelan y se avisa a los jugadores.</p>
+                <input type="date" id="weatherDate" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; box-sizing: border-box;">
+                <input type="text" id="weatherReason" placeholder="Ej: Lluvia intensa" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; box-sizing: border-box;">
+                <button id="btnSuspenderClima" class="btn-submit" style="background: #EF4444; justify-content: center; width: 100%;"><i class="fa-solid fa-triangle-exclamation"></i> Suspender y Notificar</button>
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+    <div id="subtab-canchas-monitor" class="subtab-content">
+    <!-- SECCIÓN 3: MONITOR EN VIVO (TABLA MAESTRA) -->
+    <h4 style="color: var(--color-ath-orange); margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;"><i class="fa-solid fa-desktop"></i> 3. Monitor de Canchas</h4>
+<div class="admin-card" style="width: 100%;">
+        <h3 class="admin-card-title"><i class="fa-solid fa-list-check" style="color: var(--color-ath-orange);"></i> Bloqueos & Reservas Activas</h3>
+        <div class="admin-table-container">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Cancha</th>
+                        <th>Fecha & Horario</th>
+                        <th>Detalle / Usuario</th>
+                        <th>Tipo / Motivo</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="adminLocksTableBody">
+                    <tr><td colspan="5" style="text-align: center; padding: 20px;">Cargando bloqueos y reservas...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    </div>
+</div>

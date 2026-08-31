@@ -1,8 +1,9 @@
-import re
 with open('admin.html', 'r', encoding='utf-8') as f:
-    content = f.read()
-match = re.search(r'<form id="adminTarifasForm".*?</form>', content, re.DOTALL)
+    html = f.read()
+
+import re
+match = re.search(r'(<div class="admin-tab-content" id="admin-tab-tarifas">.*?)</form>', html, re.DOTALL)
 if match:
-    print(match.group(0))
-else:
-    print("Not found")
+    for line in match.group(0).split('\n'):
+        if 'admin-card-title' in line or 'help-text' in line or 'color: var(--color-text-muted)' in line:
+            print(line.strip())

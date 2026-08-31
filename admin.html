@@ -79,34 +79,31 @@ window.addEventListener('unhandledrejection', function(event) {
                 </div>
 
                 <div class="admin-tabs-nav">
-                    <button class="admin-tab-btn active" data-admintab="usuarios">
-                        <i class="fa-solid fa-users-gear"></i> 1. Usuarios & Roles
+                    <button class="admin-tab-btn active" data-admintab="turnos">
+                        <i class="fa-solid fa-calendar-days"></i> 1. Agenda de Turnos
                     </button>
                     <button class="admin-tab-btn" data-admintab="reservas">
                         <i class="fa-solid fa-file-invoice-dollar"></i> 2. Pagos & Reservas <span id="adminPendingBadge" style="display:none; align-items:center; justify-content:center; background:#EF4444; color:#FFF; font-size:0.75rem; padding:0 6px; height:18px; border-radius:10px; margin-left:6px; box-shadow:0 0 5px rgba(239,68,68,0.5);">0</span>
                     </button>
-                    <button class="admin-tab-btn" data-admintab="turnos">
-                        <i class="fa-solid fa-calendar-days"></i> 3. Agenda de Turnos
-                    </button>
-                    <button class="admin-tab-btn future-module" data-admintab="contenido">
-                        <i class="fa-solid fa-newspaper"></i> 4. Publicar Contenido
-                    </button>
                     <button class="admin-tab-btn" data-admintab="tarifas">
-                        <i class="fa-solid fa-tags"></i> 5. Tarifas y Horarios
+                        <i class="fa-solid fa-tags"></i> 3. Tarifas y Horarios
+                    </button>
+                    <button class="admin-tab-btn" data-admintab="usuarios">
+                        <i class="fa-solid fa-users-gear"></i> 4. Usuarios & Roles
+                    </button>
+                    <button class="admin-tab-btn" data-admintab="canchas">
+                        <i class="fa-solid fa-lock"></i> 5. Gestión y Bloqueo de Canchas
                     </button>
                     <button class="admin-tab-btn future-module" data-admintab="escuela">
                         <i class="fa-solid fa-graduation-cap"></i> 6. Escuela y Alumnos
                     </button>
-                    <button class="admin-tab-btn" data-admintab="canchas">
-                        <i class="fa-solid fa-lock"></i> 7. Gestión y Bloqueo de Canchas
-                    </button>
-                    <button class="admin-tab-btn" data-admintab="staff">
-                        <i class="fa-solid fa-users"></i> 8. Staff y Equipo
+                    <button class="admin-tab-btn future-module" data-admintab="contenido">
+                        <i class="fa-solid fa-newspaper"></i> 7. Publicar Contenido
                     </button>
                 </div>
 
                 <!-- MÓDULO 1: GESTIÓN DE USUARIOS Y ROLES -->
-                <div class="admin-tab-content active" id="admin-tab-usuarios">
+                <div class="admin-tab-content" id="admin-tab-usuarios">
                     <div class="admin-card">
                         <h3 class="admin-card-title">
                             <i class="fa-solid fa-user-shield" style="color: var(--color-ath-orange);"></i> 
@@ -115,6 +112,7 @@ window.addEventListener('unhandledrejection', function(event) {
                         <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 20px;">
                             Buscá usuarios por Nombre, Apellido, DNI o Email. Seleccioná y guardá el nuevo rol ('usuario', 'alumno' o 'admin') para modificar sus privilegios en tiempo real.
                         </p>
+                        <p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: -10px; margin-bottom: 20px;"><i class="fa-solid fa-lightbulb" style="color: #FFD700;"></i> Ejemplo: Busca a un usuario y cámbiale el rol a "alumno" para que tenga descuentos en sus reservas.</p>
 
                         <input type="text" class="admin-search-bar" id="userSearchInput" placeholder="🔍 Buscar por Nombre, Apellido, DNI o Email...">
 
@@ -147,6 +145,7 @@ window.addEventListener('unhandledrejection', function(event) {
                             <i class="fa-solid fa-calendar-check" style="color: var(--color-ath-orange);"></i> 
                             Gestión de Reservas y Estado de Pagos (<span id="totalBookingsCount">0</span>)
                         </h3>
+                        <p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-bottom: 20px;"><i class="fa-solid fa-lightbulb" style="color: #FFD700;"></i> Ejemplo: Entras aquí para revisar un comprobante de transferencia. Si el dinero llegó, presionas "Aprobar". Si el comprobante es falso, presionas "Rechazar" y la cancha queda libre de nuevo.</p>
                         <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 20px;">
                             Revisá los turnos reservados por los usuarios. Aprobá los pagos o cancelá las reservas que no registren pago válido.
                         </p>
@@ -231,12 +230,13 @@ window.addEventListener('unhandledrejection', function(event) {
                 </div>
 
                 <!-- MÓDULO 3: AGENDA DE TURNOS -->
-                <div class="admin-tab-content" id="admin-tab-turnos">
+                <div class="admin-tab-content active" id="admin-tab-turnos">
                     <div class="admin-card">
                         <h3 class="admin-card-title">
                             <i class="fa-solid fa-calendar-days" style="color: var(--color-ath-orange);"></i> 
                             Agenda Operativa de Turnos
                         </h3>
+                        <p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-bottom: 20px;"><i class="fa-solid fa-lightbulb" style="color: #FFD700;"></i> Ejemplo: El canchero puede usar esta vista para ver de un pantallazo rápido quién viene a jugar hoy y en qué cancha.</p>
                         <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 20px;">
                             Consulta rápida de las canchas reservadas, ordenadas con los turnos más próximos arriba.
                         </p>
@@ -295,8 +295,7 @@ window.addEventListener('unhandledrejection', function(event) {
                                 <button type="submit" class="btn-submit">
                                     <i class="fa-solid fa-paper-plane"></i> Publicar en noticias.html
                                 </button>
-                            <button type="submit" class="btn-submit" style="background: var(--color-ath-orange); justify-content: center;"><i class="fa-solid fa-floppy-disk"></i> Guardar Datos del Contacto</button>
-                        </form>
+                            </form>
                         </div>
 
                         <div class="admin-card">
@@ -324,8 +323,7 @@ window.addEventListener('unhandledrejection', function(event) {
                                 <button type="submit" class="btn-submit btn-accent">
                                     <i class="fa-solid fa-circle-plus"></i> Publicar en torneos.html
                                 </button>
-                            <button type="submit" class="btn-submit" style="background: var(--color-ath-orange); justify-content: center;"><i class="fa-solid fa-floppy-disk"></i> Guardar Datos del Contacto</button>
-                        </form>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -433,13 +431,13 @@ window.addEventListener('unhandledrejection', function(event) {
                                 <i class="fa-solid fa-floppy-disk"></i> Guardar Tarifas y Horarios
                             </button>
                         </div>
-                            <button type="submit" class="btn-submit" style="background: var(--color-ath-orange); justify-content: center;"><i class="fa-solid fa-floppy-disk"></i> Guardar Datos del Contacto</button>
-                        </form>
+                            </form>
 
                     <!-- TARJETA 3: DATOS DE CONTACTO Y WHATSAPP OFICIAL -->
                     <div class="admin-card" style="border: 1px solid var(--color-ath-orange); margin-bottom: 24px;">
                         <h3 class="admin-card-title"><i class="fa-solid fa-address-card" style="color: var(--color-ath-orange);"></i> Datos de Contacto y WhatsApp Oficial</h3>
                         <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 16px;">Estos datos se mostrarán en la sección de contacto y sincronizarán el botón flotante y los reenvíos de WhatsApp.</p>
+                        <p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: -10px; margin-bottom: 20px;"><i class="fa-solid fa-lightbulb" style="color: #FFD700;"></i> Ejemplo: Si cambian el número de teléfono, lo escribís acá y el botón flotante de WhatsApp de toda la página se actualiza solo para dirigir al nuevo número.</p>
                         
                         <form id="formClubConfig" style="display: flex; flex-direction: column; gap: 14px;">
                             <div class="form-group">
@@ -454,15 +452,20 @@ window.addEventListener('unhandledrejection', function(event) {
                                 <label style="font-weight: 700; color: #FFF;">Número de WhatsApp Oficial (con código de país, sin '+' ni espacios. Ej: 5493564...)</label>
                                 <input type="text" id="clubWppInput" required placeholder="5493564..." style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; box-sizing: border-box;">
                             </div>
-                            <button type="submit" class="btn-submit" style="background: var(--color-ath-orange); justify-content: center;"><i class="fa-solid fa-floppy-disk"></i> Guardar Datos del Contacto</button>
-                            <button type="submit" class="btn-submit" style="background: var(--color-ath-orange); justify-content: center;"><i class="fa-solid fa-floppy-disk"></i> Guardar Datos del Contacto</button>
-                        </form>
+                                <button type="submit" class="btn-submit" style="background: var(--color-ath-orange); justify-content: center;"><i class="fa-solid fa-floppy-disk"></i> Guardar Datos del Contacto</button>
+                            </form>
                     </div>
                 </div>
 
                 <!-- MÓDULO 5: GESTIÓN Y BLOQUEO DE CANCHAS -->
                 <div class="admin-tab-content" id="admin-tab-canchas">
     
+    <div class="subtabs-container" style="margin-bottom: 24px;">
+        <button class="subtab-btn active" id="btn-canchas-horarios" onclick="window.cambiarSubtabCanchas('canchas-horarios')" style="background: linear-gradient(135deg, #FF6600 0%, #FF8800 100%); border: 1px solid #FFD700; color: #FFF; padding: 10px 18px; border-radius: 8px; font-weight: 800; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 0 10px rgba(255,102,0,0.4);"><i class="fa-solid fa-calendar-week"></i> 1. Horarios Fijos</button>
+        <button class="subtab-btn" id="btn-canchas-controles" onclick="window.cambiarSubtabCanchas('canchas-controles')" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: #CBD5E1; padding: 10px 18px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;"><i class="fa-solid fa-triangle-exclamation"></i> 2. Controles Especiales</button>
+        <button class="subtab-btn" id="btn-canchas-monitor" onclick="window.cambiarSubtabCanchas('canchas-monitor')" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: #CBD5E1; padding: 10px 18px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;"><i class="fa-solid fa-desktop"></i> 3. Monitor de Canchas</button>
+    </div>
+    <div id="subtab-canchas-horarios" class="subtab-content" style="display:block;">
     <!-- SECCIÓN 1: GESTIÓN DE HORARIOS FIJOS -->
     <h4 style="color: var(--color-ath-orange); margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;"><i class="fa-solid fa-calendar-week"></i> 1. Gestión de Horarios Fijos (Escuela / Clases)</h4>
 <div class="grid-2col" style="align-items: start; margin-bottom: 30px;">
@@ -488,8 +491,7 @@ window.addEventListener('unhandledrejection', function(event) {
                 </div>
                 <input type="text" id="reglaNombre" placeholder="Ej: Escuela Formativa" required style="width: 100%; padding: 8px; border-radius: 6px; background: rgba(0,0,0,0.3); color: #FFF; border: 1px solid rgba(255,255,255,0.2); box-sizing: border-box;">
                 <button type="submit" class="btn-submit" style="padding: 8px;"><i class="fa-solid fa-plus"></i> Agregar Regla</button>
-                            <button type="submit" class="btn-submit" style="background: var(--color-ath-orange); justify-content: center;"><i class="fa-solid fa-floppy-disk"></i> Guardar Datos del Contacto</button>
-                        </form>
+                            </form>
             
             <div id="listaReglasSemanales" style="display: flex; flex-direction: column; gap: 8px;"></div>
         </div>
@@ -524,12 +526,14 @@ window.addEventListener('unhandledrejection', function(event) {
                     </label>
                 </div>
                 <button type="submit" class="btn-submit" style="background: #10B981; border: none; padding: 11px 16px; width: 100%; justify-content: center;"><i class="fa-solid fa-unlock"></i> Liberar Cancha</button>
-                            <button type="submit" class="btn-submit" style="background: var(--color-ath-orange); justify-content: center;"><i class="fa-solid fa-floppy-disk"></i> Guardar Datos del Contacto</button>
-                        </form>
+                            </form>
             <div id="listaExcepciones" style="margin-top: 16px; display: flex; flex-direction: column; gap: 8px;"></div>
         </div>
     </div>
 
+    </div>
+
+    <div id="subtab-canchas-controles" class="subtab-content" style="display:none;">
     <!-- SECCIÓN 2: CONTROLES ESPECIALES Y EMERGENCIAS -->
     <h4 style="color: var(--color-ath-orange); margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;"><i class="fa-solid fa-triangle-exclamation"></i> 2. Controles Especiales y Emergencias</h4>
 <div class="grid-2col" style="align-items: start; margin-bottom: 30px;">
@@ -577,8 +581,7 @@ window.addEventListener('unhandledrejection', function(event) {
                 </div>
 
                 <button type="submit" class="btn-submit" style="background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%); justify-content: center;"><i class="fa-solid fa-lock"></i> Bloquear Ahora</button>
-                            <button type="submit" class="btn-submit" style="background: var(--color-ath-orange); justify-content: center;"><i class="fa-solid fa-floppy-disk"></i> Guardar Datos del Contacto</button>
-                        </form>
+                            </form>
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 20px;">
@@ -615,6 +618,9 @@ window.addEventListener('unhandledrejection', function(event) {
         </div>
     </div>
 
+    </div>
+
+    <div id="subtab-canchas-monitor" class="subtab-content" style="display:none;">
     <!-- SECCIÓN 3: MONITOR EN VIVO (TABLA MAESTRA) -->
     <h4 style="color: var(--color-ath-orange); margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;"><i class="fa-solid fa-desktop"></i> 3. Monitor de Canchas</h4>
 <div class="admin-card" style="width: 100%;">
@@ -637,9 +643,9 @@ window.addEventListener('unhandledrejection', function(event) {
         </div>
     </div>
 
+    </div>
 </div>
-
-                <!-- MÓDULO 6: GESTIÓN DE ESCUELA DE TENIS -->
+<!-- MÓDULO 6: GESTIÓN DE ESCUELA DE TENIS -->
                 <div class="admin-tab-content" id="admin-tab-escuela">
                     <div class="admin-card">
                         <h3 class="admin-card-title"><i class="fa-solid fa-users-viewfinder" style="color: var(--color-ath-orange);"></i> Gestión de Escuela de Tenis</h3>
@@ -753,8 +759,7 @@ window.addEventListener('unhandledrejection', function(event) {
                     <button type="submit" class="btn-submit">
                         <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión
                     </button>
-                            <button type="submit" class="btn-submit" style="background: var(--color-ath-orange); justify-content: center;"><i class="fa-solid fa-floppy-disk"></i> Guardar Datos del Contacto</button>
-                        </form>
+                            </form>
             </div>
 
             <div class="tab-content" id="tab-register">
@@ -801,8 +806,7 @@ window.addEventListener('unhandledrejection', function(event) {
                     <button type="submit" class="btn-submit btn-accent" id="regSubmitBtn">
                         <i class="fa-solid fa-user-plus"></i> Crear mi cuenta
                     </button>
-                            <button type="submit" class="btn-submit" style="background: var(--color-ath-orange); justify-content: center;"><i class="fa-solid fa-floppy-disk"></i> Guardar Datos del Contacto</button>
-                        </form>
+                            </form>
             </div>
 
 
@@ -822,8 +826,7 @@ window.addEventListener('unhandledrejection', function(event) {
                     <button type="submit" class="btn-submit" id="sendCodeBtn">
                         <i class="fa-solid fa-paper-plane"></i> Enviar Código de Seguridad
                     </button>
-                            <button type="submit" class="btn-submit" style="background: var(--color-ath-orange); justify-content: center;"><i class="fa-solid fa-floppy-disk"></i> Guardar Datos del Contacto</button>
-                        </form>
+                            </form>
 
                 <form class="modal-form" id="recoveryStep2Form" style="display: none;">
                     <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 6px;">
@@ -840,8 +843,7 @@ window.addEventListener('unhandledrejection', function(event) {
                     <button type="submit" class="btn-submit btn-accent" id="resetPasswordBtn">
                         <i class="fa-solid fa-check-double"></i> Restablecer Contraseña
                     </button>
-                            <button type="submit" class="btn-submit" style="background: var(--color-ath-orange); justify-content: center;"><i class="fa-solid fa-floppy-disk"></i> Guardar Datos del Contacto</button>
-                        </form>
+                            </form>
 
                 <div style="text-align: center; margin-top: 14px;">
                     <a href="#" id="backToLoginBtn" class="terms-link" style="font-size: 0.85rem;">

@@ -183,11 +183,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Sincronizar Footer
         const footerAddress = document.querySelector('.footer-social-wrapper p');
         if (footerAddress) {
-            footerAddress.innerHTML = `<strong>Club Ciudad Verde</strong><br>${cfg.direccion}`;
+            footerAddress.innerHTML = `<strong>Club Ciudad Verde</strong><br>${cfgContact.direccion}`;
         }
         const footerWpp = document.querySelector('.social-icon-btn.whatsapp');
         if (footerWpp) {
-            footerWpp.href = `https://wa.me/${cfg.whatsapp}`;
+            footerWpp.href = `https://wa.me/${cfgContact.whatsapp}`;
         }
     }
     syncGlobalConfig();

@@ -1161,7 +1161,7 @@ class ATHDatabaseEngine {
                 destino: "NUMERO_DE_PRUEBA" // Reemplazar en pruebas por el numero autorizado
             };
 
-            fetch('http://localhost:3000/api/send-whatsapp', {
+            fetch('/api/send-whatsapp', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payloadWA)

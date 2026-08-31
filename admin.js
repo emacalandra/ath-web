@@ -713,7 +713,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Inicializar sub-módulos visuales
-    initAdminStats();
+    // initAdminStats(); // DESHABILITADO PORQUE NO ESTA DEFINIDO
     if (typeof initAgendaTurnos === 'function') initAgendaTurnos();
     cargarTablaUsuarios();
         if (typeof cargarTablaStaff === "function") cargarTablaStaff();

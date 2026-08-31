@@ -148,14 +148,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Elementos de Recuperación de Contraseña (#tab-recovery)
 
     // Sincronizar configuraciones globales (horarios, footer, modal)
-    function syncGlobalConfig() {
+    function syncGlobalConfig(overrideDate = null) {
         if (!window.DBHits || typeof window.DBHits.getClubConfig !== 'function') return;
         const cfgContact = window.DBHits.getClubConfig();
         
         let apertura = cfgContact.apertura;
         let cierre = cfgContact.cierre;
         if (typeof window.DBHits.obtenerHorariosDelDia === 'function') {
-            const horarios = window.DBHits.obtenerHorariosDelDia(typeof currentWidgetDate !== 'undefined' ? currentWidgetDate : null);
+            const horarios = window.DBHits.obtenerHorariosDelDia(overrideDate);
             apertura = horarios.apertura;
             cierre = horarios.cierre;
         }
@@ -1622,7 +1622,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentWidgetDate = btn.dataset.date;
                 pintarBotonSeleccionado(dateBtns, btn);
                 renderWidgetDatePills();
-                if (typeof syncGlobalConfig === 'function') syncGlobalConfig();
+                if (typeof syncGlobalConfig === 'function') syncGlobalConfig(currentWidgetDate);
                 renderWidgetDayTimelineGrid();
                 calculateAndVerifyMinuteByMinute();
             });

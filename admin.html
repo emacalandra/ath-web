@@ -164,11 +164,7 @@ window.addEventListener('unhandledrejection', function(event) {
                         <!-- PANEL DE REPORTES FINANCIEROS Y CIERRE CONTABLE SEMANAL -->
                         <div id="panel-reportes-financieros" style="display: none; background: rgba(16, 185, 129, 0.1); border: 1px solid #10B981; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
                             <h4 style="color: #10B981; margin-top: 0; margin-bottom: 12px;"><i class="fa-solid fa-chart-line"></i> Cierre Contable Semanal</h4>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Si el club cierra siempre a las 23:00, pero el 24 de Diciembre cierran a las 18:00, usa esta herramienta.</p>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Del 01/10 al 15/10. Ideal para torneos o refacciones largas.</p>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Selecciona Cancha 1, fecha de hoy, de 14:00 a 16:00, motivo "Mantenimiento". Nadie podrá reservar en ese horario.</p>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Agrega "Cancha 4" si construyeron una nueva, o borra una vieja. Esto afecta la grilla principal.</p>
-                            <div style="display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; margin-bottom: 10px;">
+<div style="display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; margin-bottom: 10px;">
                                 <div class="form-group" style="margin: 0; min-width: 320px;">
                                     <label style="font-size: 0.8rem; margin-bottom: 4px;">Rango a consultar (Desde - Hasta):</label>
                                     <div style="display: flex; gap: 8px; align-items: center;">
@@ -351,11 +347,7 @@ window.addEventListener('unhandledrejection', function(event) {
 
                             <!-- SECCIÓN A: ALQUILER DE CANCHAS (MATRIZ POR ROLES) -->
                             <h4 style="color: var(--color-ath-orange); margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 6px;"><i class="fa-solid fa-layer-group"></i> Matriz de Alquiler de Canchas (ARS/Hora)</h4>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Si el club cierra siempre a las 23:00, pero el 24 de Diciembre cierran a las 18:00, usa esta herramienta.</p>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Del 01/10 al 15/10. Ideal para torneos o refacciones largas.</p>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Selecciona Cancha 1, fecha de hoy, de 14:00 a 16:00, motivo "Mantenimiento". Nadie podrá reservar en ese horario.</p>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Agrega "Cancha 4" si construyeron una nueva, o borra una vieja. Esto afecta la grilla principal.</p>
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-bottom: 24px;">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-bottom: 24px;">
                                 <!-- Estándar -->
                                 <div style="background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
                                     <label style="color: #94A3B8; font-size: 0.8rem; text-transform: uppercase;">Invitado / Usuario Estándar</label>
@@ -396,11 +388,7 @@ window.addEventListener('unhandledrejection', function(event) {
 
                             <!-- SECCIÓN B: CUOTAS Y CLASES -->
                             <h4 style="color: var(--color-ath-orange); margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 6px;"><i class="fa-solid fa-graduation-cap"></i> Escuela, Entrenamiento y Particulares</h4>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Si el club cierra siempre a las 23:00, pero el 24 de Diciembre cierran a las 18:00, usa esta herramienta.</p>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Del 01/10 al 15/10. Ideal para torneos o refacciones largas.</p>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Selecciona Cancha 1, fecha de hoy, de 14:00 a 16:00, motivo "Mantenimiento". Nadie podrá reservar en ese horario.</p>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Agrega "Cancha 4" si construyeron una nueva, o borra una vieja. Esto afecta la grilla principal.</p>
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
                                 <div class="form-group">
                                     <label>Cuota Mensual Formativa (ARS)</label>
                                     <input type="number" id="priceEscuela" value="25000" required>
@@ -477,16 +465,12 @@ window.addEventListener('unhandledrejection', function(event) {
     
     <!-- SECCIÓN 1: GESTIÓN DE HORARIOS FIJOS -->
     <h4 style="color: var(--color-ath-orange); margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;"><i class="fa-solid fa-calendar-week"></i> 1. Gestión de Horarios Fijos (Escuela / Clases)</h4>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Si el club cierra siempre a las 23:00, pero el 24 de Diciembre cierran a las 18:00, usa esta herramienta.</p>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Del 01/10 al 15/10. Ideal para torneos o refacciones largas.</p>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Selecciona Cancha 1, fecha de hoy, de 14:00 a 16:00, motivo "Mantenimiento". Nadie podrá reservar en ese horario.</p>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Agrega "Cancha 4" si construyeron una nueva, o borra una vieja. Esto afecta la grilla principal.</p>
-    
-    <div class="grid-2col" style="align-items: start; margin-bottom: 30px;">
+<div class="grid-2col" style="align-items: start; margin-bottom: 30px;">
         <!-- Plantilla Semanal -->
         <div class="admin-card" style="border: 1px solid var(--color-ath-orange); margin-bottom: 0;">
             <h3 class="admin-card-title"><i class="fa-solid fa-calendar-week"></i> Plantilla Fija Semanal</h3>
             <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 16px;">Configura horarios fijos (ej: clases). El sistema los bloqueará automáticamente todas las semanas.</p>
+            <p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: -10px; margin-bottom: 20px;"><i class="fa-solid fa-lightbulb" style="color: #FFD700;"></i> Ejemplo: Lunes y Miércoles, Cancha 1, de 16:00 a 18:00 para Escuela. Nadie podrá reservar.</p>
             
             <form id="formReglaSemanal" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; box-sizing: border-box;">
                 <div style="display: flex; gap: 8px; flex-wrap: wrap;">
@@ -514,6 +498,7 @@ window.addEventListener('unhandledrejection', function(event) {
         <div class="admin-card" style="border: 1px solid #10B981; background: rgba(16, 185, 129, 0.05); margin-bottom: 0;">
             <h3 class="admin-card-title"><i class="fa-solid fa-lock-open" style="color: #10B981;"></i> Excepción por Día (Liberar)</h3>
             <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 16px;">¿Falta el profesor hoy? Ingresa la fecha y horario para anular la plantilla fija <strong>solo por ese día</strong> y permitir reservas.</p>
+            <p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: -10px; margin-bottom: 20px;"><i class="fa-solid fa-lightbulb" style="color: #FFD700;"></i> Ejemplo: Falta el profe de las 18:00, anulas esa clase hoy y la cancha se abre al público.</p>
             <form id="formExcepcionClase" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; box-sizing: border-box;">
                 <div style="flex: 1; min-width: 130px;">
                     <label style="font-size: 0.8rem; color: #6EE7B7; font-weight: 700;">Fecha a liberar:</label>
@@ -547,17 +532,13 @@ window.addEventListener('unhandledrejection', function(event) {
 
     <!-- SECCIÓN 2: CONTROLES ESPECIALES Y EMERGENCIAS -->
     <h4 style="color: var(--color-ath-orange); margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;"><i class="fa-solid fa-triangle-exclamation"></i> 2. Controles Especiales y Emergencias</h4>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Si el club cierra siempre a las 23:00, pero el 24 de Diciembre cierran a las 18:00, usa esta herramienta.</p>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Del 01/10 al 15/10. Ideal para torneos o refacciones largas.</p>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Selecciona Cancha 1, fecha de hoy, de 14:00 a 16:00, motivo "Mantenimiento". Nadie podrá reservar en ese horario.</p>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Agrega "Cancha 4" si construyeron una nueva, o borra una vieja. Esto afecta la grilla principal.</p>
-    
-    <div class="grid-2col" style="align-items: start; margin-bottom: 30px;">
+<div class="grid-2col" style="align-items: start; margin-bottom: 30px;">
         
         <!-- Bloqueo Rápido -->
         <div class="admin-card" style="margin-bottom: 0;">
             <h3 class="admin-card-title"><i class="fa-solid fa-ban" style="color: #EF4444;"></i> Bloqueo Rápido / Excepcional</h3>
             <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 20px;">Bloqueá canchas de forma inmediata por alquileres externos o clases sueltas.</p>
+            <p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: -10px; margin-bottom: 20px;"><i class="fa-solid fa-lightbulb" style="color: #FFD700;"></i> Ejemplo: Selecciona Cancha 1, fecha de hoy, de 14:00 a 16:00, motivo "Mantenimiento". Nadie podrá reservar en ese horario.</p>
 
             <form id="adminCourtLockForm" style="display: flex; flex-direction: column; gap: 16px;">
                 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
@@ -605,6 +586,7 @@ window.addEventListener('unhandledrejection', function(event) {
             <div class="admin-card" style="border: 1px solid #3B82F6; background: rgba(59, 130, 246, 0.05); margin-bottom: 0;">
                 <h3 class="admin-card-title"><i class="fa-solid fa-umbrella-beach" style="color: #3B82F6;"></i> Modo Vacaciones</h3>
                 <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 16px;">Programa un receso. Las canchas quedarán liberadas al público en este rango.</p>
+            <p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: -10px; margin-bottom: 20px;"><i class="fa-solid fa-lightbulb" style="color: #FFD700;"></i> Ejemplo: Vacaciones del 01/01 al 15/01. Las clases fijas se suspenden temporalmente.</p>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;">
                     <div style="flex: 1; min-width: 130px;">
                         <label style="font-size: 0.8rem; color: #93C5FD; font-weight: 700;">Desde (Inicio):</label>
@@ -625,6 +607,7 @@ window.addEventListener('unhandledrejection', function(event) {
             <div class="admin-card" style="border: 1px solid #EF4444; background: rgba(239, 68, 68, 0.05); margin-bottom: 0;">
                 <h3 class="admin-card-title"><i class="fa-solid fa-cloud-showers-heavy" style="color: #EF4444;"></i> Alerta Climática</h3>
                 <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 12px;">Cancela turnos activos y notifica a los jugadores.</p>
+            <p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: -10px; margin-bottom: 20px;"><i class="fa-solid fa-lightbulb" style="color: #FFD700;"></i> Ejemplo: Llueve fuerte. Seleccionas las 18:00 y todos los turnos desde esa hora se cancelan y se avisa a los jugadores.</p>
                 <input type="date" id="weatherDate" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; box-sizing: border-box;">
                 <input type="text" id="weatherReason" placeholder="Ej: Lluvia intensa" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #FFF; box-sizing: border-box;">
                 <button id="btnSuspenderClima" class="btn-submit" style="background: #EF4444; justify-content: center; width: 100%;"><i class="fa-solid fa-triangle-exclamation"></i> Suspender y Notificar</button>
@@ -634,12 +617,7 @@ window.addEventListener('unhandledrejection', function(event) {
 
     <!-- SECCIÓN 3: MONITOR EN VIVO (TABLA MAESTRA) -->
     <h4 style="color: var(--color-ath-orange); margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;"><i class="fa-solid fa-desktop"></i> 3. Monitor de Canchas</h4>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Si el club cierra siempre a las 23:00, pero el 24 de Diciembre cierran a las 18:00, usa esta herramienta.</p>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Del 01/10 al 15/10. Ideal para torneos o refacciones largas.</p>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Selecciona Cancha 1, fecha de hoy, de 14:00 a 16:00, motivo "Mantenimiento". Nadie podrá reservar en ese horario.</p>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Agrega "Cancha 4" si construyeron una nueva, o borra una vieja. Esto afecta la grilla principal.</p>
-    
-    <div class="admin-card" style="width: 100%;">
+<div class="admin-card" style="width: 100%;">
         <h3 class="admin-card-title"><i class="fa-solid fa-list-check" style="color: var(--color-ath-orange);"></i> Bloqueos & Reservas Activas</h3>
         <div class="admin-table-container">
             <table class="admin-table">
@@ -701,11 +679,7 @@ window.addEventListener('unhandledrejection', function(event) {
 
                 <div class="footer-nav">
                     <h4 class="footer-heading">Navegación</h4>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Si el club cierra siempre a las 23:00, pero el 24 de Diciembre cierran a las 18:00, usa esta herramienta.</p>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Del 01/10 al 15/10. Ideal para torneos o refacciones largas.</p>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Selecciona Cancha 1, fecha de hoy, de 14:00 a 16:00, motivo "Mantenimiento". Nadie podrá reservar en ese horario.</p>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Agrega "Cancha 4" si construyeron una nueva, o borra una vieja. Esto afecta la grilla principal.</p>
-                    <ul class="footer-nav-list">
+<ul class="footer-nav-list">
                         <li><a href="index.html">Inicio</a></li>
                         <li><a href="sede.html">Sede y Reservas</a></li>
                         <li><a href="noticias.html">Noticias</a></li>
@@ -718,11 +692,7 @@ window.addEventListener('unhandledrejection', function(event) {
 
                 <div class="footer-social-wrapper">
                     <h4 class="footer-heading">Redes Sociales & Sede</h4>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Si el club cierra siempre a las 23:00, pero el 24 de Diciembre cierran a las 18:00, usa esta herramienta.</p>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Del 01/10 al 15/10. Ideal para torneos o refacciones largas.</p>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Selecciona Cancha 1, fecha de hoy, de 14:00 a 16:00, motivo "Mantenimiento". Nadie podrá reservar en ese horario.</p>
-<p class="help-text" style="font-size: 0.85rem; color: #94A3B8; margin-top: 5px; margin-bottom: 15px;">Ejemplo: Agrega "Cancha 4" si construyeron una nueva, o borra una vieja. Esto afecta la grilla principal.</p>
-                    <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 12px;">
+<p style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 12px;">
                         <strong>Club Ciudad Verde</strong><br>
                         Belgrano 2900, San Francisco, Córdoba
                     </p>

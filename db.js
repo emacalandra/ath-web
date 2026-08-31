@@ -193,7 +193,13 @@ class ATHDatabaseEngine {
 
             // Listener Tiempo Real: Reservas
             onSnapshot(doc(this.db, "ath_core", "reservas"), (docSnap) => {
-                const localData = JSON.parse(localStorage.getItem(BOOKINGS_STORAGE_KEY)) || [];
+                let localData = [];
+                try {
+                    const raw = localStorage.getItem(BOOKINGS_STORAGE_KEY);
+                    if (raw && raw !== 'undefined') localData = JSON.parse(raw) || [];
+                } catch(e) {
+                    console.warn("Error parsing BOOKINGS_STORAGE_KEY", e);
+                }
                 if (docSnap.exists()) {
                     const cloudData = docSnap.data().array || [];
                     if (cloudData.length > 0 || localData.length === 0) {
@@ -211,7 +217,13 @@ class ATHDatabaseEngine {
 
             // Listener Tiempo Real: Usuarios (Blindaje y Auto-Semilla Garantizada)
             onSnapshot(doc(this.db, "ath_core", "usuarios"), async (docSnap) => {
-                const localData = JSON.parse(localStorage.getItem(USERS_STORAGE_KEY)) || [];
+                let localData = [];
+                try {
+                    const raw = localStorage.getItem(USERS_STORAGE_KEY);
+                    if (raw && raw !== 'undefined') localData = JSON.parse(raw) || [];
+                } catch(e) {
+                    console.warn("Error parsing USERS_STORAGE_KEY", e);
+                }
                 if (docSnap.exists()) {
                     let cloudData = docSnap.data().array || [];
                     if (cloudData.length > 0) {

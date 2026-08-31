@@ -1620,7 +1620,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    async function renderWidgetDayTimelineGrid() {
+    async async function renderWidgetDayTimelineGrid() {
         const gridContainer = document.getElementById('appDayTimelineGrid') || document.getElementById('widgetDayTimelineGrid');
         if (!gridContainer) return;
         gridContainer.innerHTML = '<span style="color:var(--color-text-muted); font-size:0.85rem;">Cargando estado de la cancha...</span>';

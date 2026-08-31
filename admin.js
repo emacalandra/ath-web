@@ -241,10 +241,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             // B) Condiciones para ir al historial:
             // - Si fue explícitamente rechazada/cancelada, va al historial.
-            const esRechazada = r.estadoPago && (r.estadoPago.includes('rechazado') || r.estadoPago.includes('❌') || String(r.estadoPago).toLowerCase().includes('rechazad'));
+            const esRechazada = r.estadoPago && (String(r.estadoPago).includes('rechazado') || String(r.estadoPago).includes('❌') || String(r.estadoPago).toLowerCase().includes('rechazad'));
             
             // - Si ya pasó en el tiempo Y su pago NO está pendiente de revisión por la secretaría
-            const pagoPendiente = r.estadoPago && (r.estadoPago.includes('esperando') || r.estadoPago.includes('⏳'));
+            const pagoPendiente = r.estadoPago && (String(r.estadoPago).includes('esperando') || String(r.estadoPago).includes('⏳'));
             
             return esRechazada || (esPasada && !pagoPendiente);
         });
@@ -295,7 +295,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 badgeStyle = 'style="background: rgba(16, 185, 129, 0.2); color: #10B981; border: 1px solid #10B981; font-weight: 700; padding: 4px 8px; border-radius: 6px; display: inline-block;"';
             } else if (r.estadoPago === 'Rechazado' || r.estadoPago === '❌ Pago rechazado') {
                 badgeClass = 'status-rejected';
-            } else if (r.estadoPago === '⏳ Pago esperando aprobación' || (r.estadoPago && (r.estadoPago.includes('esperando') || r.estadoPago.includes('Revisión') || r.estadoPago.includes('Pendiente')))) {
+            } else if (r.estadoPago === '⏳ Pago esperando aprobación' || (r.estadoPago && (String(r.estadoPago).includes('esperando') || String(r.estadoPago).includes('Revisión') || String(r.estadoPago).includes('Pendiente')))) {
                 badgeClass = 'status-review';
                 badgeStyle = 'style="background: rgba(255, 215, 0, 0.2); color: #FFD700; border: 1px solid #FFD700; font-weight: 700; padding: 4px 8px; border-radius: 6px; display: inline-block;"';
             }
@@ -1433,6 +1433,6 @@ window.cargarAgendaTurnos = function() {
         const nombreStr = isBloqueo ? '<span style="color: #EF4444;">Bloqueo: ' + (r.motivo || 'Mantenimiento') + '</span>' : r.usuarioNombre;
         const colorHora = r.fecha === todayStr && (timeToMinutes(r.horaInicio) - currentMins < 60) ? '#34D399' : '#FFF';
 
-        tbody.innerHTML += '<tr><td>' + r.fecha.split('-').reverse().join('/') + '</td><td style="font-weight: 700; color: ' + colorHora + ';">' + r.horaInicio + ' - ' + r.horaFin + '</td><td><span class="user-role-tag tag-socio">Cancha ' + r.canchaId + '</span></td><td style="font-weight: 600;">' + nombreStr + '</td></tr>';
+        tbody.innerHTML += '<tr><td>' + (r.fecha || '').split('-').reverse().join('/') + '</td><td style="font-weight: 700; color: ' + colorHora + ';">' + r.horaInicio + ' - ' + r.horaFin + '</td><td><span class="user-role-tag tag-socio">Cancha ' + r.canchaId + '</span></td><td style="font-weight: 600;">' + nombreStr + '</td></tr>';
     });
 }

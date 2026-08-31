@@ -1150,6 +1150,28 @@ class ATHDatabaseEngine {
             );
         });
 
+        // Disparar WhatsApp automtico va Servidor Node.js
+        try {
+            const payloadWA = {
+                usuarioNombre: usuarioNombre || 'Usuario ATH',
+                canchaId: String(canchaId),
+                fecha: typeof formatFechaArg === 'function' ? formatFechaArg(fecha) : fecha,
+                horaInicio: horaInicio,
+                horaFin: horaFin,
+                destino: "NUMERO_DE_PRUEBA" // Reemplazar en pruebas por el numero autorizado
+            };
+
+            fetch('http://localhost:3000/api/send-whatsapp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payloadWA)
+            }).then(res => res.json())
+              .then(data => console.log(" [WhatsApp API Node] Disparado:", data))
+              .catch(e => console.error(" [WhatsApp API] Servidor Node apagado o error:", e));
+        } catch(e) {
+            console.warn("Servidor Node no disponible.");
+        }
+
         console.log(`🎾 Reserva creada para Cancha ${canchaId} el ${fecha} (${horaInicio} a ${horaFin} hs) - Estado: ${estadoInicial} - Total: $${calculo.precioTotal} ARS`);
         return nuevaReserva;
     }

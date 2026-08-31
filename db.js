@@ -945,7 +945,6 @@ class ATHDatabaseEngine {
 
         // Verificar margen de 15 minutos de descanso/reacondicionamiento
         const reservas = this.getReservasRaw();
-        const startNuevo = timeStringToMinutes(horaInicio);
         const endNuevo = timeStringToMinutes(horaFin);
         const canchaStr = String(canchaId);
 

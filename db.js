@@ -837,6 +837,27 @@ class ATHDatabaseEngine {
         }
     }
 
+    obtenerHorariosDelDia(fecha = null) {
+        let dateObj = fecha ? new Date(fecha + 'T12:00:00') : new Date();
+        const pricing = this.getPricingRaw();
+        const isFeriado = false; // Aquí se podría integrar lógica de feriados reales
+        const dayOfWeek = dateObj.getDay(); // 0: Dom, 1: Lun, ..., 6: Sab
+
+        let openTime, closeTime;
+
+        if (isFeriado) {
+            openTime = pricing.timeOpenF || '09:00';
+            closeTime = pricing.timeCloseF || '21:00';
+        } else if (dayOfWeek === 0 || dayOfWeek === 6) { // Fin de semana
+            openTime = pricing.timeOpenSD || '08:00';
+            closeTime = pricing.timeCloseSD || '22:00';
+        } else { // Lunes a Viernes
+            openTime = pricing.timeOpenLV || '08:00';
+            closeTime = pricing.timeCloseLV || '23:00';
+        }
+        return { apertura: openTime, cierre: closeTime, noche: pricing.timeNight || '18:30' };
+    }
+
     getPricingRaw() {
         try {
             const raw = localStorage.getItem(PRICING_STORAGE_KEY);
@@ -908,6 +929,20 @@ class ATHDatabaseEngine {
 
     // 2. Algoritmo Anti-Colisión (Solapamiento)
     verificarDisponibilidad(canchaId, fecha, horaInicio, horaFin) {
+        // 1. Validacion de tiempo pasado
+        const now = new Date();
+        const strFechaActual = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+        const startNuevo = timeStringToMinutes(horaInicio);
+        
+        if (fecha < strFechaActual) {
+            return { disponible: false, mensaje: '⛔ No se pueden reservar turnos en fechas pasadas.' };
+        } else if (fecha === strFechaActual) {
+            const minActuales = now.getHours() * 60 + now.getMinutes();
+            if (startNuevo <= minActuales) {
+                return { disponible: false, mensaje: '⛔ Este horario ya ha transcurrido en el día de hoy.' };
+            }
+        }
+
         // Verificar margen de 15 minutos de descanso/reacondicionamiento
         const reservas = this.getReservasRaw();
         const startNuevo = timeStringToMinutes(horaInicio);

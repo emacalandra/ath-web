@@ -1,7 +1,7 @@
-with open('script.js', 'r', encoding='utf-8') as f:
-    js = f.read()
-
-import re
-match = re.search(r'Listo para tu pr.*partido', js)
-if match:
-    print(repr(match.group(0)))
+with open("script.js", "rb") as f:
+    raw = f.read()
+try:
+    raw.decode("utf-8")
+    print("script.js is valid UTF-8")
+except UnicodeDecodeError as e:
+    print("script.js is NOT valid UTF-8:", e)

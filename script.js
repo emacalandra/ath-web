@@ -150,25 +150,33 @@ document.addEventListener('DOMContentLoaded', () => {
     // Sincronizar configuraciones globales (horarios, footer, modal)
     function syncGlobalConfig() {
         if (!window.DBHits || typeof window.DBHits.getClubConfig !== 'function') return;
-        const cfg = window.DBHits.getClubConfig();
+        const cfgContact = window.DBHits.getClubConfig();
         
+        let apertura = cfgContact.apertura;
+        let cierre = cfgContact.cierre;
+        if (typeof window.DBHits.obtenerHorariosDelDia === 'function') {
+            const horarios = window.DBHits.obtenerHorariosDelDia(typeof currentWidgetDate !== 'undefined' ? currentWidgetDate : null);
+            apertura = horarios.apertura;
+            cierre = horarios.cierre;
+        }
+
         // Sincronizar modal de reserva
         const timeStart = document.getElementById('appTimeStart');
         const timeEnd = document.getElementById('appTimeEnd');
         if (timeStart) {
-            timeStart.min = cfg.apertura;
-            timeStart.max = cfg.cierre;
+            timeStart.min = apertura;
+            timeStart.max = cierre;
             const startLabel = timeStart.previousElementSibling;
             if (startLabel && startLabel.tagName === 'LABEL') {
-                startLabel.innerHTML = `Inicio (Desde ${cfg.apertura})`;
+                startLabel.innerHTML = `Inicio (Desde ${apertura})`;
             }
         }
         if (timeEnd) {
-            timeEnd.min = cfg.apertura;
-            timeEnd.max = cfg.cierre;
+            timeEnd.min = apertura;
+            timeEnd.max = cierre;
             const endLabel = timeEnd.previousElementSibling;
             if (endLabel && endLabel.tagName === 'LABEL') {
-                endLabel.innerHTML = `Fin (Hasta ${cfg.cierre})`;
+                endLabel.innerHTML = `Fin (Hasta ${cierre})`;
             }
         }
         
@@ -1614,13 +1622,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentWidgetDate = btn.dataset.date;
                 pintarBotonSeleccionado(dateBtns, btn);
                 renderWidgetDatePills();
+                if (typeof syncGlobalConfig === 'function') syncGlobalConfig();
                 renderWidgetDayTimelineGrid();
                 calculateAndVerifyMinuteByMinute();
             });
         });
     }
 
-    async async function renderWidgetDayTimelineGrid() {
+    async function renderWidgetDayTimelineGrid() {
         const gridContainer = document.getElementById('appDayTimelineGrid') || document.getElementById('widgetDayTimelineGrid');
         if (!gridContainer) return;
         gridContainer.innerHTML = '<span style="color:var(--color-text-muted); font-size:0.85rem;">Cargando estado de la cancha...</span>';

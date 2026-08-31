@@ -1,6 +1,20 @@
 <!DOCTYPE html>
 <html lang="es-AR">
 <head>
+<script>
+window.onerror = function(msg, url, lineNo, columnNo, error) {
+    const err = msg + ' at ' + lineNo + ':' + columnNo;
+    let errs = JSON.parse(localStorage.getItem('admin_errors') || '[]');
+    errs.push(err);
+    localStorage.setItem('admin_errors', JSON.stringify(errs));
+    return false;
+};
+window.addEventListener('unhandledrejection', function(event) {
+    let errs = JSON.parse(localStorage.getItem('admin_errors') || '[]');
+    errs.push('Promise: ' + event.reason);
+    localStorage.setItem('admin_errors', JSON.stringify(errs));
+});
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administración | Academia Tenis Hits (ATH)</title>

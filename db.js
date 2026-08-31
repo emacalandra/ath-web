@@ -256,17 +256,22 @@ class ATHDatabaseEngine {
 
             // Listener Tiempo Real: Pricing y Horarios
             onSnapshot(doc(this.db, "ath_core", "pricing"), (docSnap) => {
-                const localData = JSON.parse(localStorage.getItem(PRICING_STORAGE_KEY)) || null;
-                if (docSnap.exists()) {
-                    const cloudData = docSnap.data().pricing;
-                    if (JSON.stringify(localData) !== JSON.stringify(cloudData)) {
-                        localStorage.setItem(PRICING_STORAGE_KEY, JSON.stringify(cloudData));
-                        if (typeof window.renderWidgetDayTimelineGrid === 'function') window.renderWidgetDayTimelineGrid();
-                        if (typeof window.calculateAndVerifyMinuteByMinute === 'function') window.calculateAndVerifyMinuteByMinute();
+                try {
+                    const localStr = localStorage.getItem(PRICING_STORAGE_KEY);
+                    let localData = null;
+                    if (localStr && localStr !== 'undefined') localData = JSON.parse(localStr);
+
+                    if (docSnap.exists()) {
+                        const cloudData = docSnap.data().pricing;
+                        if (JSON.stringify(localData) !== JSON.stringify(cloudData)) {
+                            localStorage.setItem(PRICING_STORAGE_KEY, JSON.stringify(cloudData));
+                            if (typeof window.renderWidgetDayTimelineGrid === 'function') window.renderWidgetDayTimelineGrid();
+                            if (typeof window.calculateAndVerifyMinuteByMinute === 'function') window.calculateAndVerifyMinuteByMinute();
+                        }
+                    } else if (localData) {
+                        this.setDoc(doc(this.db, "ath_core", "pricing"), { pricing: localData }).catch(e => console.warn(e));
                     }
-                } else if (localData) {
-                    this.setDoc(doc(this.db, "ath_core", "pricing"), { pricing: localData }).catch(e => console.warn(e));
-                }
+                } catch(e) { console.warn("Error en listener pricing:", e); }
             });
 
 
@@ -822,7 +827,9 @@ class ATHDatabaseEngine {
 
     getPricingRaw() {
         try {
-            return JSON.parse(localStorage.getItem(PRICING_STORAGE_KEY)) || {
+            const raw = localStorage.getItem(PRICING_STORAGE_KEY);
+            if (!raw || raw === 'undefined') throw new Error("no data");
+            return JSON.parse(raw) || {
                 priceCourtDay: 8000,
                 priceCourtNight: 12000,
                 priceEscuela: 25000,

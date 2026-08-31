@@ -1,0 +1,790 @@
+function renderWidgetDayTimelineGrid() {
+        const gridContainer = document.getElementById('appDayTimelineGrid') || document.getElementById('widgetDayTimelineGrid');
+        if (!gridContainer) return;
+        gridContainer.innerHTML = '<span style="color:var(--color-text-muted); font-size:0.85rem;">Cargando estado de la cancha...</span>';
+
+        try {
+            const reservasDia = await window.DBHits.listarReservas();
+            
+            // CORRECCIÓN: Filtrar también los turnos que fueron rechazados o cancelados
+            const reservasCancha = reservasDia.filter(r => {
+                const estado = String(r.estadoPago || '');
+                return String(r.canchaId) === String(currentWidgetCourt) && 
+                       r.fecha === currentWidgetDate &&
+                       !estado.includes('Rechazado') && 
+                       !estado.includes('Cancelado') && 
+                       !estado.includes('❌');
+            });
+
+            // Inyección virtual de la plantilla en la grilla visual
+            if (window.DBHits && window.DBHits.getWeeklyRules) {
+                const vacDates = window.DBHits.getVacationsDates ? window.DBHits.getVacationsDates() : null;
+                let enVacaciones = false;
+                if (vacDates && vacDates.desde && vacDates.hasta) {
+                    enVacaciones = (currentWidgetDate >= vacDates.desde && currentWidgetDate <= vacDates.hasta);
+                }
+                
+                if (!enVacaciones) {
+                    const rules = window.DBHits.getWeeklyRules();
+                    const exceptions = window.DBHits.getExceptions ? window.DBHits.getExceptions() : [];
+                    const dayOfWeek = new Date(`${currentWidgetDate}T12:00:00`).getDay();
+                    
+                    rules.forEach(rule => {
+                        if (String(rule.day) === String(dayOfWeek) && (rule.court === 'TODAS' || String(rule.court) === String(currentWidgetCourt))) {
+                            const startRuleMin = parseInt(rule.start.split(':')[0])*60 + parseInt(rule.start.split(':')[1]);
+                            const endRuleMin = parseInt(rule.end.split(':')[0])*60 + parseInt(rule.end.split(':')[1]);
+                            
+                            let ruleBlocks = [{start: startRuleMin, end: endRuleMin}];
+
+                            for (let ex of exceptions) {
+                                if (ex.fecha === currentWidgetDate && (ex.cancha === 'TODAS' || String(ex.cancha) === String(currentWidgetCourt))) {
+                                    const exStartMin = parseInt(ex.inicio.split(':')[0])*60 + parseInt(ex.inicio.split(':')[1]);
+                                    const exEndMin = parseInt(ex.fin.split(':')[0])*60 + parseInt(ex.fin.split(':')[1]);
+                                    
+                                    let newBlocks = [];
+                                    for (let block of ruleBlocks) {
+                                        if (block.start < exEndMin && block.end > exStartMin) {
+                                            if (block.start < exStartMin) newBlocks.push({start: block.start, end: exStartMin});
+                                            if (block.end > exEndMin) newBlocks.push({start: exEndMin, end: block.end});
+                                        } else {
+                                            newBlocks.push(block);
+                                        }
+                                    }
+                                    ruleBlocks = newBlocks;
+                                }
+                            }
+
+                            // Dibujar solo los fragmentos de clase que sobrevivieron a las excepciones
+                            ruleBlocks.forEach(block => {
+                                const hIn = String(Math.floor(block.start / 60)).padStart(2, '0') + ':' + String(block.start % 60).padStart(2, '0');
+                                const hOut = String(Math.floor(block.end / 60)).padStart(2, '0') + ':' + String(block.end % 60).padStart(2, '0');
+                                reservasCancha.push({
+                                    tipo: 'bloqueo_admin', motivo: rule.label, horaInicio: hIn, horaFin: hOut
+                                });
+                            });
+                        }
+                    });
+                }
+            }
+
+            if (reservasCancha.length === 0) {
+                gridContainer.innerHTML = `
+                    <div style="color: #10B981; font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; gap: 6px;">
+                        <i class="fa-solid fa-circle-check"></i> Cancha 100% despejada en todo el día.
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '<div style="display: flex; gap: 8px; flex-wrap: wrap;">';
+            reservasCancha.forEach(r => {
+                const isLock = r.tipo === 'bloqueo_admin';
+                const label = isLock ? `🚫 Bloqueo: ${r.motivo || 'Uso Interno'}` : `🎾 Reservado`;
+                html += `
+                    <span class="occupancy-slot-pill busy">
+                        ${label} (${r.horaInicio} a ${r.horaFin} hs)
+                    </span>
+                `;
+            });
+            html += '</div>';
+
+            gridContainer.innerHTML = html;
+
+        } catch (err) {
+            console.error("Error al renderizar línea de tiempo del widget:", err);
+            gridContainer.innerHTML = '<span style="color:var(--color-text-muted); font-size:0.85rem;">Sin reservas registradas para hoy.</span>';
+        }
+    }
+
+    function formatFriendlyDate(isoDateStr) {
+        if (!isoDateStr) return '';
+        const parts = isoDateStr.split('-');
+        if (parts.length !== 3) return isoDateStr;
+        const year = parseInt(parts[0], 10);
+        const month = parseInt(parts[1], 10) - 1;
+        const day = parseInt(parts[2], 10);
+        const d = new Date(year, month, day);
+        const dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+        const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+        const diaNombre = dias[d.getDay()];
+        const mesNombre = meses[d.getMonth()];
+        return `${diaNombre} ${day} de ${mesNombre}`;
+    }
+
+    
+    function getHorariosParaFecha(fechaStr) {
+        const pricingConfig = window.DBHits.getPricingRaw();
+        let tOpen = pricingConfig.timeOpenLV || pricingConfig.timeOpen || '08:00';
+        let tClose = pricingConfig.timeCloseLV || pricingConfig.timeClose || '23:00';
+        
+        if (fechaStr) {
+            const parts = fechaStr.split('-');
+            if (parts.length === 3) {
+                const d = new Date(parts[0], parts[1] - 1, parts[2]);
+                const day = d.getDay();
+                
+                // Fin de semana
+                if (day === 0 || day === 6) {
+                    tOpen = pricingConfig.timeOpenSD || tOpen;
+                    tClose = pricingConfig.timeCloseSD || tClose;
+                }
+                
+                // TODO: Lógica de feriados si existiera un array de feriados.
+                // Por ahora, asumimos que si no es sábado/domingo, es día de semana regular.
+            }
+        }
+        return { openMin: timeStringToMinutes(tOpen), closeMin: timeStringToMinutes(tClose), timeOpen: tOpen, timeClose: tClose };
+    }
+
+    function calculateAndVerifyMinuteByMinute() {
+        const timeStart = document.getElementById('appTimeStart') || document.getElementById('widgetTimeStart');
+        const timeEnd = document.getElementById('appTimeEnd') || document.getElementById('widgetTimeEnd');
+        const priceSummary = document.getElementById('appPriceSummary') || document.getElementById('widgetPriceSummary');
+        const confirmBtn = document.getElementById('appConfirmBtn') || document.getElementById('widgetConfirmBtn');
+
+        const summaryStatus = document.getElementById('appSummaryStatus') || document.getElementById('widgetSummaryStatus');
+        const summaryDetails = document.getElementById('appSummaryDetails') || document.getElementById('widgetSummaryDetails');
+        const summaryLighting = document.getElementById('appSummaryLighting') || document.getElementById('widgetSummaryLighting');
+        const summaryPrice = document.getElementById('appSummaryPrice') || document.getElementById('widgetSummaryPrice');
+        const courtBadge = document.getElementById('appCourtBadge') || document.getElementById('widgetCourtBadge');
+
+        if (!timeStart || !timeEnd || !priceSummary || !confirmBtn) return;
+
+        const horaInicio = timeStart.value || '16:00';
+        const horaFin = timeEnd.value || '17:30';
+
+        const startMin = timeStringToMinutes(horaInicio);
+        const endMin = timeStringToMinutes(horaFin);
+        const duracionHoras = (endMin - startMin) / 60;
+
+        // Sincronizar resaltado activo de los botones de duración rápida por Fuerza Bruta
+        const quickDurContainer = document.getElementById('appQuickDurBtns') || document.getElementById('widgetQuickDurBtns');
+        if (quickDurContainer) {
+            const quickBtns = quickDurContainer.querySelectorAll('.quick-dur-btn');
+            const botonMatch = Array.from(quickBtns).find(b => Math.abs(duracionHoras - parseFloat(b.dataset.hours)) < 0.02);
+            pintarBotonSeleccionado(quickBtns, botonMatch || null);
+        }
+
+        const fechaFormateada = formatFriendlyDate(currentWidgetDate);
+
+        if (endMin <= startMin) {
+            priceSummary.className = 'booking-summary-card occupied status-busy';
+            if (summaryStatus) summaryStatus.innerHTML = '❌ La hora de finalización debe ser posterior a la de inicio';
+            if (summaryDetails) summaryDetails.innerHTML = 'Horario inválido';
+            if (summaryLighting) summaryLighting.innerHTML = '-';
+            if (summaryPrice) summaryPrice.innerHTML = '$0 ARS';
+            if (courtBadge) courtBadge.innerHTML = '🔴 Horario Inválido';
+            confirmBtn.disabled = true;
+            confirmBtn.style.opacity = '0.5';
+            return;
+        }
+
+        const pricingConfig = window.DBHits.getPricingRaw();
+        const openMin = timeStringToMinutes(pricingConfig.timeOpen || '08:00');
+        const closeMin = timeStringToMinutes(pricingConfig.timeClose || '23:00');
+
+        if (startMin < openMin || endMin > closeMin) {
+            priceSummary.className = 'booking-summary-card occupied status-busy';
+            if (summaryStatus) summaryStatus.innerHTML = `❌ El club opera entre las ${pricingConfig.timeOpen || '08:00'} y ${pricingConfig.timeClose || '23:00'} hs`;
+            if (summaryDetails) summaryDetails.innerHTML = 'Fuera de rango operativo';
+            if (summaryLighting) summaryLighting.innerHTML = '-';
+            if (summaryPrice) summaryPrice.innerHTML = '$0 ARS';
+            if (courtBadge) courtBadge.innerHTML = '🔴 Fuera de Horario';
+            confirmBtn.disabled = true;
+            confirmBtn.style.opacity = '0.5';
+            return;
+        }
+
+        const chequeo = window.DBHits.verificarDisponibilidad(currentWidgetCourt, currentWidgetDate, horaInicio, horaFin);
+
+        if (!chequeo.disponible) {
+            priceSummary.className = 'booking-summary-card occupied status-busy';
+            if (courtBadge) courtBadge.innerHTML = '🔴 Turno Solapado';
+            confirmBtn.disabled = true;
+            confirmBtn.style.opacity = '0.5';
+
+            let statusHTML = `<div>❌ ${chequeo.mensaje}</div>`;
+
+            // Buscar recomendaciones inteligentes libres ante conflicto
+            if (window.DBHits && typeof window.DBHits.obtenerSugerenciasLibres === 'function') {
+                const sugerencias = window.DBHits.obtenerSugerenciasLibres(currentWidgetCourt, currentWidgetDate, horaInicio, duracionHoras);
+                if (sugerencias && sugerencias.length > 0) {
+                    statusHTML += `
+                        <div id="appSuggestionsBox" style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed rgba(239, 68, 68, 0.4);">
+                            <span style="color: #FCA5A5; font-size: 0.78rem; font-weight: 800; display: block; margin-bottom: 6px;">🔥 Opciones libres recomendadas para vos:</span>
+                            <div style="display: flex; flex-direction: column; gap: 6px;">
+                                ${sugerencias.map(s => `
+                                    <button type="button" class="btn-suggestion-item" data-cancha="${s.canchaId}" data-inicio="${s.horaInicio}" data-fin="${s.horaFin}" style="background: rgba(255, 102, 0, 0.18); border: 1px solid var(--color-ath-orange); color: #FFF; padding: 6px 10px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; text-align: left; cursor: pointer; transition: all 0.2s ease;">
+                                        ${s.texto}
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            if (summaryStatus) summaryStatus.innerHTML = statusHTML;
+        } else {
+            priceSummary.className = 'booking-summary-card available status-available';
+            if (summaryStatus) summaryStatus.innerHTML = `🟢 Horario 100% Libre y Disponible`;
+            if (courtBadge) courtBadge.innerHTML = '🟢 Cancha Disponible';
+            confirmBtn.disabled = false;
+            confirmBtn.style.opacity = '1';
+        }
+
+        try {
+            const activeUser = getActiveUser();
+            const userRole = activeUser ? activeUser.role : 'usuario';
+            const calculo = window.DBHits.calcularPrecioReserva(horaInicio, duracionHoras, userRole);
+
+            let detalleIluminacion = 'Turno Diurno';
+            if (calculo.horasDia > 0 && calculo.horasNoche > 0) {
+                detalleIluminacion = `Turno Mixto (${calculo.horasDia.toFixed(1)}h Día + ${calculo.horasNoche.toFixed(1)}h Noche LED)`;
+            } else if (calculo.horasNoche > 0) {
+                detalleIluminacion = `Turno Nocturno (Incluye Luz LED)`;
+            }
+
+            if (summaryDetails) {
+                summaryDetails.innerHTML = `
+                    <div style="background: rgba(0,0,0,0.3); padding: 8px 10px; border-radius: 6px; margin: 6px 0; border-left: 3px solid var(--color-ath-orange);">
+                        <div style="color: #FFF; font-weight: 700; font-size: 0.88rem;">🎾 Cancha: <span style="color: #FFD700;">Cancha ${currentWidgetCourt}</span></div>
+                        <div style="color: #FFF; font-weight: 700; font-size: 0.88rem;">📅 Día: <span style="color: #FFD700;">${fechaFormateada}</span></div>
+                        <div style="color: #FFF; font-weight: 700; font-size: 0.88rem;">⏰ Horario: <span style="color: #FFD700;">${horaInicio} a ${horaFin} hs</span> (${duracionHoras.toFixed(2)} hs)</div>
+                    </div>
+                `;
+            }
+            if (summaryLighting) summaryLighting.innerHTML = `<i class="fa-solid fa-bolt" style="color:#FFD700;"></i> ${detalleIluminacion}`;
+            if (summaryPrice) summaryPrice.innerHTML = `$${calculo.precioTotal.toLocaleString('es-AR')} ARS`;
+
+        } catch (err) {
+            console.error("Error al calcular cotización libre:", err);
+        }
+    }
+
+    // Escuchador interactivo para las sugerencias de canchas/horarios libres
+    document.addEventListener('click', (e) => {
+        const btnSug = e.target.closest('.btn-suggestion-item');
+        if (btnSug) {
+            const cId = btnSug.dataset.cancha;
+            const hInicio = btnSug.dataset.inicio;
+            const hFin = btnSug.dataset.fin;
+
+            if (cId) {
+                currentWidgetCourt = cId;
+                const appCourtName = document.getElementById('appCourtName');
+                if (appCourtName) appCourtName.innerText = `Cancha ${cId} (Polvo de Ladrillo)`;
+            }
+
+            const timeStartInput = document.getElementById('appTimeStart') || document.getElementById('widgetTimeStart');
+            const timeEndInput = document.getElementById('appTimeEnd') || document.getElementById('widgetTimeEnd');
+            if (timeStartInput) timeStartInput.value = hInicio;
+            if (timeEndInput) timeEndInput.value = hFin;
+
+            renderWidgetDayTimelineGrid();
+            calculateAndVerifyMinuteByMinute();
+        }
+    });
+
+    // Escucha en tiempo real de los relojes digitales de escritura libre
+    const timeStartInput = document.getElementById('appTimeStart') || document.getElementById('widgetTimeStart');
+    const timeEndInput = document.getElementById('appTimeEnd') || document.getElementById('widgetTimeEnd');
+
+    if (timeStartInput) {
+        timeStartInput.addEventListener('input', calculateAndVerifyMinuteByMinute);
+        timeStartInput.addEventListener('change', calculateAndVerifyMinuteByMinute);
+    }
+
+    if (timeEndInput) {
+        timeEndInput.addEventListener('input', calculateAndVerifyMinuteByMinute);
+        timeEndInput.addEventListener('change', calculateAndVerifyMinuteByMinute);
+    }
+
+    // Sugerencias rápidas de duración que asisten pero no bloquean la escritura libre
+    const quickDurBtnsContainer = document.getElementById('appQuickDurBtns') || document.getElementById('widgetQuickDurBtns');
+    if (quickDurBtnsContainer) {
+        const quickBtns = quickDurBtnsContainer.querySelectorAll('.quick-dur-btn');
+        const defaultMatch = Array.from(quickBtns).find(b => parseFloat(b.dataset.hours) === 1.5) || quickBtns[0];
+        pintarBotonSeleccionado(quickBtns, defaultMatch);
+
+        quickBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                pintarBotonSeleccionado(quickBtns, btn);
+
+                const hours = parseFloat(btn.dataset.hours) || 1.5;
+                const startVal = timeStartInput ? timeStartInput.value : '16:00';
+                const startMin = timeStringToMinutes(startVal);
+                const endMin = startMin + Math.round(hours * 60);
+
+                if (timeEndInput) {
+                    timeEndInput.value = minutesToTimeString(endMin);
+                    calculateAndVerifyMinuteByMinute();
+                }
+            });
+        });
+    }
+
+    let selectedPaymentMethod = 'transferencia';
+
+    // 1. Evento para abrir el calendario nativo del navegador vía showPicker()
+    const btnOpenCalendar = document.getElementById('btnOpenCalendar');
+    const appCustomDateHidden = document.getElementById('appCustomDateHidden');
+    if (btnOpenCalendar && appCustomDateHidden) {
+        btnOpenCalendar.addEventListener('click', () => {
+            if (typeof appCustomDateHidden.showPicker === 'function') {
+                appCustomDateHidden.showPicker();
+            } else {
+                appCustomDateHidden.focus();
+                appCustomDateHidden.click();
+            }
+        });
+
+        appCustomDateHidden.addEventListener('change', (e) => {
+            if (e.target.value) {
+                currentWidgetDate = e.target.value;
+                renderWidgetDatePills();
+                renderWidgetDayTimelineGrid();
+                calculateAndVerifyMinuteByMinute();
+            }
+        });
+    }
+
+    // 2. Copiado Rápido de Alias y CBU al Portapapeles con Feedback Visual
+    document.addEventListener('click', (e) => {
+        const btnCopy = e.target.closest('.btn-copy-data');
+        if (btnCopy && btnCopy.dataset.copy) {
+            const textToCopy = btnCopy.dataset.copy;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const originalText = btnCopy.innerHTML;
+                btnCopy.innerHTML = '✅ ¡Copiado!';
+                btnCopy.style.background = '#10B981';
+                setTimeout(() => {
+                    btnCopy.innerHTML = originalText;
+                    btnCopy.style.background = textToCopy.includes('TENIS') ? 'var(--color-ath-orange)' : 'rgba(255,255,255,0.15)';
+                }, 2000);
+            }).catch(err => {
+                console.error("Error al copiar datos:", err);
+            });
+        }
+    });
+
+    
+
+    // 3. Candado de Seguridad Estricto en Confirmación de Reserva & Doble Confirmación
+    const confirmAppBtn = document.getElementById('appConfirmBtn') || document.getElementById('widgetConfirmBtn');
+    if (confirmAppBtn) {
+        confirmAppBtn.addEventListener('click', async () => {
+            const activeUser = getActiveUser();
+            const timeStart = document.getElementById('appTimeStart') || document.getElementById('widgetTimeStart');
+            const timeEnd = document.getElementById('appTimeEnd') || document.getElementById('widgetTimeEnd');
+            const fileInput = document.getElementById('appReceiptUpload');
+
+            const horaInicio = timeStart ? timeStart.value : '16:00';
+            const horaFin = timeEnd ? timeEnd.value : '17:30';
+
+            const startMin = timeStringToMinutes(horaInicio);
+            const endMin = startMin + Math.round(timeStringToMinutes(horaFin) - startMin);
+            const duracionHoras = (endMin - startMin) / 60;
+
+            let comprobanteBase64 = null;
+
+            const isSecretaria = activeUser && (activeUser.role === 'admin' || activeUser.role === 'secretaria');
+            
+            // VALIDACIÓN BLOQUEANTE ESTRICTA PARA TRANSFERENCIA ÚNICA (Solo si NO es secretaria)
+            const file = (fileInput && fileInput.files && fileInput.files.length > 0) ? fileInput.files[0] : null;
+            if (!isSecretaria && !file) {
+                if (fileInput) { fileInput.style.border = '2px solid #EF4444'; fileInput.focus(); }
+                alert("⛔ ATENCIÓN: Solo aceptamos pagos por transferencia. Es obligatorio adjuntar la captura del comprobante de pago para reservar la cancha.");
+                return;
+            }
+
+            if (file) {
+                if (fileInput) fileInput.style.border = '1px dashed #FF8800';
+                try {
+                    comprobanteBase64 = await window.DBHits.convertFileToBase64(file);
+                } catch (err) {
+                    alert("Error al procesar la captura del comprobante: " + err.message);
+                    return;
+                }
+            }
+
+            // Capturar datos de secretaría si existen
+            const secNombre = document.getElementById('secInputNombre')?.value.trim();
+            const secApellido = document.getElementById('secInputApellido')?.value.trim();
+            const secTelefono = document.getElementById('secInputTelefono')?.value.trim();
+
+            const finalNombre = isSecretaria && secNombre ? `${secNombre} ${secApellido || ''}`.trim() : (activeUser ? `${activeUser.nombre} ${activeUser.apellido || ''}` : 'Usuario');
+            const finalTelefono = isSecretaria && secTelefono ? secTelefono : (activeUser ? activeUser.telefono : '');
+            const finalEstadoPago = isSecretaria ? '⏳ Pago pendiente en Club' : '⏳ Pago esperando aprobación';
+            const finalMetodoPago = isSecretaria ? 'En Secretaría (Efectivo/Físico)' : selectedPaymentMethod;
+
+            // DOBLE CONFIRMACIÓN ANTI-ERROR
+            const fechaFormateada = formatFriendlyDate(currentWidgetDate);
+            const userRole = activeUser ? activeUser.role : 'usuario';
+            const calculo = window.DBHits.calcularPrecioReserva(horaInicio, duracionHoras, userRole);
+            const mensajeConfirmacion = `❓ CONFIRMACIÓN DE RESERVA ATH\n\n¿Estás seguro que deseas confirmar la reserva con los siguientes datos?\n\n🎾 Cancha: Cancha ${currentWidgetCourt}\n📅 Día: ${fechaFormateada}\n⏰ Horario: ${horaInicio} a ${horaFin} hs\n💰 Total a abonar: $${calculo.precioTotal.toLocaleString('es-AR')} ARS\n\nPresiona ACEPTAR para enviar tu reserva o CANCELAR para modificar los horarios.`;
+
+            if (!confirm(mensajeConfirmacion)) {
+                console.log("🚫 Reserva cancelada por el usuario en el paso de doble confirmación.");
+                return; // Detiene la ejecución sin guardar nada
+            }
+
+            const pendingData = {
+                canchaId: currentWidgetCourt,
+                fecha: currentWidgetDate,
+                horaInicio: horaInicio,
+                horaFin: horaFin,
+                duracionHoras: duracionHoras,
+                metodoPago: selectedPaymentMethod,
+                comprobanteBase64: comprobanteBase64
+            };
+
+            if (!activeUser) {
+                if (window.DBHits && typeof window.DBHits.saveActiveUserSession === 'function') {
+                    try {
+                        localStorage.setItem('pending_ath_booking', JSON.stringify(pendingData));
+                    } catch {}
+                }
+                closeAppBookingModal();
+
+                if (loginAlertError) {
+                    loginAlertError.innerHTML = `<i class="fa-solid fa-lock"></i> ¡Ya casi! Iniciá sesión o creá tu cuenta en segundos para asegurar tu turno en la Cancha ${currentWidgetCourt} (${currentWidgetDate} de ${horaInicio} a ${horaFin} hs).`;
+                    loginAlertError.style.display = 'flex';
+                }
+                openModal('login', false);
+                return;
+            }
+
+            try {
+                const nuevaReserva = await window.DBHits.crearReserva({
+                    usuarioId: isSecretaria ? 'mostrador' : activeUser.id,
+                    usuarioNombre: finalNombre,
+                    usuarioEmail: activeUser.email,
+                    usuarioTelefono: finalTelefono,
+                    usuarioRole: activeUser.role || 'usuario',
+                    canchaId: currentWidgetCourt,
+                    fecha: currentWidgetDate,
+                    horaInicio: horaInicio,
+                    duracionHoras: duracionHoras,
+                    metodoPago: finalMetodoPago,
+                    comprobanteBase64: comprobanteBase64,
+                    rolUsuario: isSecretaria ? 'usuario' : userRole,
+                    overrideEstadoPago: finalEstadoPago // Parámetro nuevo
+                });
+
+                if (isSecretaria) {
+                    alert("✅ ¡TURNO AGENDADO EN MOSTRADOR!\n\nEl turno de " + finalNombre + " ha sido registrado exitosamente.\n\n⚠️ RECORDATORIO: El pago ha quedado PENDIENTE. Cuando el cliente abone en el club, recuerda presionar 'Aprobar' en el Panel de Administración para que impacte en el reporte financiero.");
+                } else {
+                    alert("✅ ¡RESERVA REGISTRADA CON ÉXITO!\n\nEstado actual: ⏳ PAGO ESPERANDO APROBACIÓN.");
+                }
+
+                closeAppBookingModal();
+                localStorage.removeItem('pending_ath_booking');
+
+                renderWidgetDayTimelineGrid();
+
+            } catch (err) {
+                alert(`Error al procesar reserva: ${err.message}`);
+            }
+        });
+    }
+
+    // Auto-procesar reserva pendiente tras iniciar sesión
+    const pendingBooking = localStorage.getItem('pending_ath_booking');
+    if (activeUser && pendingBooking) {
+        try {
+            const data = JSON.parse(pendingBooking);
+            window.DBHits.crearReserva({
+                usuarioId: activeUser.id,
+                usuarioNombre: `${activeUser.nombre} ${activeUser.apellido || ''}`,
+                usuarioEmail: activeUser.email,
+                usuarioTelefono: activeUser.telefono,
+                canchaId: data.canchaId,
+                fecha: data.fecha,
+                horaInicio: data.horaInicio,
+                duracionHoras: data.duracionHoras
+            }).then(r => {
+                alert(`🎾 ¡Reserva completada con éxito tras iniciar sesión! Cancha ${r.canchaId} el ${r.fecha} (${r.horaInicio} a ${r.horaFin} hs).`);
+                localStorage.removeItem('pending_ath_booking');
+                if (typeof renderWidgetDayTimelineGrid === 'function') renderWidgetDayTimelineGrid();
+            }).catch(e => {
+                console.error("Error al completar reserva pendiente:", e);
+                localStorage.removeItem('pending_ath_booking');
+            });
+        } catch {
+            localStorage.removeItem('pending_ath_booking');
+        }
+    }
+});
+
+
+
+    // ==========================================
+    // RENDERIZADO DE CONTACTO Y STAFF
+    // ==========================================
+    const publicStaffGrid = document.getElementById('publicStaffGrid');
+    if (publicStaffGrid && window.DBHits) {
+        const staff = window.DBHits.getStaffRaw ? window.DBHits.getStaffRaw() : [];
+        publicStaffGrid.innerHTML = '';
+        if (staff.length === 0) {
+            publicStaffGrid.innerHTML = '<div style="grid-column: 1/-1; text-align:center; color:#94A3B8;">Próximamente...</div>';
+        } else {
+            staff.forEach(s => {
+                const avatar = s.foto ? s.foto : 'assets/avatar.png';
+                publicStaffGrid.innerHTML += `
+                    <div class="class-card reveal-element" style="text-align: center; padding: 30px 20px;">
+                        <img src="${avatar}" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid var(--color-ath-orange); margin-bottom: 16px; box-shadow: 0 4px 15px rgba(255, 102, 0, 0.3);" onerror="this.src='assets/avatar.png'">
+                        <h3 style="color: #FFF; font-size: 1.25rem; margin-bottom: 4px;">${s.nombre}</h3>
+                        <div style="color: var(--color-ath-orange); font-size: 0.9rem; font-weight: 700; margin-bottom: 16px;">${s.rol}</div>
+                        <p style="color: var(--color-text-muted); font-size: 0.88rem; line-height: 1.5;">${s.desc}</p>
+                    </div>
+                `;
+            });
+        }
+    }
+
+    const publicContactData = document.getElementById('publicContactData');
+    if (publicContactData && window.DBHits) {
+        const clubInfo = window.DBHits.getClubConfig ? window.DBHits.getClubConfig() : {
+            email: 'contacto@academiatenishits.com',
+            direccion: 'San Francisco, Córdoba, Argentina',
+            whatsapp: '5493564000000'
+        };
+        
+        publicContactData.innerHTML = `
+            <div class="contact-card-item" style="background: rgba(255,255,255,0.03); padding: 24px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); text-align: center; min-width: 250px;">
+                <i class="fa-solid fa-envelope" style="font-size: 2rem; color: var(--color-ath-orange); margin-bottom: 16px;"></i>
+                <h4 style="color: #FFF; margin-bottom: 8px;">Correo Electrónico</h4>
+                <p style="color: #94A3B8; font-size: 0.9rem;">${clubInfo.email}</p>
+            </div>
+            <div class="contact-card-item" style="background: rgba(255,255,255,0.03); padding: 24px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); text-align: center; min-width: 250px;">
+                <i class="fa-solid fa-location-dot" style="font-size: 2rem; color: var(--color-ath-orange); margin-bottom: 16px;"></i>
+                <h4 style="color: #FFF; margin-bottom: 8px;">Ubicación</h4>
+                <p style="color: #94A3B8; font-size: 0.9rem;">${clubInfo.direccion}</p>
+            </div>
+            <div class="contact-card-item" style="background: rgba(255,255,255,0.03); padding: 24px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); text-align: center; min-width: 250px;">
+                <i class="fa-brands fa-whatsapp" style="font-size: 2rem; color: #10B981; margin-bottom: 16px;"></i>
+                <h4 style="color: #FFF; margin-bottom: 8px;">WhatsApp Oficial</h4>
+                <p style="color: #94A3B8; font-size: 0.9rem;">+${clubInfo.whatsapp}</p>
+                <a href="https://wa.me/${clubInfo.whatsapp}" target="_blank" class="btn-submit" style="background: #10B981; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; margin-top: 12px; display: inline-flex; width: auto;"><i class="fa-solid fa-comment-dots"></i> Enviar Mensaje</a>
+            </div>
+        `;
+    }
+
+// Helper de fecha para Mis Turnos
+function formatFechaLocal(isoDate) {
+    if (!isoDate || !isoDate.includes('-')) return isoDate;
+    const parts = isoDate.split('-');
+    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+}
+
+async function renderizarMisTurnos() {
+    // Buscar el contenedor de Mis Turnos en el HTML
+    const container = document.getElementById('misTurnosContainer') || document.querySelector('.mis-turnos-list');
+    if (!container) return;
+
+    const user = window.DBHits ? window.DBHits.getActiveUser() : null;
+    if (!user) return;
+
+    const misTurnos = window.DBHits.getReservasPorUsuario ? window.DBHits.getReservasPorUsuario(user) : [];
+    const ahora = new Date();
+
+    if (misTurnos.length === 0) {
+        container.innerHTML = `<div style="text-align:center; color:#94A3B8; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 8px;">No tienes turnos registrados.</div>`;
+        return;
+    }
+
+    container.innerHTML = `<div style="display: flex; flex-direction: column; gap: 12px; width: 100%;">` + misTurnos.map(turno => {
+        const fechaHoraTurno = new Date(`${turno.fecha}T${turno.horaInicio || '00:00'}`);
+        const esPasado = fechaHoraTurno < ahora;
+        const minutosFaltantes = (fechaHoraTurno - ahora) / (1000 * 60);
+        
+        let colorEstado = '#94A3B8'; // default
+        let estadoStr = turno.estadoPago || 'Pendiente';
+        const estaPagado = estadoStr.includes('✅') || estadoStr.toLowerCase().includes('confirmado') || estadoStr.toLowerCase().includes('aprobado');
+        
+        if(estaPagado) colorEstado = '#10B981';
+        else if(estadoStr.includes('⏳') || estadoStr.includes('pendiente') || estadoStr.includes('esperando')) colorEstado = '#F59E0B';
+        else if(estadoStr.includes('❌') || estadoStr.includes('Rechazado') || estadoStr.includes('Cancelado')) colorEstado = '#EF4444';
+
+        // Botón de cancelar: Permitir si faltan >= 30 minutos
+        let btnCancelar = '';
+        if (!esPasado && minutosFaltantes >= 30) {
+            const textoBtn = estaPagado ? '<i class="fa-solid fa-triangle-exclamation"></i> Cancelar y Pedir Reembolso' : '<i class="fa-solid fa-xmark"></i> Cancelar Turno';
+            const colorBtn = estaPagado ? 'rgba(245, 158, 11, 0.2); border: 1px solid #F59E0B; color: #FCD34D;' : 'rgba(239, 68, 68, 0.1); border: 1px solid #EF4444; color: #FCA5A5;';
+            
+            btnCancelar = `<button class="btn-cancelar-turno" data-id="${turno.id}" data-pagado="${estaPagado ? '1' : '0'}" data-fecha="${turno.fecha}" data-hora="${turno.horaInicio}" data-cancha="${turno.canchaId}" style="margin-top: 10px; width: 100%; padding: 8px; border-radius: 6px; background: ${colorBtn} cursor: pointer; font-size: 0.8rem; font-weight: 700;">${textoBtn}</button>`;
+        }
+
+        return `
+        <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-left: 4px solid ${colorEstado}; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; opacity: ${esPasado ? '0.6' : '1'};">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px;">
+                <div>
+                    <strong style="color: #FFF; font-size: 1rem;">${formatFechaLocal(turno.fecha)}</strong><br>
+                    <span style="color: var(--color-ath-orange); font-weight: 700;">${turno.horaInicio} a ${turno.horaFin || turno.hora} hs</span>
+                </div>
+                <div style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; color: #E2E8F0;">
+                    ${turno.canchaId === '1' ? 'Cancha 1' : turno.canchaId === '2' ? 'Cancha 2' : 'Cancha 3'}
+                </div>
+            </div>
+            <div style="margin-top: 8px; font-size: 0.85rem; color: ${colorEstado}; font-weight: 700;">
+                ${estadoStr}
+            </div>
+            ${btnCancelar}
+        </div>
+        `;
+    }).join('') + `</div>`;
+
+    // Asignar eventos de cancelación
+    document.querySelectorAll('.btn-cancelar-turno').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            const buttonEl = e.target.closest('.btn-cancelar-turno');
+            const id = buttonEl.dataset.id;
+            const estabaPagado = buttonEl.dataset.pagado === '1';
+            const fechaTurno = buttonEl.dataset.fecha || '';
+            const horaTurno = buttonEl.dataset.hora || '';
+            const canchaTurno = buttonEl.dataset.cancha || '';
+
+            let mensajeConfirmacion = "⚠️ ¿Estás seguro de que deseas cancelar este turno? La cancha quedará liberada.";
+            if (estabaPagado) {
+                mensajeConfirmacion = `⚠️ ATENCIÓN: Este turno ya figura como PAGADO.
+
+Al cancelar, el sistema liberará la cancha y te abrirá un chat de WhatsApp con la administración para coordinar la devolución de tu dinero. ¿Deseas continuar?`;
+            }
+
+            if (confirm(mensajeConfirmacion)) {
+                try {
+                    window.DBHits.cancelarReservaUsuario(id, user);
+                    alert("Turno cancelado exitosamente.");
+                    renderizarMisTurnos();
+
+                    if (estabaPagado) {
+                        const wppNum = window.DBHits.getWhatsAppConfig ? window.DBHits.getWhatsAppConfig() : '5493564000000';
+                        const fechaFormat = typeof formatFechaLocal === 'function' ? formatFechaLocal(fechaTurno) : fechaTurno;
+                        const textoWpp = encodeURIComponent(`Hola! Acabo de cancelar mi turno pagado para el día ${fechaFormat} (${horaTurno} hs - Cancha ${canchaTurno}) en Academia Tenis Hits y necesito coordinar la devolución del dinero.`);
+                        window.open(`https://wa.me/${wppNum}?text=${textoWpp}`, '_blank');
+                    }
+                } catch(err) {
+                    alert(err.message);
+                }
+            }
+        });
+    });
+}
+window.renderizarMisTurnos = renderizarMisTurnos;
+
+
+// Controlador del menú flotante de notificaciones en la barra de navegación
+function setupNotificationDropdown() {
+    const notifBell = document.getElementById('notificationBell') || document.querySelector('.nav-bell-icon');
+    const notifDropdown = document.getElementById('notificationDropdownMenu');
+    const closeNotif = document.getElementById('closeNotifDropdown');
+
+    if (notifBell && notifDropdown) {
+        notifBell.onclick = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const isVisible = notifDropdown.style.display === 'block';
+            notifDropdown.style.display = isVisible ? 'none' : 'block';
+            
+            if (!isVisible && window.DBHits) {
+                const user = window.DBHits.getActiveUser();
+                const listContainer = document.getElementById('notificationDropdownList');
+                if (user && listContainer) {
+                    const notifs = user.notificaciones || [];
+                    const isAdminOrSec = (user.role === 'admin' || user.role === 'secretaria');
+
+                    if (notifs.length === 0) {
+                        listContainer.innerHTML = `
+                            <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 6px; font-size: 0.8rem; color: #E2E8F0;">
+                                <i class="fa-solid fa-circle-info" style="color: var(--color-ath-orange);"></i> ¡Hola ${user.nombre || 'Usuario'}! Tus turnos y avisos se actualizarán aquí.
+                            </div>
+                        `;
+                    } else {
+                        listContainer.innerHTML = notifs.slice(0, 6).map(n => {
+                            const targetLink = n.targetUrl || (isAdminOrSec ? 'admin.html?tab=reservas' : 'perfil.html');
+                            const clickAttr = `onclick="window.location.href='${targetLink}';" style="cursor: pointer; background: rgba(255,255,255,0.07); padding: 8px; border-radius: 6px; font-size: 0.8rem; color: #E2E8F0; border-left: 3px solid ${n.tipo === 'success' ? '#10B981' : (n.tipo === 'error' ? '#EF4444' : 'var(--color-ath-orange)')}; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.12)'" onmouseout="this.style.background='rgba(255,255,255,0.07)'"`;
+                            const adminHint = `<div style="font-size: 0.68rem; color: var(--color-ath-orange); font-weight: 700; margin-top: 4px;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ver Detalles</div>`;
+                            return `
+                                <div ${clickAttr}>
+                                    <div>${n.mensaje}</div>
+                                    <div style="color: #94A3B8; font-size: 0.7rem; margin-top: 4px;">${new Date(n.fecha).toLocaleTimeString('es-AR', {hour: '2-digit', minute:'2-digit'})} hs</div>
+                                    ${adminHint}
+                                </div>
+                            `;
+                        }).join('');
+                        window.DBHits.marcarNotificacionesLeidas(user.id);
+                    }
+                }
+            }
+        };
+
+        if (closeNotif) {
+            closeNotif.onclick = (e) => {
+                e.stopPropagation();
+                notifDropdown.style.display = 'none';
+            };
+        }
+
+        document.addEventListener('click', (e) => {
+            if (!notifDropdown.contains(e.target) && !notifBell.contains(e.target)) {
+                notifDropdown.style.display = 'none';
+            }
+        });
+    }
+}
+
+
+// Inyector automático de Botón Flotante de WhatsApp Responsivo (Esquina Inferior Izquierda)
+function initFloatingWhatsApp() {
+    if (document.getElementById('athFloatingWpp')) return; // Evitar duplicados
+
+    const wppFloat = document.createElement('a');
+    wppFloat.id = 'athFloatingWpp';
+    wppFloat.href = '#';
+    wppFloat.setAttribute('aria-label', 'Contactar por WhatsApp');
+    wppFloat.style.cssText = `
+        position: fixed !important;
+        bottom: 20px !important;
+        left: 20px !important;
+        z-index: 9999 !important;
+        background-color: #25D366 !important;
+        color: #FFF !important;
+        width: 55px !important;
+        height: 55px !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 28px !important;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.5) !important;
+        transition: transform 0.3s ease, background-color 0.3s ease !important;
+        text-decoration: none !important;
+    `;
+    wppFloat.innerHTML = `<i class="fa-brands fa-whatsapp"></i>`;
+
+    // Efecto hover
+    wppFloat.addEventListener('mouseenter', () => { wppFloat.style.transform = 'scale(1.12)'; });
+    wppFloat.addEventListener('mouseleave', () => { wppFloat.style.transform = 'scale(1.0)'; });
+
+    // Acción de clic vinculada al número oficial guardado en la BD
+    wppFloat.addEventListener('click', (e) => {
+        e.preventDefault();
+        const wppNum = window.DBHits && window.DBHits.getWhatsAppConfig ? window.DBHits.getWhatsAppConfig() : '5493564000000';
+        const mensaje = encodeURIComponent("¡Hola! Me comunico desde la web de Academia Tenis Hits para realizar una consulta.");
+        window.open(`https://wa.me/${wppNum}?text=${mensaje}`, '_blank');
+    });
+
+    document.body.appendChild(wppFloat);
+}
+
+
+
+// Ejecución global incondicional de WhatsApp
+if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => { initFloatingWhatsApp(); });
+    } else {
+        initFloatingWhatsApp();
+    }
+}

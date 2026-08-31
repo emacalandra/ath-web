@@ -1443,15 +1443,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 secFields.id = 'secretariaBookingFields';
                 secFields.style.cssText = "background: rgba(16, 185, 129, 0.1); border: 1px solid #10B981; border-radius: 8px; padding: 12px; margin-bottom: 14px;";
                 secFields.innerHTML = `
-                    <div style="font-size: 0.85rem; color: #10B981; font-weight: bold; margin-bottom: 8px;"><i class="fa-solid fa-user-shield"></i> Modo Secretaría: Cargar turno a cliente</div>
+                    <div style="font-size: 0.85rem; color: #10B981; font-weight: bold; margin-bottom: 8px;"><i class="fa-solid fa-user-shield"></i> Modo Secretara: Cargar turno a cliente</div>
                     <div style="display: flex; gap: 8px; margin-bottom: 8px;">
                         <input type="text" id="secInputNombre" placeholder="Nombre" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
                         <input type="text" id="secInputApellido" placeholder="Apellido" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
                     </div>
-                    <input type="tel" id="secInputTelefono" placeholder="Teléfono" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
-                    <div style="margin-top: 8px; font-size: 0.75rem; color: #FCA5A5;"><i class="fa-solid fa-clock"></i> El turno se agendará y el pago quedará <strong>Pendiente</strong> hasta que el cliente abone en el club.</div>
+                    <input type="tel" id="secInputTelefono" placeholder="WhatsApp" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff; margin-bottom: 8px;">
+                    
+                    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                        <select id="secInputRolDescuento" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;" title="Aplicar descuento">
+                            <option value="usuario">Tarifa Invitado</option>
+                            <option value="socio">Tarifa Socio</option>
+                            <option value="alumno">Tarifa Alumno</option>
+                        </select>
+                        <select id="secInputMetodoPago" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff;">
+                            <option value="Efectivo en Sede">Pago Pendiente</option>
+                            <option value="Pagado por Transferencia">Ya Pagado</option>
+                        </select>
+                    </div>
+                    <div style="font-size: 0.75rem; color: #FCA5A5;"><i class="fa-solid fa-clock"></i> Selecciona la tarifa para calcular el cobro exacto en el resumen.</div>
                 `;
                 confirmBtnEl.parentNode.insertBefore(secFields, confirmBtnEl);
+                
+                const descSelect = document.getElementById('secInputRolDescuento');
+                if (descSelect) {
+                    descSelect.addEventListener('change', () => {
+                        if (typeof calculateAndVerifyMinuteByMinute === 'function') calculateAndVerifyMinuteByMinute();
+                    });
+                }
             }
             if (paymentCardEl) paymentCardEl.style.display = 'none'; // Ocultar carga de comprobante
             if (weatherNoticeEl) weatherNoticeEl.style.display = 'none';
@@ -1866,7 +1885,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const activeUser = getActiveUser();
-            const userRole = activeUser ? activeUser.role : 'usuario';
+            let userRole = activeUser ? activeUser.role : 'usuario';
+            
+            // Si es Secretaria/Admin reservando a un cliente, usar la tarifa seleccionada
+            const secDiscount = document.getElementById('secInputRolDescuento');
+            if (secDiscount && activeUser && (activeUser.role === 'admin' || activeUser.role === 'secretaria')) {
+                userRole = secDiscount.value;
+            }
+
             const calculo = window.DBHits.calcularPrecioReserva(horaInicio, duracionHoras, userRole);
 
             let detalleIluminacion = 'Turno Diurno';
@@ -2039,20 +2065,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // Capturar datos de secretaría si existen
+                        // Capturar datos de secretaria si existen
             const secNombre = document.getElementById('secInputNombre')?.value.trim();
             const secApellido = document.getElementById('secInputApellido')?.value.trim();
             const secTelefono = document.getElementById('secInputTelefono')?.value.trim();
+            const secDiscountEl = document.getElementById('secInputRolDescuento');
+            const secMetodoEl = document.getElementById('secInputMetodoPago');
+
+            let finalUserRole = activeUser ? activeUser.role : 'usuario';
+            if (isSecretaria && secDiscountEl) {
+                finalUserRole = secDiscountEl.value;
+            }
 
             const finalNombre = isSecretaria && secNombre ? `${secNombre} ${secApellido || ''}`.trim() : (activeUser ? `${activeUser.nombre} ${activeUser.apellido || ''}` : 'Usuario');
             const finalTelefono = isSecretaria && secTelefono ? secTelefono : (activeUser ? activeUser.telefono : '');
-            const finalEstadoPago = isSecretaria ? '⏳ Pago pendiente en Club' : '⏳ Pago esperando aprobación';
-            const finalMetodoPago = isSecretaria ? 'En Secretaría (Efectivo/Físico)' : selectedPaymentMethod;
+            
+            let finalEstadoPago = isSecretaria ? 'Pago pendiente en Club' : 'Pago esperando aprobacion';
+            let finalMetodoPago = isSecretaria ? 'En Secretara (Efectivo/Fsico)' : selectedPaymentMethod;
+            
+            if (isSecretaria && secMetodoEl) {
+                finalMetodoPago = secMetodoEl.value;
+                if (finalMetodoPago === 'Pagado por Transferencia') {
+                    finalEstadoPago = 'Aprobado';
+                }
+            }
 
-            // DOBLE CONFIRMACIÓN ANTI-ERROR
+            // DOBLE CONFIRMACION ANTI-ERROR
             const fechaFormateada = formatFriendlyDate(currentWidgetDate);
-            const userRole = activeUser ? activeUser.role : 'usuario';
-            const calculo = window.DBHits.calcularPrecioReserva(horaInicio, duracionHoras, userRole);
+            const calculo = window.DBHits.calcularPrecioReserva(horaInicio, duracionHoras, finalUserRole);
             const mensajeConfirmacion = `❓ CONFIRMACIÓN DE RESERVA ATH\n\n¿Estás seguro que deseas confirmar la reserva con los siguientes datos?\n\n🎾 Cancha: Cancha ${currentWidgetCourt}\n📅 Día: ${fechaFormateada}\n⏰ Horario: ${horaInicio} a ${horaFin} hs\n💰 Total a abonar: $${calculo.precioTotal.toLocaleString('es-AR')} ARS\n\nPresiona ACEPTAR para enviar tu reserva o CANCELAR para modificar los horarios.`;
 
             if (!confirm(mensajeConfirmacion)) {
@@ -2092,15 +2132,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     usuarioNombre: finalNombre,
                     usuarioEmail: activeUser.email,
                     usuarioTelefono: finalTelefono,
-                    usuarioRole: activeUser.role || 'usuario',
+                    usuarioRole: finalUserRole,
                     canchaId: currentWidgetCourt,
                     fecha: currentWidgetDate,
                     horaInicio: horaInicio,
                     duracionHoras: duracionHoras,
                     metodoPago: finalMetodoPago,
                     comprobanteBase64: comprobanteBase64,
-                    rolUsuario: isSecretaria ? 'usuario' : userRole,
-                    overrideEstadoPago: finalEstadoPago // Parámetro nuevo
+                                        overrideEstadoPago: finalEstadoPago // Parámetro nuevo
                 });
 
                 if (isSecretaria) {

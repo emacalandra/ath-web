@@ -1158,7 +1158,7 @@ class ATHDatabaseEngine {
                 fecha: typeof formatFechaArg === 'function' ? formatFechaArg(fecha) : fecha,
                 horaInicio: horaInicio,
                 horaFin: horaFin,
-                destino: "NUMERO_DE_PRUEBA" // Reemplazar en pruebas por el numero autorizado
+                destino: "543564220860" // Reemplazar en pruebas por el numero autorizado
             };
 
             fetch('/api/send-whatsapp', {
